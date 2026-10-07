@@ -1,4 +1,4 @@
-"""Write the built-in layouts from DefaultProfiles.swift into docs/index.html.
+"""Write the built-in layouts from the iKeypadShared profile sources into docs/index.html.
 
 Run from the repository root: ``python3 tools/export_site_layouts.py``. Each app panel in the page
 holds a ``<!-- layout:<id> --> ... <!-- /layout -->`` block that this script replaces with that
@@ -9,7 +9,8 @@ import html
 import re
 import sys
 
-SOURCE = "Packages/iKeypadShared/Sources/iKeypadShared/DefaultProfiles.swift"
+SOURCES = ["Packages/iKeypadShared/Sources/iKeypadShared/DefaultProfiles.swift",
+           "Packages/iKeypadShared/Sources/iKeypadShared/PopularAppProfiles.swift"]
 PAGE = "docs/index.html"
 SLOTS = 15
 # U+FE0E forces text presentation; without it browsers render ↩ as an emoji keycap.
@@ -18,7 +19,7 @@ GLYPHS = {"tab": "⇥\ufe0e", "return": "↩\ufe0e", "enter": "↩\ufe0e", "esca
 MODIFIER_ORDER = [(".control", "⌃"), (".option", "⌥"), (".shift", "⇧"), (".command", "⌘")]
 # Site key id -> Swift factory, in the order the app keys appear on the page.
 APPS = [("xcode", "makeXcodeProfile"), ("terminal", "makeTerminalProfile"), ("vscode", "makeVSCodeProfile"),
-        ("browsers", "makeBrowserProfile"), ("zoom", "makeZoomProfile"), ("whatsapp", "makeWhatsAppProfile"),
+        ("safari", "makeSafariProfile"), ("zoom", "makeZoomProfile"), ("whatsapp", "makeWhatsAppProfile"),
         ("telegram", "makeTelegramProfile"), ("macdown", "makeMacDownProfile"), ("word", "makeWordProfile"), ("system", "makeDefaultFallbackProfile")]
 
 
@@ -32,7 +33,7 @@ def shortcut(action_kind, args):
 
 
 def main():
-    swift = open(SOURCE).read()
+    swift = "".join(open(path).read() for path in SOURCES)
     factories = {m.group(1): m.group(2) for m in re.finditer(
         r"func (make\w+)\(.*?\)\s*->\s*DeckProfile \{(.*?)\n    \}\n", swift, re.S)}
     out = {}

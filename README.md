@@ -71,14 +71,34 @@ From then on the iPad connects to that Mac by itself whenever Sidekey is running
 | Xcode | Run, Build, Test, Stop, Clean, Open Quickly |
 | VS Code | Cmd Palette, Quick Open, Toggle Term, Source Control, Run Tests |
 | Terminal | New Tab, Close Tab, Clear, Interrupt, Split Pane |
-| Safari, Chrome, Arc | New Tab, Close Tab, Reopen Tab, Dev Tools, Reload |
+| Safari | New Tab, Reopen, Reader, Tab Overview, Reading List, Private |
+| Chrome | New Tab, Reopen Tab, Dev Tools, Search Tabs, Downloads, Incognito |
+| Arc | New Tab, Close Tab, Reopen Tab, Dev Tools, Reload |
+| Cursor | New Agent, Accept All, Reject All, Model, Mode, Add to Chat |
+| Antigravity | Agent Panel, Command Palette, Go to File, Find in Files, Terminal |
+| OpenCode | New Session, Stop, Previous and Next Session, Terminal |
+| Finder | New Folder, Get Info, Quick Look, Move to Trash, Downloads, AirDrop |
+| Mail | New Message, Reply, Reply All, Archive, Mark Read, Get Mail |
+| Messages | New Message, Reply, Tapback, Edit Last, Previous and Next Chat |
+| Notes | New Note, Checklist, Heading, Bullets, Table, Attach |
+| Calendar | New Event, Today, Day, Week, Month, Year |
+| Music | Play/Pause, Previous, Next, Volume Up and Down, Lyrics, MiniPlayer |
+| Photos | Import, Rotate Left and Right, Enhance, Favorite, Hide, Delete |
 | WhatsApp | New Chat, Search, Archive, Mute Chat, End Call |
 | Telegram | Search, Saved Msgs, Pinned 1 to 4, Prev and Next Folder |
 | Zoom | Mute, Video, Share Screen, Raise Hand, Record |
 | MacDown | Bold, Italic, Code, Link, Numbered, Bullets, Copy HTML |
 | Word | Bold, Italic, Underline, Comment, Track Changes, Focus |
+| Excel | AutoSum, Fill Down, Format Cells, Filter, Create Table, Show Formulas |
+| PowerPoint | New Slide, Play Start, Presenter, Slide Sorter, Comment, Group |
+| Outlook | New Message, Reply, Archive, Mark Read, Flag, Mail, Calendar |
+| Teams | New Chat, Search, Mute, Video, Raise Hand, End Call |
+| Slack | Jump To, All Unreads, Threads, Activity, Next Unread, Huddle |
+| Spotify | Play/Pause, Like, Shuffle, Repeat, Search, Queue |
+| Notion | New Page, Search, Back, Forward, Copy Link, Comment |
+| ChatGPT | Chat Bar, Find, Stop, Share Desktop, Share Window, Browser |
 
-Shortcuts are taken from each app's own menus or published documentation. Layouts are code in `Packages/iKeypadShared/Sources/iKeypadShared/DefaultProfiles.swift`; add an app by adding a profile there.
+Shortcuts are taken from each app's own menus or published documentation. The Outlook, Slack, Spotify, Notion and ChatGPT layouts, most of the Excel and Teams keys, and Cursor's AI keys come from each vendor's published shortcuts. Not every key has been tried in its app yet. Notion and ChatGPT publish only a few shortcuts, so their decks are partly empty. Layouts are code in `Packages/iKeypadShared/Sources/iKeypadShared/` (`DefaultProfiles.swift` and `PopularAppProfiles.swift`); add an app by adding a profile there.
 
 ## Build from source
 
