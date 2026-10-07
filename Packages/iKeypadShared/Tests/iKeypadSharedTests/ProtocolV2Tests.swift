@@ -53,6 +53,18 @@ final class ProtocolV2Tests: XCTestCase {
         XCTAssertEqual(first.first, "com.apple.Terminal#0")
     }
 
+    /// Shell actions run with the Mac app's working directory (/), so a key like `git add -A`
+    /// can never work; built-in layouts must not ship one.
+    func testNoDefaultKeyRunsAShellCommandThatDependsOnTheWorkingDirectory() {
+        for profile in DefaultProfiles.allDefaultProfiles() {
+            for key in profile.keys {
+                if case .shellScript(let command) = key.action {
+                    XCTAssertFalse(command.hasPrefix("git "), "\(profile.appName) › \(key.label) runs \(command) from /")
+                }
+            }
+        }
+    }
+
     func testEveryDefaultKeyHasARole() {
         for profile in DefaultProfiles.allDefaultProfiles() {
             for key in profile.keys {

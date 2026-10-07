@@ -110,10 +110,10 @@ public struct DefaultProfiles {
                 ),
                 DeckKey(
                     position: 4,
-                    label: "Git Stage All",
+                    label: "Source Control",
                     iconSystemName: "arrow.triangle.branch",
-                    action: .shellScript(command: "git add -A"),
-                    role: .modify
+                    action: .hotkey(key: "g", modifiers: [.control, .shift]),
+                    role: .navigate
                 ),
                 DeckKey(
                     position: 5,
