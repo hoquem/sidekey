@@ -4,7 +4,7 @@ Sidekey turns an iPad into a shortcut deck for your Mac. Prop the iPad beside yo
 
 - **Follows your Mac.** The keys change with the frontmost app: Xcode shows Run, Build and Test; Zoom shows Mute, Video and Share Screen; Terminal shows tabs, Clear and Interrupt.
 - **Shows what it is driving.** The top of the screen shows the Mac app's icon, name and window title, and whether the link is USB or Wi-Fi. For Zoom it also shows meeting state such as the mic (built from Zoom's documented menus and not yet tested in a live meeting).
-- **Every tap gets an answer.** A key glows amber while the Mac works, lights up when the shortcut fired, and shakes with the Mac's reason when it could not (for example, a missing permission).
+- **Every tap gets an answer.** A key glows amber while the Mac works, lights up when the Mac reports the shortcut was sent, and shakes with the Mac's reason when it could not (for example, a missing permission).
 - **USB first.** Connects over the iPad's USB cable when it is plugged in and falls back to Wi-Fi.
 - **Safe by design.** Disruptive keys (Lock Mac, Interrupt, End Call, Telegram Lock and Xcode Clean) fire only after a press and hold.
 
@@ -16,11 +16,11 @@ Sidekey turns an iPad into a shortcut deck for your Mac. Prop the iPad beside yo
 
 ## Install
 
-Sidekey is in early beta. A signed Mac installer will be published on [Releases](https://github.com/hoquem/sidekey/releases) and the iPad app will come to the App Store; until then, build both from source (below).
+The Mac app 1.0.0 is available as a signed, notarized download. The iPad app is in a private TestFlight beta and will come to the App Store later; until then, build the iPad app from source (below).
 
-1. **Mac:** when a release is available, download `Sidekey.dmg`, open it and drag Sidekey to Applications. Open it; it lives in the menu bar.
+1. **Mac:** download `Sidekey.dmg` from the [latest release](https://github.com/hoquem/sidekey/releases/latest), open it and drag Sidekey to Applications. Open it; it lives in the menu bar.
 2. **Allow Accessibility:** macOS asks the first time. Switch Sidekey on in System Settings › Privacy & Security › Accessibility. Sidekey needs this to send shortcuts and read window titles.
-3. **iPad:** install Sidekey on the iPad, open it and allow it to find devices on your local network.
+3. **iPad:** build and install the `iKeypad` scheme from source (see Build from source), open it and allow it to find devices on your local network.
 4. Connect the iPad to the Mac with a USB cable, or join the same Wi-Fi network. Sidekey finds the Mac by itself.
 
 ## Built-in layouts
@@ -49,7 +49,7 @@ xcodegen generate
 open iKeypadApp.xcodeproj
 ```
 
-Before building, change these in `project.yml` to your own values, then run `xcodegen generate` again:
+To build only the iPad app, use the `iKeypad` scheme; the Mac app is available ready-made from Releases. Before building, change these in `project.yml` to your own values, then run `xcodegen generate` again:
 
 - `DEVELOPMENT_TEAM` (three places): your Apple team ID.
 - The bundle IDs `com.hoque.sidekey`, `com.hoque.sidekey.tests` and `com.hoque.sidekey.mac`: they are registered to the author's team, so automatic signing fails for anyone else.
