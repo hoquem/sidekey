@@ -83,11 +83,17 @@ final class PairingWindow: ObservableObject {
 
     var isOpen: Bool { code != nil }
 
-    /// Open the window with a fresh code.
-    func open(now: Date = Date()) throws {
-        code = try PairingCrypto.pairingCode()
-        expiresAt = now.addingTimeInterval(Self.lifetime)
+    /// Open the window with a fresh code; it closes itself after ``lifetime`` seconds.
+    func open(now: Date = Date(), lifetime: TimeInterval = PairingWindow.lifetime) throws {
+        let code = try PairingCrypto.pairingCode()
+        self.code = code
+        expiresAt = now.addingTimeInterval(lifetime)
         attemptsLeft = Self.maxAttempts
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(lifetime * 1_000_000_000))
+            // Close only the window this call opened, not a newer one.
+            if self?.code == code { self?.close() }
+        }
     }
 
     func close() {

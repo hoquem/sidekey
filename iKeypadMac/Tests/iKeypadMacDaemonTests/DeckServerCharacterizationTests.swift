@@ -341,6 +341,14 @@ final class PairingWindowTests: XCTestCase {
         XCTAssertEqual(window.attempt(code, now: start.addingTimeInterval(PairingWindow.lifetime + 1)), .closed)
     }
 
+    func testTheWindowClosesItselfWhenTheCodeExpires() async throws {
+        let window = PairingWindow()
+        try window.open(lifetime: 0.2)
+        XCTAssertTrue(window.isOpen)
+        try await Task.sleep(nanoseconds: 500_000_000)
+        XCTAssertFalse(window.isOpen, "an expired code must disappear from the menu")
+    }
+
     func testTheRightCodeIsAcceptedOnce() throws {
         let window = PairingWindow()
         try window.open()
