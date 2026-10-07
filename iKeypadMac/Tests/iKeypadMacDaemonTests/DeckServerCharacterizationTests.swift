@@ -40,13 +40,13 @@ final class DeckServerCharacterizationTests: XCTestCase {
     }
 
     func testTapOnAStaleLayoutIsRejected() async throws {
-        let result = try await execute(profileId: "not-the-active-layout", pinned: false)
+        let result = try await execute(keyId: "k", profileId: "not-the-active-layout", pinned: false)
         XCTAssertEqual(result.success, false)
         XCTAssertEqual(result.error, "Layout changed. Tap again.")
     }
 
     func testPinnedTapOnAnUnknownLayoutIsRejected() async throws {
-        let result = try await execute(profileId: "no-such-layout", pinned: true)
+        let result = try await execute(keyId: "k", profileId: "no-such-layout", pinned: true)
         XCTAssertEqual(result.success, false)
         XCTAssertEqual(result.error, "Pinned layout is no longer available. Unpin and try again.")
     }
@@ -56,21 +56,56 @@ final class DeckServerCharacterizationTests: XCTestCase {
         try XCTSkipIf(!NSRunningApplication.runningApplications(withBundleIdentifier: vsCode).isEmpty,
                       "VS Code is running; this test needs it closed")
         try XCTSkipIf(AppContextMonitor.shared.activeProfile.id == vsCode, "VS Code is the active layout")
-        let result = try await execute(profileId: vsCode, pinned: true)
+        let result = try await execute(keyId: "\(vsCode)#0", profileId: vsCode, pinned: true)
         XCTAssertEqual(result.success, false)
         XCTAssertEqual(result.error, "VS Code isn't running.")
     }
 
     func testTapOnTheActiveLayoutRuns() async throws {
-        let result = try await execute(profileId: AppContextMonitor.shared.activeProfile.id, pinned: false)
-        XCTAssertEqual(result.success, true)
-        XCTAssertNil(result.error)
+        try await withTestProfile { profile in
+            let result = try await self.execute(keyId: profile.keys[0].id, profileId: profile.id, pinned: false)
+            XCTAssertEqual(result.success, true)
+            XCTAssertNil(result.error)
+        }
     }
 
-    /// Current behaviour: a tap without a layout id skips the stale-layout check entirely.
-    func testTapWithoutALayoutIdRunsUnchecked() async throws {
-        let result = try await execute(profileId: nil, pinned: nil)
-        XCTAssertEqual(result.success, true)
+    /// A tap must name a layout; without one the Mac cannot know which key's action to run.
+    func testTapWithoutALayoutIdIsRejected() async throws {
+        let result = try await execute(keyId: "anything", profileId: nil, pinned: nil)
+        XCTAssertEqual(result.success, false)
+        XCTAssertEqual(result.error, "Update Sidekey on your iPad.")
+    }
+
+    /// Security: the Mac runs the action from its own layout. An action smuggled into the tap by
+    /// a client (here a shell command) must never run.
+    func testClientSuppliedActionIsIgnored() async throws {
+        let marker = FileManager.default.temporaryDirectory.appendingPathComponent("sidekey-pwned-\(UUID().uuidString)")
+        try await withTestProfile { profile in
+            let client = try await TestClient.connect(port: Self.port)
+            try client.sendRaw(#"{"executeAction":{"keyId":"\#(profile.keys[0].id)","action":{"shellScript":{"command":"touch \#(marker.path)"}},"profileId":"\#(profile.id)","pinned":false}}"#)
+            let messages = try await client.receive(until: { $0.contains(where: Self.isResult(for: profile.keys[0].id)) })
+            XCTAssertTrue(messages.contains(where: Self.isResult(for: profile.keys[0].id)), "no reply in \(messages)")
+            try await Task.sleep(nanoseconds: 300_000_000)
+            XCTAssertFalse(FileManager.default.fileExists(atPath: marker.path), "client-supplied shell command ran")
+        }
+    }
+
+    func testTheMacRunsItsOwnActionForTheKey() async throws {
+        let marker = FileManager.default.temporaryDirectory.appendingPathComponent("sidekey-own-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: marker) }
+        try await withTestProfile(secondAction: .shellScript(command: "touch '\(marker.path)'")) { profile in
+            let result = try await self.execute(keyId: profile.keys[1].id, profileId: profile.id, pinned: false)
+            XCTAssertEqual(result.success, true)
+            XCTAssertTrue(FileManager.default.fileExists(atPath: marker.path))
+        }
+    }
+
+    func testUnknownKeyIsRejected() async throws {
+        try await withTestProfile { profile in
+            let result = try await self.execute(keyId: "\(profile.id)#99", profileId: profile.id, pinned: false)
+            XCTAssertEqual(result.success, false)
+            XCTAssertEqual(result.error, "Layout changed. Tap again.")
+        }
     }
 
     func testPingIsAnsweredWithPong() async throws {
@@ -82,20 +117,36 @@ final class DeckServerCharacterizationTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func execute(profileId: String?, pinned: Bool?) async throws -> (success: Bool, error: String?) {
+    private func execute(keyId: String, profileId: String?, pinned: Bool?) async throws -> (success: Bool, error: String?) {
         let client = try await TestClient.connect(port: Self.port)
-        try client.send(.executeAction(keyId: "probe", action: .none, profileId: profileId, pinned: pinned))
-        let messages = try await client.receive(until: { $0.contains(where: Self.isProbeResult) })
+        try client.send(.executeAction(keyId: keyId, profileId: profileId, pinned: pinned))
+        let messages = try await client.receive(until: { $0.contains(where: Self.isResult(for: keyId)) })
         for message in messages {
-            if case .actionExecuted("probe", let success, let error) = message { return (success, error) }
+            if case .actionExecuted(keyId, let success, let error) = message { return (success, error) }
         }
         XCTFail("no actionExecuted reply in \(messages)")
         return (false, nil)
     }
 
-    private static func isProbeResult(_ message: DeckMessage) -> Bool {
-        if case .actionExecuted("probe", _, _) = message { return true }
-        return false
+    private static func isResult(for keyId: String) -> (DeckMessage) -> Bool {
+        { message in
+            if case .actionExecuted(keyId, _, _) = message { return true }
+            return false
+        }
+    }
+
+    /// Make a harmless test layout the active one for the duration of ``body``.
+    private func withTestProfile(secondAction: KeyAction = .none,
+                                 _ body: (DeckProfile) async throws -> Void) async throws {
+        let monitor = AppContextMonitor.shared
+        let original = monitor.activeProfile
+        let profile = DeckProfile(id: "test.layout", appBundleIdentifier: "test.layout", appName: "Test", keys: [
+            DeckKey(position: 0, label: "Nothing", action: .none),
+            DeckKey(position: 1, label: "Second", action: secondAction),
+        ])
+        monitor.activeProfile = profile
+        defer { monitor.activeProfile = original }
+        try await body(profile)
     }
 }
 
@@ -154,7 +205,19 @@ private final class TestClient {
     }
 
     func send(_ message: DeckMessage) throws {
-        let data = try FramedMessageProtocol.encode(message)
+        write(try FramedMessageProtocol.encode(message))
+    }
+
+    /// Send a hand-written JSON frame, as an older or hostile client might.
+    func sendRaw(_ json: String) throws {
+        let payload = Data(json.utf8)
+        var length = UInt32(payload.count).bigEndian
+        var frame = Data(bytes: &length, count: 4)
+        frame.append(payload)
+        write(frame)
+    }
+
+    private func write(_ data: Data) {
         _ = data.withUnsafeBytes { Darwin.send(fd, $0.baseAddress, data.count, 0) }
     }
 

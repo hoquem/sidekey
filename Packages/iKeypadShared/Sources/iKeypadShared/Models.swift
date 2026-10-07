@@ -21,7 +21,13 @@ public struct DeckProfile: Codable, Identifiable, Equatable, Sendable {
         self.appName = appName
         self.rows = rows
         self.columns = columns
-        self.keys = keys
+        // Key ids derive from the layout id and slot, so the same key has the same id on every
+        // launch; the Mac finds a tapped key by id, including for a layout pinned on the iPad.
+        self.keys = keys.map { key in
+            var key = key
+            key.id = "\(id)#\(key.position)"
+            return key
+        }
     }
 }
 
@@ -40,7 +46,7 @@ public enum KeyRole: String, Codable, Equatable, Sendable {
 }
 
 public struct DeckKey: Codable, Identifiable, Equatable, Sendable {
-    public let id: String
+    public internal(set) var id: String
     public let position: Int
     public var label: String
     public var iconSystemName: String?
@@ -188,9 +194,11 @@ public enum DeckMessage: Codable, Equatable, Sendable {
     case handshakeAck(serverVersion: String, hostName: String?)
     case profileUpdated(profile: DeckProfile)
     case appContextUpdated(context: AppContext)
-    /// ``profileId`` is the layout the user tapped; the Mac rejects taps on a layout that is no
-    /// longer active unless ``pinned`` is set, in which case it brings that layout's app forward.
-    case executeAction(keyId: String, action: KeyAction, profileId: String?, pinned: Bool?)
+    /// A tap on key ``keyId`` of layout ``profileId``. The Mac runs the action from its own copy
+    /// of that layout; a tap never carries an action, so a client cannot make the Mac run anything
+    /// outside its built-in layouts. The Mac rejects taps on a layout that is no longer active
+    /// unless ``pinned`` is set, in which case it brings that layout's app forward.
+    case executeAction(keyId: String, profileId: String?, pinned: Bool?)
     case actionExecuted(keyId: String, success: Bool, errorMessage: String?)
     case ping
     case pong

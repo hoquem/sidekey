@@ -34,9 +34,23 @@ final class ProtocolV2Tests: XCTestCase {
     }
 
     func testExecuteActionCarriesProfileAndPin() throws {
-        let message = DeckMessage.executeAction(keyId: "k", action: .none, profileId: "p1", pinned: true)
+        let message = DeckMessage.executeAction(keyId: "k", profileId: "p1", pinned: true)
         var buffer = try FramedMessageProtocol.encode(message)
         XCTAssertEqual(FramedMessageProtocol.decode(from: &buffer), message)
+    }
+
+    /// A tap names a key; the action it runs is the Mac's own. An action field sent by an older or
+    /// hostile client must not survive decoding.
+    func testExecuteActionDropsAnyClientSuppliedAction() throws {
+        let frame = #"{"executeAction":{"keyId":"k","action":{"shellScript":{"command":"touch /tmp/x"}},"profileId":"p","pinned":false}}"#
+        let decoded = try JSONDecoder().decode(DeckMessage.self, from: Data(frame.utf8))
+        XCTAssertEqual(decoded, .executeAction(keyId: "k", profileId: "p", pinned: false))
+    }
+
+    func testDefaultProfileKeyIdsAreStableAcrossLaunches() {
+        let first = DefaultProfiles.makeTerminalProfile().keys.map(\.id)
+        XCTAssertEqual(first, DefaultProfiles.makeTerminalProfile().keys.map(\.id))
+        XCTAssertEqual(first.first, "com.apple.Terminal#0")
     }
 
     func testEveryDefaultKeyHasARole() {

@@ -264,7 +264,7 @@ public final class DeckClient: ObservableObject {
         }
         let profile = displayedProfile
         setFeedback(.pending, for: key.id, clearAfter: nil)
-        send(message: .executeAction(keyId: key.id, action: key.action, profileId: profile.id, pinned: pinnedProfile != nil))
+        send(message: .executeAction(keyId: key.id, profileId: profile.id, pinned: pinnedProfile != nil))
         Task { @MainActor [weak self] in
             try? await Task.sleep(for: Self.pendingTimeout)
             guard let self, self.keyFeedback[key.id] == .pending else { return }

@@ -9,7 +9,8 @@ public final class AppContextMonitor: ObservableObject {
 
     @Published public private(set) var activeBundleId: String = ""
     @Published public private(set) var activeAppName: String = "Finder"
-    @Published public private(set) var activeProfile: DeckProfile
+    /// Internal setter so tests can install a harmless layout; the app sets it only from focus changes.
+    @Published public internal(set) var activeProfile: DeckProfile
 
     /// Fires with a fresh ``AppContext`` whenever the frontmost app, its window title or its
     /// chips change. The icon is included only when the app itself changed.

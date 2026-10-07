@@ -133,13 +133,13 @@ public final class DeckServer: ObservableObject {
                 send(message: .appContextUpdated(context: context), over: connection)
             }
 
-        case .executeAction(let keyId, let action, let profileId, let pinned):
-            print("[Server] Executing action for key \(keyId): \(action) (profile \(profileId ?? "-"), pinned \(pinned ?? false))")
-            switch prepareTarget(forTapOn: profileId, pinned: pinned) {
+        case .executeAction(let keyId, let profileId, let pinned):
+            print("[Server] Tap on key \(keyId) (profile \(profileId ?? "-"), pinned \(pinned ?? false))")
+            switch prepareTarget(forTapOn: keyId, in: profileId, pinned: pinned) {
             case .failure(let rejection):
                 send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: rejection.reason), over: connection)
-            case .success(let delay):
-                fire(action, keyId: keyId, after: delay, over: connection)
+            case .success(let target):
+                fire(target.action, keyId: keyId, after: target.delay, over: connection)
             }
 
         case .ping:
@@ -155,26 +155,49 @@ public final class DeckServer: ObservableObject {
         let reason: String
     }
 
-    /// Decide whether a tap on layout ``profileId`` may run, bringing a pinned layout's app
-    /// forward first.
+    /// The Mac's own action for a tapped key, and how long to wait before running it.
+    struct TapTarget {
+        let action: KeyAction
+        let delay: TimeInterval
+    }
+
+    /// Decide whether a tap on key ``keyId`` of layout ``profileId`` may run and which action it
+    /// runs, bringing a pinned layout's app forward first.
     ///
-    /// :returns: Seconds to wait before firing (time for a pinned app to come forward), or why
-    ///     the tap is rejected. A tap without a layout id is not checked.
-    private func prepareTarget(forTapOn profileId: String?, pinned: Bool?) -> Result<TimeInterval, TapRejected> {
+    /// The action always comes from the Mac's own layout, never from the client, so only the
+    /// built-in layouts' actions can ever run.
+    ///
+    /// :returns: The key's action and the delay before firing (time for a pinned app to come
+    ///     forward), or why the tap is rejected.
+    private func prepareTarget(forTapOn keyId: String, in profileId: String?, pinned: Bool?) -> Result<TapTarget, TapRejected> {
         let monitor = AppContextMonitor.shared
-        guard let profileId, profileId != monitor.activeProfile.id else { return .success(0) }
-        guard pinned == true else {
-            // The layout changed between the user seeing the key and tapping it.
+        guard let profileId else {
+            // Taps from builds before layout ids existed cannot be matched to a key.
+            return .failure(TapRejected(reason: "Update Sidekey on your iPad."))
+        }
+        let profile: DeckProfile
+        var delay: TimeInterval = 0
+        if profileId == monitor.activeProfile.id {
+            profile = monitor.activeProfile
+        } else {
+            guard pinned == true else {
+                // The layout changed between the user seeing the key and tapping it.
+                return .failure(TapRejected(reason: "Layout changed. Tap again."))
+            }
+            guard let pinnedProfile = monitor.profile(withId: profileId) else {
+                return .failure(TapRejected(reason: "Pinned layout is no longer available. Unpin and try again."))
+            }
+            guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: pinnedProfile.appBundleIdentifier).first else {
+                return .failure(TapRejected(reason: "\(pinnedProfile.appName) isn't running."))
+            }
+            app.activate()
+            profile = pinnedProfile
+            delay = 0.25
+        }
+        guard let key = profile.keys.first(where: { $0.id == keyId }) else {
             return .failure(TapRejected(reason: "Layout changed. Tap again."))
         }
-        guard let pinnedProfile = monitor.profile(withId: profileId) else {
-            return .failure(TapRejected(reason: "Pinned layout is no longer available. Unpin and try again."))
-        }
-        guard let target = NSRunningApplication.runningApplications(withBundleIdentifier: pinnedProfile.appBundleIdentifier).first else {
-            return .failure(TapRejected(reason: "\(pinnedProfile.appName) isn't running."))
-        }
-        target.activate()
-        return .success(0.25)
+        return .success(TapTarget(action: key.action, delay: delay))
     }
 
     /// Run ``action`` off the main thread after ``delay`` and report the result to the iPad.
