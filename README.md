@@ -76,10 +76,10 @@ From then on the iPad connects to that Mac by itself whenever Sidekey is running
 | Arc | New Tab, Close Tab, Reopen Tab, Dev Tools, Reload |
 | Cursor | New Agent, Accept All, Reject All, Model, Mode, Add to Chat |
 | Antigravity | Agent Panel, Command Palette, Go to File, Find in Files, Terminal |
-| OpenCode | New Session, Stop, Previous and Next Session, Terminal |
+| OpenCode | New Session, Stop, Prev and Next Session, Terminal |
 | Finder | New Folder, Get Info, Quick Look, Move to Trash, Downloads, AirDrop |
 | Mail | New Message, Reply, Reply All, Archive, Mark Read, Get Mail |
-| Messages | New Message, Reply, Tapback, Edit Last, Previous and Next Chat |
+| Messages | New Message, Reply, Tapback, Edit Last, Prev and Next Chat |
 | Notes | New Note, Checklist, Heading, Bullets, Table, Attach |
 | Calendar | New Event, Today, Day, Week, Month, Year |
 | Music | Play/Pause, Previous, Next, Volume Up and Down, Lyrics, MiniPlayer |
@@ -98,7 +98,7 @@ From then on the iPad connects to that Mac by itself whenever Sidekey is running
 | Notion | New Page, Search, Back, Forward, Copy Link, Comment |
 | ChatGPT | Chat Bar, Find, Stop, Share Desktop, Share Window, Browser |
 
-Shortcuts are taken from each app's own menus or published documentation. The Outlook, Slack, Spotify, Notion and ChatGPT layouts, most of the Excel and Teams keys, and Cursor's AI keys come from each vendor's published shortcuts. Not every key has been tried in its app yet. Notion and ChatGPT publish only a few shortcuts, so their decks are partly empty. Layouts are code in `Packages/iKeypadShared/Sources/iKeypadShared/` (`DefaultProfiles.swift` and `PopularAppProfiles.swift`); add an app by adding a profile there.
+Shortcuts are taken from each app's own menus or published documentation. The Outlook, Slack, Spotify, Notion and ChatGPT layouts, most of the Excel and Teams keys, Cursor's Accept All, Reject All, Model, Mode, Mode Menu and Add to Chat keys, Antigravity's Agent Panel key and OpenCode's Stop key come from each vendor's published shortcuts. Not every key has been tried in its app yet. Notion and ChatGPT publish only a few shortcuts, so their decks are partly empty. Layouts are code in `Packages/iKeypadShared/Sources/iKeypadShared/` (`DefaultProfiles.swift` and `PopularAppProfiles.swift`); add an app by adding a profile there.
 
 ## Build from source
 
