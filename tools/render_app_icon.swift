@@ -1,4 +1,4 @@
-// Renders the iKeypad app icon ("Lit key"): a near-black plate with a 3 x 3 grid of graphite
+// Renders the Sidekey app icon ("Lit key"): a near-black plate with a 3 x 3 grid of graphite
 // keycaps whose centre key glows amber, as if just pressed.
 //
 // Usage: swift tools/render_app_icon.swift <output.png>

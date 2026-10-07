@@ -1,6 +1,6 @@
 ---
 name: Sidekey
-description: A dark hardware macro deck for the Mac, worn by the iPad beside the keyboard.
+description: A dark hardware macro deck for the Mac, shown on an iPad beside the keyboard.
 colors:
   lit: "#FFB020"
   failure: "#FF7A7A"
@@ -124,7 +124,7 @@ The signature move is the lit-key glow travelling from tap to confirmation: a fa
 - Graphite plate, graphite caps, high-contrast white labels.
 - Role colour lives on the key's symbol; the cap edge is reserved for the Mac's answer.
 - One amber signal colour, used only for "lit" meaning.
-- A fixed 3 x 5 grid with recessed wells, so keys never move within an orientation.
+- A fixed 15-slot grid (5 columns by 3 rows in landscape, 3 by 5 in portrait) with recessed wells, so keys never move within an orientation.
 - Native materials: SF Pro, Dynamic Type, SF Symbols, continuous-corner rounded rectangles.
 
 ## Colors
@@ -195,7 +195,7 @@ One screen, full-bleed plate, 24pt margin on all sides.
 
 - **Orientation switch:** landscape when width exceeds 1.15 x height; otherwise portrait. This holds for Split View widths too.
 - **Portrait:** the Now Controlling band sits in a row on top, 24pt above the grid. Profiles are authored as 5 columns x 3 rows; portrait renders 3 columns x 5 rows, refilling slots in reading order (slot index = row x columns + column with the dimensions swapped).
-- **Landscape:** the band becomes a left column, width min(300pt, 28% of screen width), 28pt from a 5 x 3 grid.
+- **Landscape:** the band becomes a left column, width min(300pt, 28% of screen width), 28pt from a grid of 5 columns by 3 rows.
 - **Grid sizing:** the gap is 2.8% of the grid area's shorter side. Keys divide the remaining space; portrait keys are clamped to near square (height at most 1.1 x width, width at most 1.4 x height), landscape keys at most 1.25 x width, with the leftover height spread into the row gaps (up to 2.5 x the base gap). Portrait grids are top-aligned; landscape grids are vertically centred.
 - **Fixed slots:** every slot renders: a key or an empty well. Within an orientation, a key never moves.
 - **Band row (portrait):** 64pt app icon, 18pt gap, name and window title stacked 3pt apart, chips 8pt below, flexible space, then connection and pin.

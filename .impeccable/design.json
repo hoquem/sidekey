@@ -403,7 +403,7 @@
       "kind": "nav",
       "refersTo": "",
       "description": "Portrait band: app icon, name, window title, chips, link and pin.",
-      "html": "<div class=\"ds-band\"><div class=\"ds-band-icon\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#A3ADBA\" stroke-width=\"1.8\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M3 8h18\"/></svg></div><div class=\"ds-band-id\"><div class=\"ds-band-name\">Xcode</div><div class=\"ds-band-title\">iKeypad, Package.swift</div></div><div class=\"ds-band-link\"><div class=\"ds-band-usb\">USB</div><div class=\"ds-band-host\">MacBook Pro</div></div></div>",
+      "html": "<div class=\"ds-band\"><div class=\"ds-band-icon\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#A3ADBA\" stroke-width=\"1.8\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M3 8h18\"/></svg></div><div class=\"ds-band-id\"><div class=\"ds-band-name\">Xcode</div><div class=\"ds-band-title\">Sidekey, Package.swift</div></div><div class=\"ds-band-link\"><div class=\"ds-band-usb\">USB</div><div class=\"ds-band-host\">MacBook Pro</div></div></div>",
       "css": ".ds-band{font-family:-apple-system,system-ui,sans-serif;display:flex;align-items:center;gap:18px;padding:24px;background:#101218;color:#F3F5F8}.ds-band-icon{width:64px;height:64px;border-radius:14px;background:#22262D;display:flex;align-items:center;justify-content:center}.ds-band-id{flex:1;display:flex;flex-direction:column;gap:3px}.ds-band-name{font-size:22px;font-weight:700}.ds-band-title{font-size:15px;color:#A3ADBA}.ds-band-link{text-align:right}.ds-band-usb{font-size:13px;font-weight:600}.ds-band-host{font-size:12px;color:#A3ADBA}"
     }
   ],
