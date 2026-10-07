@@ -17,15 +17,43 @@ Sidekey turns an iPad into a shortcut deck for your Mac. Prop the iPad beside yo
 
 ## Install
 
-The Mac app is a signed, notarized download. The iPad app is in a private TestFlight beta and will come to the App Store later; until then, build it from source (below).
+Sidekey has two parts: a menu bar app for your Mac and an app for your iPad. The Mac app is available now; the iPad app is not yet publicly available (see step 2). Once both are installed, pair them once.
 
-If you installed Mac version 1.0.0, replace it: it had a security problem and was withdrawn (see the [1.0.0 release notes](https://github.com/hoquem/sidekey/releases/tag/v1.0.0)).
+If you installed Mac version 1.0.0, replace it with the latest version: 1.0.0 had a security problem and was withdrawn (see the [1.0.0 release notes](https://github.com/hoquem/sidekey/releases/tag/v1.0.0)).
 
-1. **Mac:** download `Sidekey.dmg` from the [latest release](https://github.com/hoquem/sidekey/releases/latest), open it and drag Sidekey to Applications. Open it from Applications; it then lives in the menu bar.
-2. **Allow Accessibility:** macOS asks the first time. Switch Sidekey on in System Settings › Privacy & Security › Accessibility. Sidekey needs this to send shortcuts and read window titles.
-3. **iPad:** open Sidekey and allow it to find devices on your local network.
-4. **Connect:** plug the iPad into the Mac with a USB cable, or put both on the same Wi-Fi network.
-5. **Pair once:** on the Mac, choose **Pair iPad...** in the Sidekey menu. Type the 6-digit code it shows into the iPad and tap Pair. From then on the iPad connects to that Mac by itself.
+### 1. Mac app (DMG download)
+
+Requires macOS 13 or later.
+
+1. Download **Sidekey.dmg** from the [latest release](https://github.com/hoquem/sidekey/releases/latest).
+2. Open the downloaded `Sidekey.dmg`. In the window that appears, drag **Sidekey** onto the **Applications** folder.
+3. Eject the Sidekey disk in Finder, and delete `Sidekey.dmg` if you like.
+4. Open **Sidekey** from your Applications folder. The first time, macOS says it was downloaded from the internet; click **Open**. The app is signed with Developer ID and notarized by Apple. Sidekey has no Dock icon: it appears in the menu bar as a keyboard icon with three dots. On a crowded menu bar it may be hidden behind other icons.
+5. When macOS asks, open System Settings › Privacy & Security › **Accessibility** and switch **Sidekey** on. Sidekey needs this to send shortcuts and read window titles. If Sidekey is not in the list, click **+**, choose Sidekey from Applications and switch it on.
+6. On macOS 15 or later, allow Sidekey to find devices on your local network if asked. Keys that run AppleScript, such as Play/Pause, may also ask for Automation access the first time.
+
+**Updating:** Sidekey does not update itself; watch the [releases page](https://github.com/hoquem/sidekey/releases) for new versions. Quit Sidekey from its menu bar icon, download the new `Sidekey.dmg` and drag Sidekey to Applications again, replacing the old copy. If keys stop working after an update, switch Sidekey off and on again in the Accessibility list; if that does not help, remove it with the minus button, add it back with the plus button and switch it on.
+
+**Uninstalling:** first choose **Forget Paired iPads** in the Sidekey menu, so a later reinstall does not still trust your old iPads. Then quit Sidekey, delete it from Applications, and remove it from System Settings › Privacy & Security › Accessibility (and Automation and Local Network, if listed).
+
+### 2. iPad app (coming to the App Store)
+
+Requires iPadOS 16 or later.
+
+Sidekey for iPad is not on the App Store yet; this section will link to it when it is available. Once it is, open the **App Store** on your iPad, search for **Sidekey**, and tap **Get**.
+
+Until then, the iPad app is in a private TestFlight beta, or you can build it yourself from source (see [Build from source](#build-from-source)). Building needs Xcode and your own Apple developer team and bundle IDs; with a free personal team, Apple lets the build run for 7 days before you must reinstall it.
+
+However you install it, open **Sidekey** on the iPad and tap **Allow** when it asks to find devices on your local network.
+
+### 3. Connect and pair
+
+1. Plug the iPad into the Mac with a USB cable, or put both on the same Wi-Fi network.
+2. Open Sidekey on the iPad. When it finds the Mac, it asks for a pairing code.
+3. On the Mac, click the Sidekey menu bar icon and choose **Pair iPad...**. A window shows a 6-digit code for two minutes.
+4. On the iPad, type the code and tap **Pair**. After five wrong codes, or two minutes, choose Pair iPad again for a new code.
+
+From then on the iPad connects to that Mac by itself whenever Sidekey is running on both. Switch apps on the Mac and the keys on the iPad change to match.
 
 ## Security
 
