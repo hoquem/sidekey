@@ -16,9 +16,11 @@ Sidekey turns an iPad into a shortcut deck for your Mac. Prop the iPad beside yo
 
 ## Install
 
-The Mac app 1.0.0 is available as a signed, notarized download. The iPad app is in a private TestFlight beta and will come to the App Store later; until then, build the iPad app from source (below).
+**The Mac download is temporarily unavailable.** Version 1.0.0 was withdrawn because of a security problem (see the [1.0.0 release notes](https://github.com/hoquem/sidekey/releases/tag/v1.0.0)); a fixed release with pairing is in progress. Until it is published, please do not run Sidekey on your Mac. The iPad app is in a private TestFlight beta and will come to the App Store later.
 
-1. **Mac:** download `Sidekey.dmg` from the [latest release](https://github.com/hoquem/sidekey/releases/latest), open it and drag Sidekey to Applications. Open it; it lives in the menu bar.
+Once the fixed release is out:
+
+1. **Mac:** download `Sidekey.dmg` from the [latest release](https://github.com/hoquem/sidekey/releases/latest), open it and drag Sidekey to Applications. Open it from Applications; it then lives in the menu bar.
 2. **Allow Accessibility:** macOS asks the first time. Switch Sidekey on in System Settings › Privacy & Security › Accessibility. Sidekey needs this to send shortcuts and read window titles.
 3. **iPad:** build and install the `iKeypad` scheme from source (see Build from source), open it and allow it to find devices on your local network.
 4. Connect the iPad to the Mac with a USB cable, or join the same Wi-Fi network. Sidekey finds the Mac by itself.
@@ -50,7 +52,7 @@ xcodegen generate
 open iKeypadApp.xcodeproj
 ```
 
-To build only the iPad app, use the `iKeypad` scheme; the Mac app is available ready-made from Releases. Before building, change these in `project.yml` to your own values, then run `xcodegen generate` again:
+To build only the iPad app, use the `iKeypad` scheme. Before building, change these in `project.yml` to your own values, then run `xcodegen generate` again:
 
 - `DEVELOPMENT_TEAM` (three places): your Apple team ID.
 - The bundle IDs `com.hoque.sidekey`, `com.hoque.sidekey.tests` and `com.hoque.sidekey.mac`: they are registered to the author's team, so automatic signing fails for anyone else.
