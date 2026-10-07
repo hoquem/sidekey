@@ -1,0 +1,377 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		22E0C4AE2AE8FB82CC902980 /* DeckClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6876AAE119F49D350E6A3542 /* DeckClient.swift */; };
+		A3FDF19AF9C6FFDC1A54E288 /* NowControllingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2328F3C3DE9811908410F05 /* NowControllingView.swift */; };
+		BCA2140EE000ED2F05A34C55 /* DeckKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */; };
+		C60B52E8C8CA6EEE7F5994D2 /* DeckRotaryDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */; };
+		C9CD19EB506F4A60EFB3DA00 /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = B798A3E91C1453CF0038144E /* iKeypadShared */; };
+		F142C3232B7E1DC1DEE8D7F4 /* DeckTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCDA982494BE16D9CA7A091 /* DeckTheme.swift */; };
+		F47D261B07788105CDA43ACD /* iKeypadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8E6E51D0F95DA50DAB80B /* iKeypadApp.swift */; };
+		F7A820FF3AF0CF8F1DB99869 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66BE045D8C96A71F82327FB5 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		66BE045D8C96A71F82327FB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6876AAE119F49D350E6A3542 /* DeckClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckClient.swift; sourceTree = "<group>"; };
+		71192AD8239744B4140C2154 /* iKeypad.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iKeypad.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckKeyView.swift; sourceTree = "<group>"; };
+		948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRotaryDialView.swift; sourceTree = "<group>"; };
+		B5418E667911A23A5003A13F /* iKeypadShared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iKeypadShared; path = Packages/iKeypadShared; sourceTree = SOURCE_ROOT; };
+		CDCDA982494BE16D9CA7A091 /* DeckTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckTheme.swift; sourceTree = "<group>"; };
+		D3E8E6E51D0F95DA50DAB80B /* iKeypadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iKeypadApp.swift; sourceTree = "<group>"; };
+		E2328F3C3DE9811908410F05 /* NowControllingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowControllingView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		53A4DE58805FA640F965B52D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9CD19EB506F4A60EFB3DA00 /* iKeypadShared in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3B97FC6A7916016FB8166E7A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				71192AD8239744B4140C2154 /* iKeypad.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7158175D63F4665B10AA9C81 /* iKeypad */ = {
+			isa = PBXGroup;
+			children = (
+				6876AAE119F49D350E6A3542 /* DeckClient.swift */,
+				8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */,
+				948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */,
+				CDCDA982494BE16D9CA7A091 /* DeckTheme.swift */,
+				D3E8E6E51D0F95DA50DAB80B /* iKeypadApp.swift */,
+				E2328F3C3DE9811908410F05 /* NowControllingView.swift */,
+			);
+			name = iKeypad;
+			path = iKeypad/Sources/iKeypad;
+			sourceTree = "<group>";
+		};
+		7C126A9A01D0E635BA07786C /* iKeypadApp */ = {
+			isa = PBXGroup;
+			children = (
+				66BE045D8C96A71F82327FB5 /* Assets.xcassets */,
+			);
+			path = iKeypadApp;
+			sourceTree = "<group>";
+		};
+		83BA457165F4612546752FED = {
+			isa = PBXGroup;
+			children = (
+				7158175D63F4665B10AA9C81 /* iKeypad */,
+				7C126A9A01D0E635BA07786C /* iKeypadApp */,
+				EEF6AA1C61FC463C88B96D65 /* Packages */,
+				3B97FC6A7916016FB8166E7A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EEF6AA1C61FC463C88B96D65 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				B5418E667911A23A5003A13F /* iKeypadShared */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5081C51E4656F36DEBDE8814 /* iKeypad */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6BDA9B7DA839D40557E90E1 /* Build configuration list for PBXNativeTarget "iKeypad" */;
+			buildPhases = (
+				E70AE497D461E80E2D315B32 /* Sources */,
+				E7CF0101175C2A9B01FCEAFC /* Resources */,
+				53A4DE58805FA640F965B52D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iKeypad;
+			packageProductDependencies = (
+				B798A3E91C1453CF0038144E /* iKeypadShared */,
+			);
+			productName = iKeypad;
+			productReference = 71192AD8239744B4140C2154 /* iKeypad.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		384A6D957573AD84AE562584 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					5081C51E4656F36DEBDE8814 = {
+						DevelopmentTeam = C67LAFG9Q4;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = DC9634201ACBB57152C9574C /* Build configuration list for PBXProject "iKeypadApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 83BA457165F4612546752FED;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CB41525011F0E0E0B997BA6E /* XCLocalSwiftPackageReference "Packages/iKeypadShared" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3B97FC6A7916016FB8166E7A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5081C51E4656F36DEBDE8814 /* iKeypad */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E7CF0101175C2A9B01FCEAFC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7A820FF3AF0CF8F1DB99869 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E70AE497D461E80E2D315B32 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22E0C4AE2AE8FB82CC902980 /* DeckClient.swift in Sources */,
+				BCA2140EE000ED2F05A34C55 /* DeckKeyView.swift in Sources */,
+				C60B52E8C8CA6EEE7F5994D2 /* DeckRotaryDialView.swift in Sources */,
+				F142C3232B7E1DC1DEE8D7F4 /* DeckTheme.swift in Sources */,
+				A3FDF19AF9C6FFDC1A54E288 /* NowControllingView.swift in Sources */,
+				F47D261B07788105CDA43ACD /* iKeypadApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		178356BBEA77DD25CF389DDC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		67BF5528836A5B47BABC1E02 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		89E7C4BE971277E39A7749E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C67LAFG9Q4;
+				INFOPLIST_FILE = iKeypadApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hoque.ikeypad;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		B5018EE0346D94D0F97E8DAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C67LAFG9Q4;
+				INFOPLIST_FILE = iKeypadApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hoque.ikeypad;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D6BDA9B7DA839D40557E90E1 /* Build configuration list for PBXNativeTarget "iKeypad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89E7C4BE971277E39A7749E7 /* Debug */,
+				B5018EE0346D94D0F97E8DAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DC9634201ACBB57152C9574C /* Build configuration list for PBXProject "iKeypadApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				178356BBEA77DD25CF389DDC /* Debug */,
+				67BF5528836A5B47BABC1E02 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		CB41525011F0E0E0B997BA6E /* XCLocalSwiftPackageReference "Packages/iKeypadShared" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/iKeypadShared;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B798A3E91C1453CF0038144E /* iKeypadShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = iKeypadShared;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 384A6D957573AD84AE562584 /* Project object */;
+}

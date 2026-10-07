@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# SwiftPM / Xcode build output
+.build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+
+# Runtime logs
+.impeccable/daemon.log

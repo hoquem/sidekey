@@ -1,0 +1,465 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-07T16:56:21Z",
+  "title": "Design System: iKeypad",
+  "extensions": {
+    "colorMeta": {
+      "lit": {
+        "role": "primary",
+        "displayName": "Lit Amber",
+        "canonical": "#FFB020",
+        "tonalRamp": [
+          "#3D2800",
+          "#704800",
+          "#A36900",
+          "#E69400",
+          "#FFB329",
+          "#FFC966",
+          "#FFDEA3",
+          "#FFF2DB"
+        ]
+      },
+      "failure": {
+        "role": "status",
+        "displayName": "Signal Red",
+        "canonical": "#FF7A7A",
+        "tonalRamp": [
+          "#3D0000",
+          "#700000",
+          "#A30000",
+          "#E60000",
+          "#FF2929",
+          "#FF6666",
+          "#FFA3A3",
+          "#FFDBDB"
+        ]
+      },
+      "role-navigate": {
+        "role": "role",
+        "displayName": "Slate",
+        "canonical": "#CBD5E1",
+        "tonalRamp": [
+          "#161E27",
+          "#293747",
+          "#3C5067",
+          "#547092",
+          "#7791B1",
+          "#9EB1C7",
+          "#C5D0DD",
+          "#E8EDF2"
+        ]
+      },
+      "role-create": {
+        "role": "role",
+        "displayName": "Sky",
+        "canonical": "#7AB4FF",
+        "tonalRamp": [
+          "#001B3D",
+          "#003170",
+          "#0047A3",
+          "#0064E6",
+          "#2986FF",
+          "#66A9FF",
+          "#A3CBFF",
+          "#DBEBFF"
+        ]
+      },
+      "role-run": {
+        "role": "role",
+        "displayName": "Signal Green",
+        "canonical": "#5EE38E",
+        "tonalRamp": [
+          "#093419",
+          "#11602D",
+          "#188B42",
+          "#22C45C",
+          "#49DF7F",
+          "#7DE8A4",
+          "#B1F1C8",
+          "#E1FAEA"
+        ]
+      },
+      "role-modify": {
+        "role": "role",
+        "displayName": "Lavender",
+        "canonical": "#C9A8FF",
+        "tonalRamp": [
+          "#17003D",
+          "#2B0070",
+          "#3E00A3",
+          "#5700E6",
+          "#7A29FF",
+          "#A066FF",
+          "#C6A3FF",
+          "#E9DBFF"
+        ]
+      },
+      "plate": {
+        "role": "neutral",
+        "displayName": "Deck Plate",
+        "canonical": "#101218",
+        "tonalRamp": [
+          "#181C25",
+          "#2D3243",
+          "#414962",
+          "#5C678A",
+          "#7E89A9",
+          "#A3ABC2",
+          "#C8CDDA",
+          "#EAEBF1"
+        ]
+      },
+      "well": {
+        "role": "neutral",
+        "displayName": "Recessed Well",
+        "canonical": "#0A0C0F",
+        "tonalRamp": [
+          "#181D25",
+          "#2D3643",
+          "#414E62",
+          "#5C6E8A",
+          "#7E90A9",
+          "#A3AFC2",
+          "#C8CFDA",
+          "#EAECF1"
+        ]
+      },
+      "cap-top": {
+        "role": "neutral",
+        "displayName": "Cap Top",
+        "canonical": "#24272E",
+        "tonalRamp": [
+          "#1B1D22",
+          "#31353F",
+          "#484E5C",
+          "#656D81",
+          "#878FA1",
+          "#A9AFBC",
+          "#CCCFD7",
+          "#EBECEF"
+        ]
+      },
+      "cap-bottom": {
+        "role": "neutral",
+        "displayName": "Cap Bottom",
+        "canonical": "#1A1D23",
+        "tonalRamp": [
+          "#1A1D23",
+          "#303540",
+          "#464E5E",
+          "#626D84",
+          "#848FA4",
+          "#A7AFBE",
+          "#CACFD8",
+          "#EBECF0"
+        ]
+      },
+      "cap-pressed": {
+        "role": "neutral",
+        "displayName": "Cap Pressed",
+        "canonical": "#14161B",
+        "tonalRamp": [
+          "#1A1D23",
+          "#303540",
+          "#454C5E",
+          "#626B84",
+          "#848DA4",
+          "#A7AEBE",
+          "#CACED8",
+          "#EAECF0"
+        ]
+      },
+      "raised": {
+        "role": "neutral",
+        "displayName": "Raised Graphite",
+        "canonical": "#22262D",
+        "tonalRamp": [
+          "#1A1D23",
+          "#303640",
+          "#464F5D",
+          "#636E83",
+          "#8590A3",
+          "#A8B0BD",
+          "#CBCFD7",
+          "#EBECF0"
+        ]
+      },
+      "label": {
+        "role": "neutral",
+        "displayName": "Label White",
+        "canonical": "#F3F5F8",
+        "tonalRamp": [
+          "#171D27",
+          "#293547",
+          "#3C4D67",
+          "#556D91",
+          "#788EB0",
+          "#9EAEC7",
+          "#C5CFDD",
+          "#E8ECF2"
+        ]
+      },
+      "secondary-label": {
+        "role": "neutral",
+        "displayName": "Secondary Grey",
+        "canonical": "#A3ADBA",
+        "tonalRamp": [
+          "#1A1E23",
+          "#303740",
+          "#46505D",
+          "#627183",
+          "#8592A3",
+          "#A8B1BD",
+          "#CBD0D8",
+          "#EBEDF0"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Cap Hairline",
+        "canonical": "rgba(255,255,255,0.07)"
+      },
+      "well-hairline": {
+        "role": "neutral",
+        "displayName": "Well Hairline",
+        "canonical": "rgba(255,255,255,0.035)"
+      }
+    },
+    "typographyMeta": {
+      "band-name-column": {
+        "displayName": "Band name, column",
+        "purpose": "Dynamic Type .title bold. Controlled app name in the landscape column."
+      },
+      "band-name-row": {
+        "displayName": "Band name, row",
+        "purpose": "Dynamic Type .title2 bold. App name in the portrait band; not-connected headline in landscape."
+      },
+      "status-headline": {
+        "displayName": "Status headline",
+        "purpose": "Dynamic Type .title3 bold. Not-connected headline in portrait."
+      },
+      "key-label": {
+        "displayName": "Key label",
+        "purpose": "Dynamic Type .subheadline semibold, 2 lines, min scale 0.7."
+      },
+      "body-secondary": {
+        "displayName": "Secondary body",
+        "purpose": "Dynamic Type .subheadline regular. Window title (middle truncation) and setup help."
+      },
+      "toast": {
+        "displayName": "Toast",
+        "purpose": "Dynamic Type .subheadline medium."
+      },
+      "chip-label": {
+        "displayName": "Chip label",
+        "purpose": "Dynamic Type .footnote semibold. Chips and the USB / Wi-Fi label."
+      },
+      "host-caption": {
+        "displayName": "Host caption",
+        "purpose": "Dynamic Type .caption regular. The Mac's host name."
+      },
+      "key-hint": {
+        "displayName": "Key hint",
+        "purpose": "Dynamic Type .caption2 medium, 1 line, min scale 0.7. Shortcut sent, Hold hint, or live chip state."
+      }
+    },
+    "shadows": [
+      {
+        "name": "cap-rest",
+        "value": "SwiftUI .shadow(color: black 45%, radius: 8, x: 0, y: 5); CSS approx 0 5px 16px rgba(0,0,0,0.45)",
+        "purpose": "Resting keycap on the plate."
+      },
+      {
+        "name": "cap-pressed",
+        "value": "SwiftUI .shadow(color: black 20%, radius: 2, x: 0, y: 1); CSS approx 0 1px 4px rgba(0,0,0,0.2)",
+        "purpose": "Cap held down."
+      },
+      {
+        "name": "lit-pending",
+        "value": "SwiftUI .shadow(color: lit 25%, radius: 6, x: 0, y: 0); CSS approx 0 0 12px rgba(255,176,32,0.25)",
+        "purpose": "Faint glow while the Mac works on the tap."
+      },
+      {
+        "name": "lit-success",
+        "value": "SwiftUI .shadow(color: lit 60%, radius: 16, x: 0, y: 0); CSS approx 0 0 32px rgba(255,176,32,0.6)",
+        "purpose": "Bloom when the Mac reports success."
+      },
+      {
+        "name": "toast",
+        "value": "SwiftUI .shadow(color: black 50%, radius: 16, x: 0, y: 8); CSS approx 0 8px 32px rgba(0,0,0,0.5)",
+        "purpose": "Floating toast."
+      }
+    ],
+    "motion": [
+      {
+        "name": "press",
+        "value": "easeOut 0.12s; scale 0.965",
+        "purpose": "Cap sinks while pressed."
+      },
+      {
+        "name": "feedback",
+        "value": "easeOut 0.35s",
+        "purpose": "Edge and glow transitions between pending, succeeded, failed."
+      },
+      {
+        "name": "failure-shake",
+        "value": "linear 0.36s; translateX 6pt x sin(4 pi t), two full cycles",
+        "purpose": "Failed key. Skipped under Reduce Motion."
+      },
+      {
+        "name": "hold-fill",
+        "value": "linear 0.6s rise; easeOut 0.18s release",
+        "purpose": "Hold-to-confirm fill on disruptive keys. Haptics: light on start, heavy on fire."
+      },
+      {
+        "name": "profile-swap",
+        "value": "easeOut 0.22s; opacity + scale 0.985 (opacity only under Reduce Motion)",
+        "purpose": "Grid swaps when the controlled app changes."
+      },
+      {
+        "name": "toast",
+        "value": "easeOut 0.25s; move from bottom + opacity (opacity only under Reduce Motion)",
+        "purpose": "Toast in and out."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "landscape",
+        "value": "width > 1.15 x height"
+      },
+      {
+        "name": "band-column-width",
+        "value": "min(300pt, 28% of width)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Keycap",
+      "kind": "custom",
+      "refersTo": "keycap",
+      "description": "Raised graphite cap: role-tinted symbol, white label, shortcut hint. Press sinks it.",
+      "html": "<button class=\"ds-cap\"><span class=\"ds-cap-icon\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 4l12 8-12 8z\" fill=\"currentColor\"/></svg></span><span class=\"ds-cap-label\">Run</span><span class=\"ds-cap-hint\">⌘R</span></button>",
+      "css": ".ds-cap{font-family:-apple-system,system-ui,sans-serif;width:150px;height:150px;border-radius:24px;background:linear-gradient(#24272E,#1A1D23);border:1px solid rgba(255,255,255,0.07);box-shadow:0 5px 16px rgba(0,0,0,0.45);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:13px;color:#F3F5F8;cursor:pointer;transition:transform .12s ease-out,box-shadow .35s ease-out,border-color .35s ease-out;position:relative;overflow:hidden}.ds-cap:hover{border-color:rgba(255,255,255,0.12)}.ds-cap:focus-visible{outline:2px solid #F3F5F8;outline-offset:3px}.ds-cap:active{background:#14161B;transform:scale(.965);box-shadow:0 1px 4px rgba(0,0,0,0.2)}.ds-cap-icon{color:#5EE38E;display:flex}.ds-cap-label{font-size:15px;font-weight:600}.ds-cap-hint{font-size:11px;font-weight:500;color:#A3ADBA}"
+    },
+    {
+      "name": "Keycap, succeeded",
+      "kind": "custom",
+      "refersTo": "keycap",
+      "description": "The Mac fired the action: full amber edge and bloom.",
+      "html": "<button class=\"ds-cap ds-cap-ok\"><span class=\"ds-cap-icon\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 4l12 8-12 8z\" fill=\"currentColor\"/></svg></span><span class=\"ds-cap-label\">Run</span><span class=\"ds-cap-hint\">⌘R</span></button>",
+      "css": ".ds-cap{font-family:-apple-system,system-ui,sans-serif;width:150px;height:150px;border-radius:24px;background:linear-gradient(#24272E,#1A1D23);border:1px solid rgba(255,255,255,0.07);box-shadow:0 5px 16px rgba(0,0,0,0.45);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:13px;color:#F3F5F8;cursor:pointer;transition:transform .12s ease-out,box-shadow .35s ease-out,border-color .35s ease-out;position:relative;overflow:hidden}.ds-cap:hover{border-color:rgba(255,255,255,0.12)}.ds-cap:focus-visible{outline:2px solid #F3F5F8;outline-offset:3px}.ds-cap:active{background:#14161B;transform:scale(.965);box-shadow:0 1px 4px rgba(0,0,0,0.2)}.ds-cap-icon{color:#5EE38E;display:flex}.ds-cap-label{font-size:15px;font-weight:600}.ds-cap-hint{font-size:11px;font-weight:500;color:#A3ADBA}.ds-cap-ok{border:2px solid #FFB020;box-shadow:0 5px 16px rgba(0,0,0,0.45),0 0 32px rgba(255,176,32,0.6)}.ds-cap-ok:hover{border-color:#FFB020}"
+    },
+    {
+      "name": "Keycap, failed",
+      "kind": "custom",
+      "refersTo": "keycap",
+      "description": "The Mac reported failure: red edge, corner badge, horizontal shake.",
+      "html": "<button class=\"ds-cap ds-cap-fail\"><span class=\"ds-cap-badge\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\"><circle cx=\"8\" cy=\"8\" r=\"8\" fill=\"#FF7A7A\"/><rect x=\"7\" y=\"3.5\" width=\"2\" height=\"6\" rx=\"1\" fill=\"#1A1D23\"/><circle cx=\"8\" cy=\"12\" r=\"1.2\" fill=\"#1A1D23\"/></svg></span><span class=\"ds-cap-icon\" style=\"color:#FF7A7A\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\"><rect x=\"5\" y=\"5\" width=\"14\" height=\"14\" rx=\"2\" fill=\"currentColor\"/></svg></span><span class=\"ds-cap-label\">Stop</span><span class=\"ds-cap-hint\">⌘.</span></button>",
+      "css": ".ds-cap{font-family:-apple-system,system-ui,sans-serif;width:150px;height:150px;border-radius:24px;background:linear-gradient(#24272E,#1A1D23);border:1px solid rgba(255,255,255,0.07);box-shadow:0 5px 16px rgba(0,0,0,0.45);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:13px;color:#F3F5F8;cursor:pointer;transition:transform .12s ease-out,box-shadow .35s ease-out,border-color .35s ease-out;position:relative;overflow:hidden}.ds-cap:hover{border-color:rgba(255,255,255,0.12)}.ds-cap:focus-visible{outline:2px solid #F3F5F8;outline-offset:3px}.ds-cap:active{background:#14161B;transform:scale(.965);box-shadow:0 1px 4px rgba(0,0,0,0.2)}.ds-cap-icon{color:#5EE38E;display:flex}.ds-cap-label{font-size:15px;font-weight:600}.ds-cap-hint{font-size:11px;font-weight:500;color:#A3ADBA}.ds-cap-fail{border:2px solid #FF7A7A;animation:ds-shake .36s linear}.ds-cap-fail:hover{border-color:#FF7A7A}.ds-cap-badge{position:absolute;top:10px;right:10px;display:flex}@keyframes ds-shake{0%,50%,100%{transform:translateX(0)}12.5%,62.5%{transform:translateX(6px)}37.5%,87.5%{transform:translateX(-6px)}}@media (prefers-reduced-motion:reduce){.ds-cap-fail{animation:none}}"
+    },
+    {
+      "name": "Keycap, hold to confirm",
+      "kind": "custom",
+      "refersTo": "keycap",
+      "description": "Disruptive key: a role-tinted fill rises over 0.6 s of holding; releasing early cancels.",
+      "html": "<button class=\"ds-cap ds-cap-hold\"><span class=\"ds-cap-fill\"></span><span class=\"ds-cap-icon\" style=\"color:#FF7A7A\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><rect x=\"5\" y=\"10\" width=\"14\" height=\"10\" rx=\"2\" fill=\"currentColor\"/><path d=\"M8 10V7a4 4 0 018 0v3\"/></svg></span><span class=\"ds-cap-label\">Lock Mac</span><span class=\"ds-cap-hint\">Hold · ⌃⌘Q</span></button>",
+      "css": ".ds-cap{font-family:-apple-system,system-ui,sans-serif;width:150px;height:150px;border-radius:24px;background:linear-gradient(#24272E,#1A1D23);border:1px solid rgba(255,255,255,0.07);box-shadow:0 5px 16px rgba(0,0,0,0.45);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:13px;color:#F3F5F8;cursor:pointer;transition:transform .12s ease-out,box-shadow .35s ease-out,border-color .35s ease-out;position:relative;overflow:hidden}.ds-cap:hover{border-color:rgba(255,255,255,0.12)}.ds-cap:focus-visible{outline:2px solid #F3F5F8;outline-offset:3px}.ds-cap:active{background:#14161B;transform:scale(.965);box-shadow:0 1px 4px rgba(0,0,0,0.2)}.ds-cap-icon{color:#5EE38E;display:flex}.ds-cap-label{font-size:15px;font-weight:600}.ds-cap-hint{font-size:11px;font-weight:500;color:#A3ADBA}.ds-cap-fill{position:absolute;left:0;right:0;bottom:0;height:0;background:rgba(255,122,122,0.28);transition:height .18s ease-out}.ds-cap-hold:active .ds-cap-fill{height:100%;transition:height .6s linear}.ds-cap-hold>span:not(.ds-cap-fill){position:relative}"
+    },
+    {
+      "name": "Empty well",
+      "kind": "custom",
+      "refersTo": "key-well",
+      "description": "Recessed empty slot so the grid never reflows.",
+      "html": "<div class=\"ds-well\" aria-hidden=\"true\"></div>",
+      "css": ".ds-well{width:150px;height:150px;border-radius:24px;background:#0A0C0F;border:1px solid rgba(255,255,255,0.035)}"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip-good",
+      "description": "App state capsule, coloured by tone at 14% background.",
+      "html": "<div class=\"ds-chips\"><span class=\"ds-chip ds-chip-good\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 16 16\"><circle cx=\"8\" cy=\"8\" r=\"6\" fill=\"currentColor\"/></svg>Connected</span><span class=\"ds-chip ds-chip-warn\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 16 16\"><circle cx=\"8\" cy=\"8\" r=\"6\" fill=\"currentColor\"/></svg>Muted</span><span class=\"ds-chip ds-chip-bad\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 16 16\"><path d=\"M8 1.5L15 14H1z\" fill=\"currentColor\"/></svg>Mac needs Accessibility permission</span><span class=\"ds-chip ds-chip-neutral\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 16 16\"><rect x=\"2\" y=\"2\" width=\"12\" height=\"12\" rx=\"2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg>System keys</span></div>",
+      "css": ".ds-chips{display:flex;flex-wrap:wrap;gap:8px;font-family:-apple-system,system-ui,sans-serif;}.ds-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}.ds-chip-good{color:#5EE38E;background:rgba(94,227,142,0.14)}.ds-chip-warn{color:#FFB020;background:rgba(255,176,32,0.14)}.ds-chip-bad{color:#FF7A7A;background:rgba(255,122,122,0.14)}.ds-chip-neutral{color:#A3ADBA;background:rgba(163,173,186,0.14)}"
+    },
+    {
+      "name": "Pin button",
+      "kind": "button",
+      "refersTo": "pin-button",
+      "description": "44pt circle; amber on an amber 16% circle when the layout is pinned.",
+      "html": "<div style=\"display:flex;gap:12px\"><button class=\"ds-pin\" aria-label=\"Pin these keys\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M9 3h6l-1 6 3 3H7l3-3z\"/><path d=\"M12 12v9\"/></svg></button><button class=\"ds-pin ds-pin-on\" aria-label=\"Unpin keys\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M9 3h6l-1 6 3 3H7l3-3z\"/><path d=\"M12 12v9\"/></svg></button></div>",
+      "css": ".ds-pin{width:44px;height:44px;border-radius:22px;border:none;background:#22262D;color:#A3ADBA;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s}.ds-pin:hover{background:#2A2E36}.ds-pin:focus-visible{outline:2px solid #F3F5F8;outline-offset:2px}.ds-pin-on{background:rgba(255,176,32,0.16);color:#FFB020}.ds-pin-on:hover{background:rgba(255,176,32,0.22)}"
+    },
+    {
+      "name": "Toast",
+      "kind": "custom",
+      "refersTo": "toast",
+      "description": "Bottom message: red triangle for errors, amber tap glyph for hints.",
+      "html": "<div class=\"ds-toast\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\"><path d=\"M10 3a2 2 0 014 0v8l4 1a3 3 0 012 3l-1 6H9l-4-6a2 2 0 013-2l2 1z\" fill=\"#FFB020\"/></svg><span>Hold to lock mac.</span></div>",
+      "css": ".ds-toast{font-family:-apple-system,system-ui,sans-serif;display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;background:#22262D;color:#F3F5F8;font-size:15px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,0.5)}"
+    },
+    {
+      "name": "Now Controlling band",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "Portrait band: app icon, name, window title, chips, link and pin.",
+      "html": "<div class=\"ds-band\"><div class=\"ds-band-icon\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#A3ADBA\" stroke-width=\"1.8\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M3 8h18\"/></svg></div><div class=\"ds-band-id\"><div class=\"ds-band-name\">Xcode</div><div class=\"ds-band-title\">iKeypad, Package.swift</div></div><div class=\"ds-band-link\"><div class=\"ds-band-usb\">USB</div><div class=\"ds-band-host\">MacBook Pro</div></div></div>",
+      "css": ".ds-band{font-family:-apple-system,system-ui,sans-serif;display:flex;align-items:center;gap:18px;padding:24px;background:#101218;color:#F3F5F8}.ds-band-icon{width:64px;height:64px;border-radius:14px;background:#22262D;display:flex;align-items:center;justify-content:center}.ds-band-id{flex:1;display:flex;flex-direction:column;gap:3px}.ds-band-name{font-size:22px;font-weight:700}.ds-band-title{font-size:15px;color:#A3ADBA}.ds-band-link{text-align:right}.ds-band-usb{font-size:13px;font-weight:600}.ds-band-host{font-size:12px;color:#A3ADBA}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lit Key",
+    "overview": "iKeypad is a dark hardware deck: a graphite plate carrying a fixed grid of raised graphite keycaps, read from 50 to 70 cm away and tapped without looking. The surface is deliberately quiet so that the two things that matter can be seen at a glance: which Mac app the deck is driving (the real app icon, name and window title in the band) and what the Mac said about the last tap. Colour is never decoration. Each key's role tints its SF Symbol; a single warm amber, the lit signal, marks a key that is firing or has fired, a live state that needs attention, and the app icon's glowing centre key.\n\nThe deck is forced dark whatever the system appearance (`preferredColorScheme(.dark)`). There is no light theme. Depth is physical: caps carry a soft drop shadow and a top-to-bottom gradient, sink and darken when pressed, and empty slots are recessed wells darker than the plate. Type is the platform's own: SF Pro through Dynamic Type text styles, SF Symbols for every glyph.\n\nThe signature move is the lit-key glow travelling from tap to confirmation: a faint amber edge and glow while the Mac works, a full amber bloom when it reports success, a red edge, badge and shake with the Mac's reason when it fails.",
+    "keyCharacteristics": [
+      "Graphite plate, graphite caps, high-contrast white labels.",
+      "Role colour lives on the key's symbol; the cap edge is reserved for the Mac's answer.",
+      "One amber signal colour, used only for \"lit\" meaning.",
+      "A fixed 3 x 5 grid with recessed wells, so keys never move within an orientation.",
+      "Native materials: SF Pro, Dynamic Type, SF Symbols, continuous-corner rounded rectangles."
+    ],
+    "rules": [
+      {
+        "name": "The One Signal Rule",
+        "body": "Amber means lit: firing, fired, live attention state, pinned. If a use of amber cannot be described as \"lit\", it is the wrong colour.",
+        "section": "colors"
+      },
+      {
+        "name": "The Symbol Carries the Role Rule",
+        "body": "Role colour tints the key's symbol only. Cap fills stay graphite on every key, so the grid never becomes a wall of coloured tiles.",
+        "section": "colors"
+      },
+      {
+        "name": "The Shortcut Teaches Rule",
+        "body": "Every hotkey key shows the exact shortcut it sends, in Mac modifier glyph order ⌃⌥⇧⌘, so the deck teaches the keyboard.",
+        "section": "typography"
+      },
+      {
+        "name": "The Muscle Memory Rule",
+        "body": "The grid is always full: a layout with fewer keys than slots shows wells, never a reflowed, shorter grid.",
+        "section": "layout"
+      },
+      {
+        "name": "The Light Not Lift Rule",
+        "body": "The amber glow is centred and unoffset; it never doubles as an elevation shadow, and black shadows never carry colour.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep every cap fill graphite (cap-top to cap-bottom) and put role colour on the symbol only.",
+      "Do answer every tap on the cap edge: amber 45% pending, full amber succeeded, red failed with badge and shake.",
+      "Do render all 15 slots, using recessed wells for empty ones.",
+      "Do show the exact shortcut in ⌃⌥⇧⌘ order under every hotkey key.",
+      "Do use Dynamic Type text styles and SF Symbols; scale key symbols and corners from the key's shorter side (24% and 16%).",
+      "Do gate disruptive keys behind the 0.6 s hold with a rising role-tinted fill.",
+      "Do dim keys to 38% and make them inert while the Mac is not connected.",
+      "Do honour Reduce Motion: no shake, and opacity-only transitions."
+    ],
+    "donts": [
+      "Don't use amber for anything that is not lit, pinned or an attention state.",
+      "Don't fill caps with saturated colour or give each role a coloured cap.",
+      "Don't reflow or shorten the grid when a layout has fewer keys.",
+      "Don't add a light appearance; the deck is dark whatever the system setting.",
+      "Don't give the amber glow an offset or use coloured shadows for elevation."
+    ]
+  }
+}

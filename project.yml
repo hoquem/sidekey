@@ -1,0 +1,40 @@
+name: iKeypadApp
+options:
+  bundleIdPrefix: com.hoque
+  deploymentTarget:
+    iOS: "16.0"
+packages:
+  iKeypadShared:
+    path: Packages/iKeypadShared
+targets:
+  iKeypad:
+    type: application
+    platform: iOS
+    sources:
+      - path: iKeypad/Sources/iKeypad
+      - path: iKeypadApp/Assets.xcassets
+    dependencies:
+      - package: iKeypadShared
+    info:
+      path: iKeypadApp/Info.plist
+      properties:
+        CFBundleDisplayName: iKeypad
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSLocalNetworkUsageDescription: iKeypad connects to the iKeypad companion app on your Mac to show shortcut keys.
+        NSBonjourServices:
+          - _ikeypad._tcp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hoque.ikeypad
+        TARGETED_DEVICE_FAMILY: "2"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: C67LAFG9Q4
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
