@@ -4,18 +4,37 @@ import AppKit
 import Combine
 import iKeypadShared
 
+/// Serves layouts and app state to paired iPads and runs their taps.
+///
+/// Every connection starts unauthenticated and receives only a ``DeckMessage/challenge``. It
+/// becomes authenticated by pairing with the code shown in the menu or by proving a stored
+/// token; only then does it receive layouts and app state, and only then are its taps run.
 @MainActor
 public final class DeckServer: ObservableObject {
-    public static let shared = DeckServer()
+    public static let shared = DeckServer(store: KeychainPairedDeviceStore(), hostId: HostIdentity.current, pairing: PairingWindow())
 
+    static let protocolVersion = "2.1.0"
+
+    let pairing: PairingWindow
+    private let store: PairedDeviceStore
+    private let hostId: String
     private var listener: NWListener?
     private var activeConnections: [NWConnection] = []
     private var receiveBuffers: [ObjectIdentifier: Data] = [:]
+    private var nonces: [ObjectIdentifier: Data] = [:]
+    private var authenticated: Set<ObjectIdentifier> = []
     private var cancellables = Set<AnyCancellable>()
 
+    /// Paired iPads currently connected.
     @Published public private(set) var connectedClientsCount: Int = 0
+    @Published private(set) var pairedDeviceCount: Int = 0
 
-    private init() {
+    init(store: PairedDeviceStore, hostId: String, pairing: PairingWindow) {
+        self.store = store
+        self.hostId = hostId
+        self.pairing = pairing
+        self.pairedDeviceCount = store.count
+
         // Observe profile changes to broadcast
         AppContextMonitor.shared.$activeProfile
             .sink { [weak self] newProfile in
@@ -39,9 +58,11 @@ public final class DeckServer: ObservableObject {
         do {
             let parameters = NWParameters.tcp
             self.listener = try NWListener(using: parameters, on: NWEndpoint.Port(rawValue: port)!)
-            // Advertise via Bonjour for zero-config Wi-Fi & USB peer-to-peer detection
+            // Advertise via Bonjour for zero-config Wi-Fi & USB peer-to-peer detection. The TXT
+            // record carries this Mac's id so a paired iPad reconnects only to it.
             if let serviceName {
-                self.listener?.service = NWListener.Service(name: serviceName, type: "_sidekey._tcp")
+                self.listener?.service = NWListener.Service(name: serviceName, type: "_sidekey._tcp",
+                                                            txtRecord: NWTXTRecord(["hostId": hostId]))
             }
 
             self.listener?.stateUpdateHandler = { state in
@@ -78,17 +99,16 @@ public final class DeckServer: ObservableObject {
                 case .ready:
                     print("[Server] Client connected from \(connection.endpoint)")
                     self.activeConnections.append(connection)
-                    self.connectedClientsCount = self.activeConnections.count
-                    AppContextMonitor.shared.setPolling(true)
-                    // Send current active profile immediately
-                    self.send(message: .profileUpdated(profile: AppContextMonitor.shared.activeProfile), over: connection)
+                    self.sendChallenge(over: connection)
                     self.receiveLoop(connection)
                 case .failed, .cancelled:
                     print("[Server] Client disconnected: \(connection.endpoint)")
+                    let id = ObjectIdentifier(connection)
                     self.activeConnections.removeAll { $0 === connection }
-                    self.receiveBuffers.removeValue(forKey: ObjectIdentifier(connection))
-                    self.connectedClientsCount = self.activeConnections.count
-                    AppContextMonitor.shared.setPolling(!self.activeConnections.isEmpty)
+                    self.receiveBuffers.removeValue(forKey: id)
+                    self.nonces.removeValue(forKey: id)
+                    self.authenticated.remove(id)
+                    self.authenticationChanged()
                 default:
                     break
                 }
@@ -124,14 +144,24 @@ public final class DeckServer: ObservableObject {
     }
 
     private func handleMessage(_ message: DeckMessage, from connection: NWConnection) {
+        let id = ObjectIdentifier(connection)
+        switch message {
+        case .pair(let code, let clientId, let clientName):
+            handlePairing(code: code, clientId: clientId, clientName: clientName, from: connection)
+            return
+        case .authenticate(let clientId, let proof):
+            handleAuthentication(clientId: clientId, proof: proof, from: connection)
+            return
+        case .executeAction(let keyId, _, _) where !authenticated.contains(id):
+            send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: "Pair this iPad with your Mac first."), over: connection)
+            return
+        default:
+            guard authenticated.contains(id) else { return }
+        }
+
         switch message {
         case .handshake(let clientName):
             print("[Server] Received handshake from \(clientName)")
-            send(message: .handshakeAck(serverVersion: "2.0.0", hostName: Host.current().localizedName), over: connection)
-            send(message: .profileUpdated(profile: AppContextMonitor.shared.activeProfile), over: connection)
-            if let context = AppContextMonitor.shared.currentContext() {
-                send(message: .appContextUpdated(context: context), over: connection)
-            }
 
         case .executeAction(let keyId, let profileId, let pinned):
             print("[Server] Tap on key \(keyId) (profile \(profileId ?? "-"), pinned \(pinned ?? false))")
@@ -147,6 +177,91 @@ public final class DeckServer: ObservableObject {
 
         default:
             break
+        }
+    }
+
+    // MARK: - Pairing and authentication
+
+    /// Start a connection's authentication with a fresh nonce.
+    private func sendChallenge(over connection: NWConnection) {
+        do {
+            let nonce = try PairingCrypto.randomBytes(32)
+            nonces[ObjectIdentifier(connection)] = nonce
+            send(message: .challenge(nonce: nonce, hostId: hostId, hostName: Host.current().localizedName), over: connection)
+        } catch {
+            print("[Server] Could not create a challenge, closing connection: \(error)")
+            connection.cancel()
+        }
+    }
+
+    private func handlePairing(code: String, clientId: String, clientName: String, from connection: NWConnection) {
+        switch pairing.attempt(code) {
+        case .accepted:
+            do {
+                let token = try PairingCrypto.randomBytes(32)
+                try store.save(token: token, for: clientId, name: clientName)
+                pairedDeviceCount = store.count
+                print("[Server] Paired with \(clientName)")
+                send(message: .paired(token: token), over: connection)
+                welcome(connection)
+            } catch {
+                print("[Server] Pairing failed to store the token: \(error)")
+                send(message: .pairingFailed(reason: "The Mac couldn't save the pairing. Try again."), over: connection)
+            }
+        case .wrong:
+            send(message: .pairingFailed(reason: "That code is wrong. Check the code in the Sidekey menu on your Mac."), over: connection)
+        case .closed:
+            send(message: .pairingFailed(reason: "Pairing isn't open. On your Mac, choose Pair iPad in the Sidekey menu to get a code."), over: connection)
+        }
+    }
+
+    private func handleAuthentication(clientId: String, proof: Data, from connection: NWConnection) {
+        guard let nonce = nonces[ObjectIdentifier(connection)],
+              let token = store.token(for: clientId),
+              PairingCrypto.verify(proof: proof, token: token, nonce: nonce) else {
+            send(message: .authenticationFailed(reason: "This iPad isn't paired with this Mac. Pair again."), over: connection)
+            return
+        }
+        welcome(connection)
+    }
+
+    /// Mark a connection authenticated and send it everything it needs to show the deck.
+    private func welcome(_ connection: NWConnection) {
+        let id = ObjectIdentifier(connection)
+        nonces.removeValue(forKey: id)
+        authenticated.insert(id)
+        authenticationChanged()
+        send(message: .handshakeAck(serverVersion: Self.protocolVersion, hostName: Host.current().localizedName), over: connection)
+        send(message: .profileUpdated(profile: AppContextMonitor.shared.activeProfile), over: connection)
+        if let context = AppContextMonitor.shared.currentContext() {
+            send(message: .appContextUpdated(context: context), over: connection)
+        }
+    }
+
+    private func authenticationChanged() {
+        connectedClientsCount = authenticated.count
+        AppContextMonitor.shared.setPolling(!authenticated.isEmpty)
+    }
+
+    /// Open the pairing window from the menu; the code shows there for ``PairingWindow/lifetime``.
+    func openPairing() {
+        do {
+            try pairing.open()
+        } catch {
+            print("[Server] Could not open pairing: \(error)")
+        }
+    }
+
+    /// Forget every paired iPad; they must pair again.
+    func forgetPairedDevices() {
+        do {
+            try store.removeAll()
+        } catch {
+            print("[Server] Could not forget paired iPads: \(error)")
+        }
+        pairedDeviceCount = store.count
+        for connection in activeConnections where authenticated.contains(ObjectIdentifier(connection)) {
+            connection.cancel()
         }
     }
 
@@ -210,8 +325,9 @@ public final class DeckServer: ObservableObject {
         }
     }
 
+    /// Send ``message`` to every authenticated iPad; unpaired connections never receive it.
     public func broadcast(message: DeckMessage) {
-        for conn in activeConnections {
+        for conn in activeConnections where authenticated.contains(ObjectIdentifier(conn)) {
             send(message: message, over: conn)
         }
     }

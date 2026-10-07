@@ -200,6 +200,20 @@ public enum DeckMessage: Codable, Equatable, Sendable {
     /// unless ``pinned`` is set, in which case it brings that layout's app forward.
     case executeAction(keyId: String, profileId: String?, pinned: Bool?)
     case actionExecuted(keyId: String, success: Bool, errorMessage: String?)
+
+    // Pairing and authentication (see ``PairingCrypto``). Until a connection authenticates, the
+    // Mac sends it nothing but ``challenge`` and pairing or authentication results.
+
+    /// Mac to iPad on connect: a fresh nonce to prove a stored token against, and who the Mac is.
+    case challenge(nonce: Data, hostId: String, hostName: String?)
+    /// iPad to Mac: the 6-digit code shown in the Mac's menu while pairing is open.
+    case pair(code: String, clientId: String, clientName: String)
+    /// Mac to iPad: the token to keep for this Mac. Sent once, at pairing.
+    case paired(token: Data)
+    case pairingFailed(reason: String)
+    /// iPad to Mac: ``PairingCrypto/proof(token:nonce:)`` for the current challenge.
+    case authenticate(clientId: String, proof: Data)
+    case authenticationFailed(reason: String)
     case ping
     case pong
 }

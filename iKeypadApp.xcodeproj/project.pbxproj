@@ -13,8 +13,10 @@
 		508724F6C31A8E58D119FC48 /* ActionDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7975824A26AADE9117E8C4 /* ActionDispatcher.swift */; };
 		5BAE329C48E3FB1B24D1DE1B /* AppContextMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C829FA5E3E27D4B01E0D3F /* AppContextMonitor.swift */; };
 		5EC070841EA09B30DF8A3867 /* iKeypadMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CE111B591B07C75936E526 /* iKeypadMacApp.swift */; };
+		986CB87BD752D654082CC132 /* PairingCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2499A2D7703C7855202ADDB /* PairingCredentials.swift */; };
 		A3FDF19AF9C6FFDC1A54E288 /* NowControllingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2328F3C3DE9811908410F05 /* NowControllingView.swift */; };
 		BCA2140EE000ED2F05A34C55 /* DeckKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */; };
+		BF68CA4897EDD57B41FF7A49 /* DeckClientPairingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57B8C32E5801300F0C9F3EF /* DeckClientPairingTests.swift */; };
 		C60B52E8C8CA6EEE7F5994D2 /* DeckRotaryDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */; };
 		C9CD19EB506F4A60EFB3DA00 /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = B798A3E91C1453CF0038144E /* iKeypadShared */; };
 		DD49CA285073562750BDE4BB /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = EEEB7F49CCF79F6247BF1292 /* iKeypadShared */; };
@@ -22,6 +24,7 @@
 		E58FB833DBAC073EF3D05D73 /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = C830920EDA055DB0CF158CB3 /* iKeypadShared */; };
 		EE0B4A769C1E52BDC97DC2AC /* DeckServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF5AF288E06B91060D5116D /* DeckServer.swift */; };
 		F142C3232B7E1DC1DEE8D7F4 /* DeckTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCDA982494BE16D9CA7A091 /* DeckTheme.swift */; };
+		F2BD1E5D33B7071F93857C45 /* Pairing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A8E3E2C7DDB3D8690FC16E /* Pairing.swift */; };
 		F47D261B07788105CDA43ACD /* iKeypadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8E6E51D0F95DA50DAB80B /* iKeypadApp.swift */; };
 		F7A820FF3AF0CF8F1DB99869 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66BE045D8C96A71F82327FB5 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -48,13 +51,16 @@
 		78649CBB69AC98598A9A5736 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckKeyView.swift; sourceTree = "<group>"; };
 		948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRotaryDialView.swift; sourceTree = "<group>"; };
+		B2499A2D7703C7855202ADDB /* PairingCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCredentials.swift; sourceTree = "<group>"; };
 		B5418E667911A23A5003A13F /* iKeypadShared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iKeypadShared; path = Packages/iKeypadShared; sourceTree = SOURCE_ROOT; };
 		BFFAA2F4D26EBC38A5AD4966 /* SidekeyMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SidekeyMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C77AA9BB916D950399D72DA7 /* AppStateReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateReader.swift; sourceTree = "<group>"; };
 		CDCDA982494BE16D9CA7A091 /* DeckTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckTheme.swift; sourceTree = "<group>"; };
 		D3E8E6E51D0F95DA50DAB80B /* iKeypadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iKeypadApp.swift; sourceTree = "<group>"; };
+		D57B8C32E5801300F0C9F3EF /* DeckClientPairingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckClientPairingTests.swift; sourceTree = "<group>"; };
 		DA7975824A26AADE9117E8C4 /* ActionDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionDispatcher.swift; sourceTree = "<group>"; };
 		E2328F3C3DE9811908410F05 /* NowControllingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowControllingView.swift; sourceTree = "<group>"; };
+		E7A8E3E2C7DDB3D8690FC16E /* Pairing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pairing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +99,7 @@
 				C77AA9BB916D950399D72DA7 /* AppStateReader.swift */,
 				3AF5AF288E06B91060D5116D /* DeckServer.swift */,
 				08CE111B591B07C75936E526 /* iKeypadMacApp.swift */,
+				E7A8E3E2C7DDB3D8690FC16E /* Pairing.swift */,
 			);
 			name = iKeypadMac;
 			path = iKeypadMac/Sources/iKeypadMac;
@@ -117,6 +124,7 @@
 				CDCDA982494BE16D9CA7A091 /* DeckTheme.swift */,
 				D3E8E6E51D0F95DA50DAB80B /* iKeypadApp.swift */,
 				E2328F3C3DE9811908410F05 /* NowControllingView.swift */,
+				B2499A2D7703C7855202ADDB /* PairingCredentials.swift */,
 			);
 			name = iKeypad;
 			path = iKeypad/Sources/iKeypad;
@@ -155,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				352E2A3C6D0EE3B3B41DD60E /* DeckClientCharacterizationTests.swift */,
+				D57B8C32E5801300F0C9F3EF /* DeckClientPairingTests.swift */,
 			);
 			name = Tests;
 			path = iKeypad/Tests;
@@ -306,6 +315,7 @@
 				5BAE329C48E3FB1B24D1DE1B /* AppContextMonitor.swift in Sources */,
 				DE925D7F3C8B0142F783FC09 /* AppStateReader.swift in Sources */,
 				EE0B4A769C1E52BDC97DC2AC /* DeckServer.swift in Sources */,
+				F2BD1E5D33B7071F93857C45 /* Pairing.swift in Sources */,
 				5EC070841EA09B30DF8A3867 /* iKeypadMacApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -315,6 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E08DA389DAA37612D3CBD48 /* DeckClientCharacterizationTests.swift in Sources */,
+				BF68CA4897EDD57B41FF7A49 /* DeckClientPairingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +338,7 @@
 				C60B52E8C8CA6EEE7F5994D2 /* DeckRotaryDialView.swift in Sources */,
 				F142C3232B7E1DC1DEE8D7F4 /* DeckTheme.swift in Sources */,
 				A3FDF19AF9C6FFDC1A54E288 /* NowControllingView.swift in Sources */,
+				986CB87BD752D654082CC132 /* PairingCredentials.swift in Sources */,
 				F47D261B07788105CDA43ACD /* iKeypadApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,7 +424,7 @@
 				CODE_SIGN_ENTITLEMENTS = SidekeyMac/Sidekey.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = C67LAFG9Q4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SidekeyMac/Info.plist;
@@ -420,7 +432,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hoque.sidekey.mac;
 				PRODUCT_NAME = Sidekey;
 				SDKROOT = macosx;
@@ -490,7 +502,7 @@
 				CODE_SIGN_ENTITLEMENTS = SidekeyMac/Sidekey.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = C67LAFG9Q4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SidekeyMac/Info.plist;
@@ -498,7 +510,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hoque.sidekey.mac;
 				PRODUCT_NAME = Sidekey;
 				SDKROOT = macosx;
@@ -511,7 +523,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = C67LAFG9Q4;
 				INFOPLIST_FILE = iKeypadApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -531,7 +543,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = C67LAFG9Q4;
 				INFOPLIST_FILE = iKeypadApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

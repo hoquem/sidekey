@@ -14,6 +14,8 @@ struct NowControllingView: View {
         Group {
             if client.isConnected {
                 connected
+            } else if case .pairing(let error) = client.phase {
+                PairingPrompt(hostName: client.hostName, error: error, isColumn: isColumn)
             } else {
                 notConnected
             }
@@ -140,6 +142,11 @@ struct NowControllingView: View {
             }
             .accessibilityElement(children: .combine)
             .accessibilityLabel("Connected to \(client.hostName ?? "your Mac") over \(client.isUSB ? "USB" : "Wi-Fi")")
+            .contextMenu {
+                Button(role: .destructive) { client.forgetPairedMac() } label: {
+                    Label("Forget This Mac", systemImage: "link.badge.plus")
+                }
+            }
 
             Button {
                 client.togglePin()
@@ -182,7 +189,7 @@ struct NowControllingView: View {
         switch client.phase {
         case .reconnecting: return "Reconnecting to \(client.hostName ?? "your Mac")…"
         case .connecting: return "Connecting…"
-        case .searching, .connected: return "Looking for your Mac…"
+        case .searching, .connected, .pairing: return "Looking for \(client.pairedMacName ?? "your Mac")…"
         }
     }
 
@@ -211,5 +218,65 @@ struct ChipView: View {
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .background(Capsule().fill(color.opacity(0.14)))
+    }
+}
+
+/// Asks for the 6-digit code the Mac shows under Pair iPad in its Sidekey menu.
+private struct PairingPrompt: View {
+    @EnvironmentObject private var client: DeckClient
+    let hostName: String?
+    let error: String?
+    let isColumn: Bool
+    @State private var code = ""
+    @FocusState private var focused: Bool
+
+    private var isComplete: Bool { code.filter(\.isNumber).count == 6 }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Pair with \(hostName ?? "your Mac")")
+                .font(isColumn ? .title2.weight(.bold) : .title3.weight(.bold))
+                .foregroundStyle(DeckTheme.label)
+            Text("On your Mac, open the Sidekey menu and choose Pair iPad. Enter the code it shows.")
+                .font(.subheadline)
+                .foregroundStyle(DeckTheme.secondaryLabel)
+                .fixedSize(horizontal: false, vertical: true)
+            HStack(spacing: 12) {
+                TextField("6-digit code", text: $code)
+                    .keyboardType(.numberPad)
+                    .textContentType(.oneTimeCode)
+                    .font(.title3.monospacedDigit().weight(.semibold))
+                    .foregroundStyle(DeckTheme.label)
+                    .padding(.horizontal, 14)
+                    .frame(minHeight: 48)
+                    .frame(maxWidth: 220)
+                    .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(DeckTheme.well))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(DeckTheme.hairline))
+                    .focused($focused)
+                    .accessibilityLabel("Pairing code")
+                    .onSubmit(submit)
+                Button("Pair", action: submit)
+                    .font(.body.weight(.semibold))
+                    .frame(minWidth: 88, minHeight: 48)
+                    .foregroundStyle(isComplete ? DeckTheme.label : DeckTheme.secondaryLabel)
+                    .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(DeckTheme.raised))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .strokeBorder(isComplete ? DeckTheme.lit : DeckTheme.hairline, lineWidth: isComplete ? 2 : 1))
+                    .disabled(!isComplete)
+            }
+            if let error {
+                Label(error, systemImage: "exclamationmark.triangle.fill")
+                    .font(.subheadline)
+                    .foregroundStyle(DeckTheme.failure)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .onAppear { focused = true }
+    }
+
+    private func submit() {
+        guard isComplete else { return }
+        client.submitPairingCode(code)
+        code = ""
     }
 }

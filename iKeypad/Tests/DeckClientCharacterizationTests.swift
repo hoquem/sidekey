@@ -10,7 +10,7 @@ final class DeckClientCharacterizationTests: XCTestCase {
     private var client: DeckClient!
 
     override func setUp() async throws {
-        client = DeckClient()
+        client = DeckClient(credentials: InMemoryPairingCredentials())
     }
 
     func testTapWhileDisconnectedShowsAnErrorAndSendsNothing() {

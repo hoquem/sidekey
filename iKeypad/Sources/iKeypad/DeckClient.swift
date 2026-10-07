@@ -15,6 +15,8 @@ public enum ConnectionPhase: Equatable {
     case connected
     /// Lost a Mac we were connected to and trying to get it back.
     case reconnecting
+    /// Connected to a Mac this iPad has not paired with; waiting for its 6-digit code.
+    case pairing(error: String?)
 }
 
 /// The visible result of tapping a key.
@@ -33,8 +35,9 @@ public struct DeckToast: Equatable, Identifiable {
 
 @MainActor
 public final class DeckClient: ObservableObject {
-    public static let shared = DeckClient()
+    public static let shared = DeckClient(credentials: KeychainPairingCredentials())
 
+    /// Connected to and accepted by the Mac (paired and authenticated), so keys can be used.
     @Published public private(set) var isConnected: Bool = false
     @Published public private(set) var phase: ConnectionPhase = .searching(since: Date())
     @Published public private(set) var isUSB: Bool = false
@@ -53,6 +56,12 @@ public final class DeckClient: ObservableObject {
     private var iconCache: [String: UIImage] = [:]
     private static let pendingTimeout: Duration = .seconds(4)
 
+    private let credentials: PairingCredentials
+    /// The Mac on the other end of the current connection, from its challenge.
+    private var currentHostId: String?
+    /// The network link is up; the Mac may not have accepted this iPad yet.
+    private var transportReady = false
+
     private var browser: NWBrowser?
     private var connection: NWConnection?
     private var connectionIsWired = false
@@ -64,13 +73,31 @@ public final class DeckClient: ObservableObject {
     private var receiveBuffer = Data()
 
     /// Internal (not private) so tests can create isolated clients; the app uses ``shared``.
-    init() {}
+    init(credentials: PairingCredentials) {
+        self.credentials = credentials
+    }
+
+    /// Name of the Mac this iPad paired with, if any.
+    public var pairedMacName: String? { credentials.pairedHostName }
+
+    /// Send the 6-digit code shown in the Mac's Sidekey menu.
+    public func submitPairingCode(_ code: String) {
+        let digits = code.filter(\.isNumber)
+        send(message: .pair(code: digits, clientId: credentials.clientId, clientName: UIDevice.current.name))
+    }
+
+    /// Forget the paired Mac and look for any Mac to pair with.
+    public func forgetPairedMac() {
+        credentials.forget()
+        hostName = nil
+        startDiscovery()
+    }
 
     public func startDiscovery() {
         stop()
 
         let parameters = NWParameters()
-        let descriptor = NWBrowser.Descriptor.bonjour(type: "_sidekey._tcp", domain: nil)
+        let descriptor = NWBrowser.Descriptor.bonjourWithTXTRecord(type: "_sidekey._tcp", domain: nil)
         let browser = NWBrowser(for: descriptor, using: parameters)
 
         browser.stateUpdateHandler = { [weak self] state in
@@ -85,15 +112,19 @@ public final class DeckClient: ObservableObject {
 
         browser.browseResultsChangedHandler = { [weak self] results, _ in
             Task { @MainActor [weak self] in
-                guard let self = self, let result = results.first else { return }
+                guard let self = self else { return }
+                // Once paired, only the paired Mac (by the id in its TXT record) is a candidate.
+                let pairedHostId = self.credentials.pairedHostId
+                guard let result = results.first(where: { pairedHostId == nil || Self.hostId(of: $0) == pairedHostId }) else { return }
                 let wiredInterface = self.consecutiveWiredFailures >= Self.maxWiredFailures
                     ? nil
                     : result.interfaces.first { $0.type == .wiredEthernet }
                 let wiredAvailable = wiredInterface != nil
 
-                if self.isConnected {
+                if self.transportReady {
                     // Already connected; only move a Wi-Fi connection onto USB once it appears.
                     guard wiredAvailable, !self.connectionIsWired else { return }
+                    self.transportReady = false
                     self.isConnected = false
                 }
                 // A pending attempt may target a stale Bonjour result from a host that has
@@ -127,13 +158,12 @@ public final class DeckClient: ObservableObject {
                 guard let self = self, let conn = conn, conn === self.connection else { return }
                 switch state {
                 case .ready:
-                    self.isConnected = true
+                    // The link is up; the Mac now challenges this iPad (see handleMessage).
+                    self.transportReady = true
                     self.consecutiveWiredFailures = 0
                     // An unrestricted attempt may still have landed on USB; record the real path.
                     self.connectionIsWired = conn.currentPath?.usesInterfaceType(.wiredEthernet) ?? false
                     self.isUSB = self.connectionIsWired
-                    self.phase = .connected
-                    UIApplication.shared.isIdleTimerDisabled = true
                     #if os(iOS)
                     let deviceName = UIDevice.current.name
                     #else
@@ -159,7 +189,7 @@ public final class DeckClient: ObservableObject {
         // re-registers its service mid-resolve, so give up and rediscover if not ready in time.
         Task { @MainActor [weak self, weak conn] in
             try? await Task.sleep(nanoseconds: Self.connectTimeoutNanoseconds)
-            guard let self = self, let conn = conn, conn === self.connection, !self.isConnected else { return }
+            guard let self = self, let conn = conn, conn === self.connection, !self.transportReady else { return }
             self.handleDisconnection("Connection attempt timed out")
         }
     }
@@ -168,7 +198,7 @@ public final class DeckClient: ObservableObject {
 
     private func handleDisconnection(_ reason: String) {
         print("[Client] Disconnected: \(reason)")
-        if connectionIsWired && !isConnected {
+        if connectionIsWired && !transportReady {
             consecutiveWiredFailures += 1
         }
         if isConnected || phase == .reconnecting || hostName != nil {
@@ -179,6 +209,7 @@ public final class DeckClient: ObservableObject {
             phase = .searching(since: Date())
         }
         self.isConnected = false
+        self.transportReady = false
         UIApplication.shared.isIdleTimerDisabled = false
         failPendingKeys("Lost the connection to your Mac.")
         let oldConnection = self.connection
@@ -195,6 +226,7 @@ public final class DeckClient: ObservableObject {
         connection?.cancel()
         connection = nil
         isConnected = false
+        transportReady = false
     }
 
     private func receiveLoop() {
@@ -230,6 +262,29 @@ public final class DeckClient: ObservableObject {
         case .handshakeAck(let version, let hostName):
             print("[Client] Connected to host version \(version)")
             self.hostName = hostName
+            isConnected = true
+            phase = .connected
+            UIApplication.shared.isIdleTimerDisabled = true
+
+        case .challenge(let nonce, let hostId, let hostName):
+            currentHostId = hostId
+            self.hostName = hostName
+            if let token = credentials.token(for: hostId) {
+                send(message: .authenticate(clientId: credentials.clientId, proof: PairingCrypto.proof(token: token, nonce: nonce)))
+            } else {
+                phase = .pairing(error: nil)
+            }
+
+        case .paired(let token):
+            guard let hostId = currentHostId else { return }
+            credentials.save(token: token, hostId: hostId, hostName: hostName)
+
+        case .pairingFailed(let reason):
+            phase = .pairing(error: reason)
+
+        case .authenticationFailed(let reason):
+            credentials.forget()
+            phase = .pairing(error: reason)
 
         case .appContextUpdated(let context):
             if let png = context.iconPNG, let image = UIImage(data: png) {
@@ -250,7 +305,7 @@ public final class DeckClient: ObservableObject {
                 showToast(reason, isError: true)
             }
 
-        case .handshake, .executeAction, .ping, .pong:
+        case .handshake, .executeAction, .ping, .pong, .pair, .authenticate:
             break
         }
     }
@@ -309,7 +364,7 @@ public final class DeckClient: ObservableObject {
     }
 
     private func send(message: DeckMessage) {
-        guard let connection = connection, isConnected else { return }
+        guard let connection = connection, transportReady else { return }
         do {
             let data = try FramedMessageProtocol.encode(message)
             connection.send(content: data, completion: .contentProcessed { error in
@@ -320,5 +375,13 @@ public final class DeckClient: ObservableObject {
         } catch {
             print("[Client] Error encoding message: \(error)")
         }
+    }
+}
+
+extension DeckClient {
+    /// The Mac's id from a Bonjour result's TXT record.
+    static func hostId(of result: NWBrowser.Result) -> String? {
+        guard case .bonjour(let txt) = result.metadata else { return nil }
+        return txt["hostId"]
     }
 }

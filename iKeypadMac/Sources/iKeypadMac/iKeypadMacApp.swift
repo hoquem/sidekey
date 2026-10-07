@@ -43,12 +43,45 @@ struct iKeypadMacApp: App {
 
                 Divider()
 
+                PairingMenuSection(server: server, pairing: server.pairing)
+
+                Divider()
+
                 Button("Quit Sidekey") {
                     NSApplication.shared.terminate(nil)
                 }
                 .keyboardShortcut("q")
             }
             .padding(4)
+        }
+    }
+}
+
+/// Pairing controls in the menu: open a short-lived code for a new iPad, or forget paired iPads.
+private struct PairingMenuSection: View {
+    @ObservedObject var server: DeckServer
+    @ObservedObject var pairing: PairingWindow
+
+    var body: some View {
+        if let code = pairing.code, let expiresAt = pairing.expiresAt {
+            TimelineView(.periodic(from: .now, by: 1)) { timeline in
+                let remaining = max(0, Int(expiresAt.timeIntervalSince(timeline.date)))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Pairing code")
+                        .foregroundColor(.secondary)
+                    Text(code.prefix(3) + " " + code.suffix(3))
+                        .font(.system(.title, design: .monospaced).weight(.semibold))
+                    Text(remaining > 0 ? "Enter it on your iPad within \(remaining) s" : "Code expired")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            Button("Stop Pairing") { pairing.close() }
+        } else {
+            Button("Pair iPad...") { server.openPairing() }
+        }
+        if server.pairedDeviceCount > 0 {
+            Button("Forget Paired iPads (\(server.pairedDeviceCount))") { server.forgetPairedDevices() }
         }
     }
 }

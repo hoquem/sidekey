@@ -4,40 +4,123 @@ import Darwin
 import iKeypadShared
 @testable import iKeypadMacDaemon
 
-/// Characterization tests: they pin how the Mac companion behaves today, over a real TCP
-/// connection to ``DeckServer`` on a private, unadvertised port.
+/// Tests of the Mac companion over a real TCP connection to a ``DeckServer`` on a private,
+/// unadvertised port, with an in-memory pairing store so the real Keychain is never touched.
 @MainActor
 final class DeckServerCharacterizationTests: XCTestCase {
     private static let port: UInt16 = 49_298
+    static let store = InMemoryPairedDeviceStore()
+    static let pairing = PairingWindow()
+    static let server = DeckServer(store: store, hostId: "test-host", pairing: pairing)
     private static var started = false
+    static let clientId = "test-client"
+    static let token = Data(repeating: 42, count: 32)
 
     override func setUp() async throws {
         if !Self.started {
-            DeckServer.shared.start(port: Self.port, serviceName: nil)
+            Self.server.start(port: Self.port, serviceName: nil)
             Self.started = true
         }
+        try Self.store.removeAll()
+        try Self.store.save(token: Self.token, for: Self.clientId, name: "Test iPad")
+        Self.pairing.close()
     }
 
-    /// Current behaviour: the active layout is sent as soon as a client connects, then again
-    /// right after the handshake acknowledgement (a harmless duplicate).
-    func testConnectAndHandshakeEachSendTheActiveProfile() async throws {
+    /// Connect and authenticate as the paired test iPad.
+    private func pairedClient() async throws -> TestClient {
         let client = try await TestClient.connect(port: Self.port)
-        try client.send(.handshake(clientName: "test"))
-
-        let messages = try await client.receive(until: { $0.count >= 3 })
-        let activeId = AppContextMonitor.shared.activeProfile.id
-        XCTAssertEqual(messages.first, .profileUpdated(profile: AppContextMonitor.shared.activeProfile))
-        guard let ackIndex = messages.firstIndex(where: { if case .handshakeAck = $0 { return true } else { return false } }) else {
-            return XCTFail("no handshakeAck in \(messages)")
+        let challenge = try await client.receive(until: { !$0.isEmpty })
+        guard case .challenge(let nonce, "test-host", _) = challenge.first else {
+            XCTFail("expected a challenge first, got \(challenge)")
+            return client
         }
-        guard case .handshakeAck(let version, let host) = messages[ackIndex] else { return }
-        XCTAssertEqual(version, "2.0.0")
-        XCTAssertNotNil(host)
-        guard ackIndex + 1 < messages.count, case .profileUpdated(let profile) = messages[ackIndex + 1] else {
-            return XCTFail("expected profileUpdated right after handshakeAck in \(messages)")
-        }
-        XCTAssertEqual(profile.id, activeId)
+        try client.send(.authenticate(clientId: Self.clientId, proof: PairingCrypto.proof(token: Self.token, nonce: nonce)))
+        return client
     }
+
+    // MARK: - Pairing and authentication
+
+    /// Security: an unpaired device gets a challenge and nothing else: no layout, no app context.
+    func testUnauthenticatedClientReceivesOnlyAChallenge() async throws {
+        let client = try await TestClient.connect(port: Self.port)
+        // Wait for the challenge so the server has registered this connection before broadcasting.
+        let first = try await client.receive(until: { !$0.isEmpty })
+        guard case .challenge = first.first else { return XCTFail("expected a challenge, got \(first)") }
+        try client.send(.handshake(clientName: "stranger"))
+        try await Task.sleep(nanoseconds: 200_000_000)
+        Self.server.broadcast(message: .profileUpdated(profile: AppContextMonitor.shared.activeProfile))
+        let later = try await client.receive(until: { _ in false }, timeout: 0.8)
+        XCTAssertEqual(first.count + later.count, 1, "unpaired client received \(first + later)")
+    }
+
+    /// Security: an unpaired device cannot press keys.
+    func testUnauthenticatedTapIsRefusedAndNotRun() async throws {
+        let marker = FileManager.default.temporaryDirectory.appendingPathComponent("sidekey-unpaired-\(UUID().uuidString)")
+        try await withTestProfile(secondAction: .shellScript(command: "touch '\(marker.path)'")) { profile in
+            let client = try await TestClient.connect(port: Self.port)
+            try client.send(.executeAction(keyId: profile.keys[1].id, profileId: profile.id, pinned: false))
+            let messages = try await client.receive(until: { $0.contains(where: Self.isResult(for: profile.keys[1].id)) })
+            XCTAssertTrue(messages.contains(.actionExecuted(keyId: profile.keys[1].id, success: false, errorMessage: "Pair this iPad with your Mac first.")), "got \(messages)")
+            try await Task.sleep(nanoseconds: 300_000_000)
+            XCTAssertFalse(FileManager.default.fileExists(atPath: marker.path), "unpaired tap ran")
+        }
+    }
+
+    func testPairedClientIsWelcomedWithVersionHostAndActiveProfile() async throws {
+        let client = try await pairedClient()
+        let messages = try await client.receive(until: { $0.count >= 2 })
+        guard case .handshakeAck(let version, let host) = messages.first else {
+            return XCTFail("expected handshakeAck first, got \(messages)")
+        }
+        XCTAssertEqual(version, "2.1.0")
+        XCTAssertNotNil(host)
+        XCTAssertEqual(messages[1], .profileUpdated(profile: AppContextMonitor.shared.activeProfile))
+    }
+
+    func testWrongProofIsRefused() async throws {
+        let client = try await TestClient.connect(port: Self.port)
+        _ = try await client.receive(until: { !$0.isEmpty })
+        try client.send(.authenticate(clientId: Self.clientId, proof: Data(repeating: 0, count: 32)))
+        let messages = try await client.receive(until: { $0.contains(where: Self.isAuthFailure) })
+        XCTAssertTrue(messages.contains(where: Self.isAuthFailure), "got \(messages)")
+        XCTAssertFalse(messages.contains(where: { if case .profileUpdated = $0 { return true } else { return false } }))
+    }
+
+    func testPairingWithTheRightCodeIssuesATokenThatAuthenticates() async throws {
+        try Self.pairing.open()
+        let code = try XCTUnwrap(Self.pairing.code)
+        let client = try await TestClient.connect(port: Self.port)
+        _ = try await client.receive(until: { !$0.isEmpty })
+        try client.send(.pair(code: code, clientId: "new-ipad", clientName: "New iPad"))
+        let messages = try await client.receive(until: { $0.count >= 3 })
+        guard case .paired(let token) = messages.first else { return XCTFail("expected paired first, got \(messages)") }
+        XCTAssertEqual(token.count, 32)
+        XCTAssertEqual(Self.store.token(for: "new-ipad"), token)
+        XCTAssertFalse(Self.pairing.isOpen, "a used code must close the window")
+        XCTAssertTrue(messages.contains(where: { if case .handshakeAck = $0 { return true } else { return false } }))
+    }
+
+    func testPairingWithAWrongCodeFails() async throws {
+        try Self.pairing.open()
+        let wrong = Self.pairing.code == "000000" ? "111111" : "000000"
+        let client = try await TestClient.connect(port: Self.port)
+        _ = try await client.receive(until: { !$0.isEmpty })
+        try client.send(.pair(code: wrong, clientId: "x", clientName: "X"))
+        let messages = try await client.receive(until: { $0.contains(where: Self.isPairFailure) })
+        XCTAssertTrue(messages.contains(.pairingFailed(reason: "That code is wrong. Check the code in the Sidekey menu on your Mac.")), "got \(messages)")
+        XCTAssertNil(Self.store.token(for: "x"))
+    }
+
+    func testPairingWhenTheWindowIsClosedFails() async throws {
+        let client = try await TestClient.connect(port: Self.port)
+        _ = try await client.receive(until: { !$0.isEmpty })
+        try client.send(.pair(code: "123456", clientId: "x", clientName: "X"))
+        let messages = try await client.receive(until: { $0.contains(where: Self.isPairFailure) })
+        XCTAssertTrue(messages.contains(.pairingFailed(reason: "Pairing isn't open. On your Mac, choose Pair iPad in the Sidekey menu to get a code.")), "got \(messages)")
+    }
+
+    private static func isAuthFailure(_ m: DeckMessage) -> Bool { if case .authenticationFailed = m { return true }; return false }
+    private static func isPairFailure(_ m: DeckMessage) -> Bool { if case .pairingFailed = m { return true }; return false }
 
     func testTapOnAStaleLayoutIsRejected() async throws {
         let result = try await execute(keyId: "k", profileId: "not-the-active-layout", pinned: false)
@@ -81,7 +164,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
     func testClientSuppliedActionIsIgnored() async throws {
         let marker = FileManager.default.temporaryDirectory.appendingPathComponent("sidekey-pwned-\(UUID().uuidString)")
         try await withTestProfile { profile in
-            let client = try await TestClient.connect(port: Self.port)
+            let client = try await pairedClient()
             try client.sendRaw(#"{"executeAction":{"keyId":"\#(profile.keys[0].id)","action":{"shellScript":{"command":"touch \#(marker.path)"}},"profileId":"\#(profile.id)","pinned":false}}"#)
             let messages = try await client.receive(until: { $0.contains(where: Self.isResult(for: profile.keys[0].id)) })
             XCTAssertTrue(messages.contains(where: Self.isResult(for: profile.keys[0].id)), "no reply in \(messages)")
@@ -109,7 +192,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
     }
 
     func testPingIsAnsweredWithPong() async throws {
-        let client = try await TestClient.connect(port: Self.port)
+        let client = try await pairedClient()
         try client.send(.ping)
         let messages = try await client.receive(until: { $0.contains(.pong) })
         XCTAssertTrue(messages.contains(.pong), "got \(messages)")
@@ -118,7 +201,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
     // MARK: - Helpers
 
     private func execute(keyId: String, profileId: String?, pinned: Bool?) async throws -> (success: Bool, error: String?) {
-        let client = try await TestClient.connect(port: Self.port)
+        let client = try await pairedClient()
         try client.send(.executeAction(keyId: keyId, profileId: profileId, pinned: pinned))
         let messages = try await client.receive(until: { $0.contains(where: Self.isResult(for: keyId)) })
         for message in messages {
@@ -234,5 +317,35 @@ private final class TestClient {
             while let message = FramedMessageProtocol.decode(from: &buffer) { messages.append(message) }
         }
         return messages
+    }
+}
+
+
+@MainActor
+final class PairingWindowTests: XCTestCase {
+    func testFiveWrongAttemptsCloseTheWindow() throws {
+        let window = PairingWindow()
+        try window.open()
+        let wrong = window.code == "000000" ? "111111" : "000000"
+        for _ in 0..<(PairingWindow.maxAttempts - 1) { XCTAssertEqual(window.attempt(wrong), .wrong) }
+        XCTAssertEqual(window.attempt(wrong), .wrong)
+        XCTAssertFalse(window.isOpen)
+        XCTAssertEqual(window.attempt(wrong), .closed)
+    }
+
+    func testAnExpiredCodeIsRefused() throws {
+        let window = PairingWindow()
+        let start = Date()
+        try window.open(now: start)
+        let code = try XCTUnwrap(window.code)
+        XCTAssertEqual(window.attempt(code, now: start.addingTimeInterval(PairingWindow.lifetime + 1)), .closed)
+    }
+
+    func testTheRightCodeIsAcceptedOnce() throws {
+        let window = PairingWindow()
+        try window.open()
+        let code = try XCTUnwrap(window.code)
+        XCTAssertEqual(window.attempt(code), .accepted)
+        XCTAssertEqual(window.attempt(code), .closed)
     }
 }
