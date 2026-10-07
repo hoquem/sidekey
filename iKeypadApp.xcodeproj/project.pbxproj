@@ -8,18 +8,32 @@
 
 /* Begin PBXBuildFile section */
 		22E0C4AE2AE8FB82CC902980 /* DeckClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6876AAE119F49D350E6A3542 /* DeckClient.swift */; };
+		4E08DA389DAA37612D3CBD48 /* DeckClientCharacterizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 352E2A3C6D0EE3B3B41DD60E /* DeckClientCharacterizationTests.swift */; };
 		A3FDF19AF9C6FFDC1A54E288 /* NowControllingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2328F3C3DE9811908410F05 /* NowControllingView.swift */; };
 		BCA2140EE000ED2F05A34C55 /* DeckKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */; };
 		C60B52E8C8CA6EEE7F5994D2 /* DeckRotaryDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */; };
 		C9CD19EB506F4A60EFB3DA00 /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = B798A3E91C1453CF0038144E /* iKeypadShared */; };
+		E58FB833DBAC073EF3D05D73 /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = C830920EDA055DB0CF158CB3 /* iKeypadShared */; };
 		F142C3232B7E1DC1DEE8D7F4 /* DeckTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCDA982494BE16D9CA7A091 /* DeckTheme.swift */; };
 		F47D261B07788105CDA43ACD /* iKeypadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8E6E51D0F95DA50DAB80B /* iKeypadApp.swift */; };
 		F7A820FF3AF0CF8F1DB99869 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66BE045D8C96A71F82327FB5 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6843C9ECC1C2E26D8064E89C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 384A6D957573AD84AE562584 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5081C51E4656F36DEBDE8814;
+			remoteInfo = iKeypad;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		352E2A3C6D0EE3B3B41DD60E /* DeckClientCharacterizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckClientCharacterizationTests.swift; sourceTree = "<group>"; };
 		66BE045D8C96A71F82327FB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6876AAE119F49D350E6A3542 /* DeckClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckClient.swift; sourceTree = "<group>"; };
+		6F373BB288407BA133B72DD2 /* iKeypadTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = iKeypadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71192AD8239744B4140C2154 /* iKeypad.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iKeypad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckKeyView.swift; sourceTree = "<group>"; };
 		948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRotaryDialView.swift; sourceTree = "<group>"; };
@@ -38,6 +52,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		96A186E23315680E802D8F7D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E58FB833DBAC073EF3D05D73 /* iKeypadShared in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -45,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				71192AD8239744B4140C2154 /* iKeypad.app */,
+				6F373BB288407BA133B72DD2 /* iKeypadTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -77,8 +100,18 @@
 				7158175D63F4665B10AA9C81 /* iKeypad */,
 				7C126A9A01D0E635BA07786C /* iKeypadApp */,
 				EEF6AA1C61FC463C88B96D65 /* Packages */,
+				A4ED0595D6C1572B978C5E17 /* Tests */,
 				3B97FC6A7916016FB8166E7A /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		A4ED0595D6C1572B978C5E17 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				352E2A3C6D0EE3B3B41DD60E /* DeckClientCharacterizationTests.swift */,
+			);
+			name = Tests;
+			path = iKeypad/Tests;
 			sourceTree = "<group>";
 		};
 		EEF6AA1C61FC463C88B96D65 /* Packages */ = {
@@ -112,6 +145,26 @@
 			productReference = 71192AD8239744B4140C2154 /* iKeypad.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B4278E412772FF041E8B7CBC /* iKeypadTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 498C4232BE6637D144CAEF3F /* Build configuration list for PBXNativeTarget "iKeypadTests" */;
+			buildPhases = (
+				658100D106CDAD167FF5639A /* Sources */,
+				96A186E23315680E802D8F7D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				47DEE32832CE84DDB2DAB384 /* PBXTargetDependency */,
+			);
+			name = iKeypadTests;
+			packageProductDependencies = (
+				C830920EDA055DB0CF158CB3 /* iKeypadShared */,
+			);
+			productName = iKeypadTests;
+			productReference = 6F373BB288407BA133B72DD2 /* iKeypadTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -122,6 +175,10 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					5081C51E4656F36DEBDE8814 = {
+						DevelopmentTeam = C67LAFG9Q4;
+						ProvisioningStyle = Automatic;
+					};
+					B4278E412772FF041E8B7CBC = {
 						DevelopmentTeam = C67LAFG9Q4;
 						ProvisioningStyle = Automatic;
 					};
@@ -145,6 +202,7 @@
 			projectRoot = "";
 			targets = (
 				5081C51E4656F36DEBDE8814 /* iKeypad */,
+				B4278E412772FF041E8B7CBC /* iKeypadTests */,
 			);
 		};
 /* End PBXProject section */
@@ -161,6 +219,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		658100D106CDAD167FF5639A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E08DA389DAA37612D3CBD48 /* DeckClientCharacterizationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E70AE497D461E80E2D315B32 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -175,6 +241,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		47DEE32832CE84DDB2DAB384 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5081C51E4656F36DEBDE8814 /* iKeypad */;
+			targetProxy = 6843C9ECC1C2E26D8064E89C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		178356BBEA77DD25CF389DDC /* Debug */ = {
@@ -336,9 +410,56 @@
 			};
 			name = Release;
 		};
+		B9C78CB41F66FC42738B360A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C67LAFG9Q4;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hoque.ikeypad.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iKeypad.app/iKeypad";
+			};
+			name = Release;
+		};
+		FD8F66C72718CCFEE757E613 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C67LAFG9Q4;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hoque.ikeypad.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iKeypad.app/iKeypad";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		498C4232BE6637D144CAEF3F /* Build configuration list for PBXNativeTarget "iKeypadTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FD8F66C72718CCFEE757E613 /* Debug */,
+				B9C78CB41F66FC42738B360A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		D6BDA9B7DA839D40557E90E1 /* Build configuration list for PBXNativeTarget "iKeypad" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -368,6 +489,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		B798A3E91C1453CF0038144E /* iKeypadShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = iKeypadShared;
+		};
+		C830920EDA055DB0CF158CB3 /* iKeypadShared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = iKeypadShared;
 		};

@@ -38,3 +38,21 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
+    scheme:
+      testTargets:
+        - iKeypadTests
+  iKeypadTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: iKeypad/Tests
+    dependencies:
+      - target: iKeypad
+      - package: iKeypadShared
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.hoque.ikeypad.tests
+        TARGETED_DEVICE_FAMILY: "2"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: C67LAFG9Q4

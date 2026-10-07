@@ -63,7 +63,8 @@ public final class DeckClient: ObservableObject {
     private static let maxWiredFailures = 2
     private var receiveBuffer = Data()
 
-    private init() {}
+    /// Internal (not private) so tests can create isolated clients; the app uses ``shared``.
+    init() {}
 
     public func startDiscovery() {
         stop()
@@ -220,7 +221,7 @@ public final class DeckClient: ObservableObject {
         }
     }
 
-    private func handleMessage(_ message: DeckMessage) {
+    func handleMessage(_ message: DeckMessage) {
         switch message {
         case .profileUpdated(let profile):
             self.currentProfile = profile
@@ -292,7 +293,7 @@ public final class DeckClient: ObservableObject {
         }
     }
 
-    private func setFeedback(_ feedback: KeyFeedback, for keyId: String, clearAfter delay: Duration?) {
+    func setFeedback(_ feedback: KeyFeedback, for keyId: String, clearAfter delay: Duration?) {
         keyFeedback[keyId] = feedback
         guard let delay else { return }
         Task { @MainActor [weak self] in
