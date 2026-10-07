@@ -20,6 +20,8 @@ targets:
       path: iKeypadApp/Info.plist
       properties:
         CFBundleDisplayName: Sidekey
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         ITSAppUsesNonExemptEncryption: false
         UILaunchScreen: {}
         UIRequiresFullScreen: true
@@ -75,6 +77,8 @@ targets:
       path: SidekeyMac/Info.plist
       properties:
         CFBundleDisplayName: Sidekey
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSUIElement: true
         LSApplicationCategoryType: public.app-category.productivity
         NSAppleEventsUsageDescription: Sidekey runs the AppleScript actions on your keys, such as Play/Pause in Music.
