@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sidekey: an iPad shortcut deck that follows your Mac</title>
+  <meta name="description" content="Sidekey turns an iPad into a shortcut deck for your Mac. The keys change with the app in front, and every tap shows what the Mac did with it.">
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="masthead">
+      <img src="icon.png" alt="" width="84" height="84">
+      <div>
+        <h1>Sidekey</h1>
+        <p>Your iPad, following your Mac.</p>
+      </div>
+    </header>
+
+    <main>
+      <nav aria-label="Sidekey">
+        <ul class="deck">
+          <li><a class="key lit" href="#download" data-role="run" data-panel="download">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
+            <span class="name">Download for Mac</span><span class="hint">macOS 13+</span></a></li>
+          <li><a class="key" href="#how" data-role="navigate" data-panel="how">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="11" height="8" rx="1.5"/><rect x="15.5" y="9" width="5.5" height="10" rx="1.2"/><path d="M6 17h6"/></svg>
+            <span class="name">How it works</span></a></li>
+          <li><a class="key" href="privacy.html" data-role="navigate">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>
+            <span class="name">Privacy</span></a></li>
+          <li><a class="key" href="support.html" data-role="navigate">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.7M12 16.8v.2"/></svg>
+            <span class="name">Support</span></a></li>
+
+          <li><a class="key" href="#xcode" data-role="navigate" data-panel="xcode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4.5 19.5 9.5 17 12 12 7"/><path d="M13.2 8.2 4.5 16.9a1.8 1.8 0 0 0 2.6 2.6l8.7-8.7"/></svg><span class="name">Xcode</span></a></li>
+          <li><a class="key" href="#terminal" data-role="navigate" data-panel="terminal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m7 10 3 2-3 2M12.5 15H17"/></svg><span class="name">Terminal</span></a></li>
+          <li><a class="key" href="#vscode" data-role="navigate" data-panel="vscode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 8-4 4 4 4M15.5 8l4 4-4 4M13 6l-2 12"/></svg><span class="name">VS Code</span></a></li>
+          <li><a class="key" href="#browsers" data-role="navigate" data-panel="browsers"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.6 2.6 14.4 0 17M12 3.5c-2.6 2.6-2.6 14.4 0 17"/></svg><span class="name">Safari, Chrome, Arc</span></a></li>
+          <li><a class="key" href="#zoom" data-role="navigate" data-panel="zoom"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="12.5" height="10" rx="2"/><path d="m15.5 11 5-3v8l-5-3"/></svg><span class="name">Zoom</span></a></li>
+
+          <li><a class="key" href="#whatsapp" data-role="navigate" data-panel="whatsapp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.6A8 8 0 1 1 8 19z"/><path d="M9.3 9.6c.3 1.8 2 3.6 4 4.2"/></svg><span class="name">WhatsApp</span></a></li>
+          <li><a class="key" href="#telegram" data-role="navigate" data-panel="telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 4.5 3.5 11.2l5.6 2.1 2.2 5.9 3.1-3.9 4.4 3.2z"/><path d="m9.1 13.3 6.9-5.3"/></svg><span class="name">Telegram</span></a></li>
+          <li><a class="key" href="#word" data-role="navigate" data-panel="word"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20z"/><path d="M14 3.5v4h4M9 12h6M9 15h6M9 18h4"/></svg><span class="name">Word</span></a></li>
+          <li><a class="key" href="#macdown" data-role="navigate" data-panel="macdown"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 15V9l2.5 3 2.5-3v6M15.5 9v6m0 0-2-2m2 2 2-2"/></svg><span class="name">MacDown</span></a></li>
+          <li><a class="key" href="#system" data-role="navigate" data-panel="system"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9V6.5A2.5 2.5 0 1 0 6.5 9H9zm0 0v6m0-6h6m-6 6H6.5A2.5 2.5 0 1 0 9 17.5V15zm0 0h6m0 0v2.5a2.5 2.5 0 1 0 2.5-2.5H15zm0 0V9m0 0h2.5A2.5 2.5 0 1 0 15 6.5V9z"/></svg><span class="name">Every other app</span></a></li>
+          <li><a class="key" href="https://github.com/hoquem/sidekey" data-role="navigate">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 8-4 4 4 4M15.5 8l4 4-4 4"/></svg>
+            <span class="name">Source code</span><span class="hint">MIT</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="panels">
+        <section class="panel shown" id="download" aria-labelledby="download-title">
+          <h2 id="download-title">Download Sidekey for Mac</h2>
+          <p>Prop your iPad beside the keyboard. Whenever you switch apps on the Mac, the iPad shows keys for that app, and tapping a key runs the shortcut on the Mac.</p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/hoquem/sidekey/releases/latest/download/Sidekey.dmg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>Download Sidekey.dmg</a>
+            <a class="button secondary" href="https://github.com/hoquem/sidekey/releases/latest">Release notes</a>
+          </div>
+          <p class="note"><strong>You need</strong> an iPad with iPadOS 16 or later, a Mac with macOS 13 or later, and a USB cable between them or the same Wi-Fi network.</p>
+          <p class="note">The Mac app is signed with Developer ID and notarized by Apple. Open the DMG, drag Sidekey to Applications and open it from there; it lives in the menu bar. Switch it on when macOS asks for Accessibility, then choose Pair iPad in its menu and type the code on your iPad.</p>
+          <p class="note">If you installed Mac version 1.0.0, replace it: it had a security problem and was <a href="https://github.com/hoquem/sidekey/releases/tag/v1.0.0">withdrawn</a>.</p>
+          <p class="note">The iPad app is in a private TestFlight beta and will come to the App Store. Until then you can build it from the <a href="https://github.com/hoquem/sidekey#build-from-source">source code</a>.</p>
+        </section>
+
+        <section class="panel" id="how" aria-labelledby="how-title">
+          <h2 id="how-title">How it works</h2>
+          <ol>
+            <li><strong>Sidekey on the Mac</strong> lives in the menu bar and watches which app is in front.</li>
+            <li><strong>Sidekey on the iPad</strong> finds the Mac over the USB cable when plugged in, or the same Wi-Fi network otherwise.</li>
+            <li><strong>Pair once.</strong> Choose Pair iPad in the Mac's Sidekey menu and type the code it shows into the iPad. Until an iPad is paired, the Mac sends it only its name and a pairing request and runs none of its taps. After that, the iPad connects to your Mac by itself.</li>
+            <li><strong>The keys change with the app.</strong> The top of the iPad shows the Mac app's icon, name and window title, so you always know where a tap will land.</li>
+            <li><strong>Every tap gets an answer.</strong> A key glows amber while the Mac works, lights up when the shortcut was sent, and shakes with the Mac's reason when it could not be.</li>
+            <li><strong>Only built-in actions.</strong> The Mac runs a key's action from its own layout, never an action sent over the network.</li>
+            <li><strong>Use a trusted connection.</strong> Traffic is not encrypted yet, so use Sidekey over USB or on a network you trust. See <a href="privacy.html">Privacy</a> for what that means.</li>
+            <li><strong>Disruptive keys need a hold.</strong> Lock Mac, Interrupt, End Call, Telegram Lock and Xcode Clean fire only after a press and hold.</li>
+          </ol>
+        </section>
+
+
+        <section class="panel app-panel" id="xcode" data-layout="xcode" aria-labelledby="xcode-title"><h2 id="xcode-title">Xcode</h2>
+          <!-- layout:xcode -->
+          <p>When Xcode is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="run"><b>Run</b><span>⌘R</span></div><div class="mini-key" role="listitem" data-role="run"><b>Build</b><span>⌘B</span></div><div class="mini-key" role="listitem" data-role="run"><b>Test</b><span>⌘U</span></div><div class="mini-key" role="listitem" data-role="danger"><b>Stop</b><span>⌘.</span></div><div class="mini-key" role="listitem" data-role="danger"><b>Clean</b><span>Hold · ⇧⌘K</span></div><div class="mini-key" role="listitem" data-role="create"><b>Open Quickly</b><span>⇧⌘O</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Navigator</b><span>⌘0</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Debug Area</b><span>⇧⌘Y</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Inspector</b><span>⌥⌘0</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Canvas</b><span>⌥⌘↩︎</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Jump to Def</b><span>⌃⌘J</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Back</b><span>⌃⌘←</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Comment</b><span>⌘/</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Re-Indent</b><span>⌃I</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Find All</b><span>⇧⌘F</span></div></div>
+          <!-- /layout -->
+        </section>
+        <section class="panel app-panel" id="terminal" data-layout="terminal" aria-labelledby="terminal-title"><h2 id="terminal-title">Terminal</h2>
+          <!-- layout:terminal -->
+          <p>When Terminal is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="create"><b>New Tab</b><span>⌘T</span></div><div class="mini-key" role="listitem" data-role="create"><b>New Window</b><span>⌘N</span></div><div class="mini-key" role="listitem" data-role="danger"><b>Close Tab</b><span>⌘W</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Prev Tab</b><span>⌃⇧⇥︎</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Next Tab</b><span>⌃⇥︎</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Clear</b><span>⌘K</span></div><div class="mini-key" role="listitem" data-role="danger"><b>Interrupt</b><span>Hold · ⌃C</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Find</b><span>⌘F</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Copy</b><span>⌘C</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Paste</b><span>⌘V</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Zoom In</b><span>⌘=</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Zoom Out</b><span>⌘-</span></div><div class="mini-key" role="listitem" data-role="create"><b>Split Pane</b><span>⌘D</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Prev Cmd</b><span>⌘↑</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Next Cmd</b><span>⌘↓</span></div></div>
+          <!-- /layout -->
+        </section>
+        <section class="panel app-panel" id="vscode" data-layout="vscode" aria-labelledby="vscode-title"><h2 id="vscode-title">VS Code</h2>
+          <!-- layout:vscode -->
+          <p>When VS Code is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="create"><b>Cmd Palette</b><span>⇧⌘P</span></div><div class="mini-key" role="listitem" data-role="create"><b>Quick Open</b><span>⌘P</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Toggle Term</b><span>⌃`</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Format Code</b><span>⌥⇧F</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Source Control</b><span>⌃⇧G</span></div><div class="mini-key" role="listitem" data-role="run"><b>Run Tests</b><span>⌘;</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Sidebar</b><span>⌘B</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Find In Files</b><span>⇧⌘F</span></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div></div>
+          <!-- /layout -->
+        </section>
+        <section class="panel app-panel" id="browsers" data-layout="browsers" aria-labelledby="browsers-title"><h2 id="browsers-title">Safari, Chrome and Arc</h2>
+          <!-- layout:browsers -->
+          <p>When Safari, Chrome or Arc is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="create"><b>New Tab</b><span>⌘T</span></div><div class="mini-key" role="listitem" data-role="danger"><b>Close Tab</b><span>⌘W</span></div><div class="mini-key" role="listitem" data-role="create"><b>Reopen Tab</b><span>⇧⌘T</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Dev Tools</b><span>⌥⌘I</span></div><div class="mini-key" role="listitem" data-role="run"><b>Reload</b><span>⌘R</span></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div></div>
+          <!-- /layout -->
+        </section>
+        <section class="panel app-panel" id="zoom" data-layout="zoom" aria-labelledby="zoom-title"><h2 id="zoom-title">Zoom</h2>
+          <!-- layout:zoom -->
+          <p>When Zoom is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="modify"><b>Mute</b><span>⇧⌘A</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Video</b><span>⇧⌘V</span></div><div class="mini-key" role="listitem" data-role="run"><b>Share Screen</b><span>⇧⌘S</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Pause Share</b><span>⇧⌘T</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Raise Hand</b><span>⌥Y</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Chat</b><span>⇧⌘H</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Participants</b><span>⌘U</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Switch View</b><span>⇧⌘W</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Mini Window</b><span>⇧⌘M</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Full Screen</b><span>⇧⌘F</span></div><div class="mini-key" role="listitem" data-role="create"><b>Invite</b><span>⌘I</span></div><div class="mini-key" role="listitem" data-role="run"><b>Record</b><span>⇧⌘R</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Pause Rec</b><span>⇧⌘P</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Switch Camera</b><span>⇧⌘N</span></div><div class="mini-key" role="listitem" data-role="run"><b>Join Meeting</b><span>⌘J</span></div></div>
+          <!-- /layout --><p>The deck also shows meeting state such as your mic. This is built from Zoom's documented menus and not yet tested in a live meeting.</p>
+        </section>
+        <section class="panel app-panel" id="whatsapp" data-layout="whatsapp" aria-labelledby="whatsapp-title"><h2 id="whatsapp-title">WhatsApp</h2>
+          <!-- layout:whatsapp -->
+          <p>When WhatsApp is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="create"><b>New Chat</b><span>⌘N</span></div><div class="mini-key" role="listitem" data-role="create"><b>New Group</b><span>⇧⌘N</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Search</b><span>⌘F</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Search Chat</b><span>⌥⌘F</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Archived</b><span>⌃4</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Prev Chat</b><span>⇧⌘[</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Next Chat</b><span>⇧⌘]</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Mark Unread</b><span>⇧⌘U</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Archive</b><span>⇧⌘E</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Pin</b><span>⇧⌘P</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Mute Chat</b><span>⇧⌘M</span></div><div class="mini-key" role="listitem" data-role="run"><b>New Call</b><span>⇧⌘C</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Mute Mic</b><span>⌃⌘M</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Camera Off</b><span>⌃⌘V</span></div><div class="mini-key" role="listitem" data-role="danger"><b>End Call</b><span>Hold · ⌃⌘W</span></div></div>
+          <!-- /layout -->
+        </section>
+        <section class="panel app-panel" id="telegram" data-layout="telegram" aria-labelledby="telegram-title"><h2 id="telegram-title">Telegram</h2>
+          <!-- layout:telegram -->
+          <p>When Telegram is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="navigate"><b>Search</b><span>⌘F</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Prev Chat</b><span>⌥↑</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Next Chat</b><span>⌥↓</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Saved Msgs</b><span>⌘0</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Archive</b><span>⌘9</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Pinned 1</b><span>⌘1</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Pinned 2</b><span>⌘2</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Pinned 3</b><span>⌘3</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Pinned 4</b><span>⌘4</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Contacts</b><span>⌘J</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>All Chats</b><span>⌃1</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Prev Folder</b><span>⌃⇧↑</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Next Folder</b><span>⌃⇧↓</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Chat Menu</b><span>⌘\</span></div><div class="mini-key" role="listitem" data-role="danger"><b>Lock</b><span>Hold · ⌘L</span></div></div>
+          <!-- /layout -->
+        </section>
+        <section class="panel app-panel" id="word" data-layout="word" aria-labelledby="word-title"><h2 id="word-title">Microsoft Word</h2>
+          <!-- layout:word -->
+          <p>When Word is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="create"><b>New</b><span>⌘N</span></div><div class="mini-key" role="listitem" data-role="create"><b>Open</b><span>⌘O</span></div><div class="mini-key" role="listitem" data-role="run"><b>Save</b><span>⌘S</span></div><div class="mini-key" role="listitem" data-role="run"><b>Print</b><span>⌘P</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Find</b><span>⌘F</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Bold</b><span>⌘B</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Italic</b><span>⌘I</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Underline</b><span>⌘U</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Link</b><span>⌘K</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Center</b><span>⌘E</span></div><div class="mini-key" role="listitem" data-role="create"><b>Comment</b><span>⌥⌘A</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Track Changes</b><span>⇧⌘E</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Undo</b><span>⌘Z</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Redo</b><span>⌘Y</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Focus</b><span>⌃⇧⌘F</span></div></div>
+          <!-- /layout -->
+        </section>
+        <section class="panel app-panel" id="macdown" data-layout="macdown" aria-labelledby="macdown-title"><h2 id="macdown-title">MacDown</h2>
+          <!-- layout:macdown -->
+          <p>When MacDown is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="create"><b>New</b><span>⌘N</span></div><div class="mini-key" role="listitem" data-role="create"><b>Open</b><span>⌘O</span></div><div class="mini-key" role="listitem" data-role="run"><b>Save</b><span>⌘S</span></div><div class="mini-key" role="listitem" data-role="create"><b>Copy HTML</b><span>⌥⌘C</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>1:1 Split</b><span>⇧⌘0</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Bold</b><span>⌘B</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Italic</b><span>⌘I</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Code</b><span>⌘K</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Link</b><span>⇧⌘K</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Image</b><span>⇧⌘I</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Numbered</b><span>⇧⌘O</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Bullets</b><span>⇧⌘U</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Quote</b><span>⇧⌘B</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Comment</b><span>⌘/</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Indent</b><span>⌘]</span></div></div>
+          <!-- /layout -->
+        </section>
+        <section class="panel app-panel" id="system" data-layout="system" aria-labelledby="system-title"><h2 id="system-title">Every other app</h2>
+          <!-- layout:system -->
+          <p>When any other app is in front, the iPad shows these keys and the shortcut each one sends.</p>
+          <div class="mini-deck" role="list"><div class="mini-key" role="listitem" data-role="modify"><b>Mute Mic</b><span>Runs on Mac</span></div><div class="mini-key" role="listitem" data-role="run"><b>Play/Pause</b><span>Runs on Mac</span></div><div class="mini-key" role="listitem" data-role="run"><b>Screenshot</b><span>⇧⌘4</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Spotlight</b><span>⌘Space</span></div><div class="mini-key" role="listitem" data-role="danger"><b>Lock Mac</b><span>Hold · ⌃⌘Q</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Terminal</b><span>Runs on Mac</span></div><div class="mini-key" role="listitem" data-role="navigate"><b>Finder</b><span>Runs on Mac</span></div><div class="mini-key" role="listitem" data-role="modify"><b>Do Not Disturb</b><span>Runs on Mac</span></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div><div class="mini-key empty" aria-hidden="true"></div></div>
+          <!-- /layout --><p>Apps without their own layout get these system keys. Do Not Disturb runs a shortcut named Toggle Focus, which you create in the Shortcuts app on your Mac.</p>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <nav aria-label="Footer">
+        <a href="privacy.html">Privacy</a>
+        <a href="support.html">Support</a>
+        <a href="https://github.com/hoquem/sidekey">GitHub</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script src="site.js"></script>
+</body>
+</html>

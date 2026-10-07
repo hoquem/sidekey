@@ -1,0 +1,175 @@
+/* Sidekey site. Tokens mirror the app's DeckTheme (see DESIGN.md): a graphite deck plate,
+   raised graphite keycaps, colour reserved for meaning, one amber "lit" signal. */
+:root {
+  color-scheme: dark;
+  --plate: #101218;
+  --well: #0a0c0f;
+  --cap-top: #24272e;
+  --cap-bottom: #1a1d23;
+  --cap-pressed: #14161b;
+  --raised: #22262d;
+  --hairline: rgba(255, 255, 255, 0.07);
+  --label: #f3f5f8;
+  --secondary: #a3adba;
+  --lit: #ffb020;
+  --failure: #ff7a7a;
+  --navigate: #cbd5e1;
+  --create: #7ab4ff;
+  --run: #5ee38e;
+  --modify: #c9a8ff;
+
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  --gap: clamp(10px, 1.6vw, 16px);
+  --measure: 68ch;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--plate); }
+
+body {
+  margin: 0;
+  background: var(--plate);
+  color: var(--label);
+  font-family: var(--font);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: rgba(255, 176, 32, 0.35); color: var(--label); }
+
+a { color: var(--label); text-decoration-color: rgba(163, 173, 186, 0.5); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--label); }
+:focus-visible { outline: 2px solid var(--lit); outline-offset: 3px; border-radius: 6px; }
+
+.wrap { width: min(1080px, 100% - 32px); margin-inline: auto; }
+
+/* Header */
+.masthead { display: flex; align-items: center; gap: 18px; padding: clamp(28px, 6vw, 64px) 0 clamp(20px, 4vw, 36px); }
+.masthead img { width: clamp(56px, 9vw, 84px); height: auto; border-radius: 22%; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); }
+.masthead h1 { margin: 0; font-family: var(--font-display); font-size: clamp(34px, 6vw, 58px); font-weight: 700; line-height: 1.02; letter-spacing: -0.025em; }
+.masthead p { margin: 6px 0 0; color: var(--secondary); font-size: clamp(17px, 2.2vw, 21px); }
+.masthead a { text-decoration: none; }
+
+/* The deck: the page's navigation, laid out like the app (5 x 3, or 3 x 5 when narrow). */
+.deck {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--gap);
+  padding: clamp(12px, 1.8vw, 18px);
+  margin: 0;
+  list-style: none;
+  border-radius: 22px;
+  background: var(--well);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+}
+
+.key {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  aspect-ratio: 1 / 0.86;
+  padding: 10px;
+  border-radius: 16%;
+  background: linear-gradient(var(--cap-top), var(--cap-bottom));
+  box-shadow: inset 0 0 0 1px var(--hairline), 0 5px 10px rgba(0, 0, 0, 0.45);
+  color: var(--label);
+  text-align: center;
+  text-decoration: none;
+  transition: transform 120ms ease-out, box-shadow 350ms ease-out, background 120ms ease-out;
+}
+.key:hover { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 5px 10px rgba(0, 0, 0, 0.45); }
+.key:active { transform: scale(0.965); background: var(--cap-pressed); box-shadow: inset 0 0 0 1px var(--hairline), 0 1px 2px rgba(0, 0, 0, 0.2); }
+.key svg { width: clamp(22px, 3.2vw, 34px); height: auto; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.key .name { overflow-wrap: anywhere; font-weight: 600; font-size: clamp(13px, 1.6vw, 16px); line-height: 1.2; }
+.key .hint { color: var(--secondary); font-size: clamp(11px, 1.2vw, 12px); font-weight: 500; }
+
+.key[data-role="navigate"] svg { color: var(--navigate); }
+.key[data-role="create"] svg { color: var(--create); }
+.key[data-role="run"] svg { color: var(--run); }
+.key[data-role="modify"] svg { color: var(--modify); }
+
+/* Pending: the faint amber edge a key shows while it is being chosen (the app's tap state). */
+.key.pending { box-shadow: inset 0 0 0 1px rgba(255, 176, 32, 0.45), 0 0 8px rgba(255, 176, 32, 0.2), 0 5px 10px rgba(0, 0, 0, 0.45); }
+
+/* Lit: the selected key, and the download key at rest. Amber means "this one". */
+.key.lit, .key[aria-current="true"] {
+  box-shadow: inset 0 0 0 2px var(--lit), 0 0 18px rgba(255, 176, 32, 0.45), 0 5px 10px rgba(0, 0, 0, 0.45);
+}
+.key.lit svg, .key[aria-current="true"] svg { color: var(--lit); }
+
+
+/* Panels below the deck. Without JavaScript every panel shows, stacked. */
+.panels { margin: clamp(28px, 5vw, 48px) 0 clamp(40px, 8vw, 80px); }
+.panel { padding-block: 8px 28px; }
+.js .panel { display: none; }
+.js .panel.shown { display: block; animation: rise 260ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.panel h2 { margin: 0 0 12px; font-family: var(--font-display); font-size: clamp(26px, 3.6vw, 34px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
+.panel p, .panel li { max-width: var(--measure); }
+.panel p { margin: 0 0 14px; color: var(--secondary); }
+.panel p strong, .panel li strong { color: var(--label); font-weight: 600; }
+.panel ol, .panel ul { padding-left: 1.2em; color: var(--secondary); }
+.panel li { margin-bottom: 8px; }
+
+/* Buttons are keycaps too; the primary one is the lit key. */
+.button {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 48px; padding: 12px 22px;
+  border-radius: 14px;
+  background: linear-gradient(var(--cap-top), var(--cap-bottom));
+  color: var(--label);
+  font-weight: 700; text-decoration: none;
+  box-shadow: inset 0 0 0 1px var(--hairline), 0 5px 10px rgba(0, 0, 0, 0.45);
+  transition: transform 120ms ease-out;
+}
+.button:active { transform: scale(0.965); background: var(--cap-pressed); }
+/* The lit edge only: the deck's lit key already carries the glow, and one bloom per action is enough. */
+.button.primary { box-shadow: inset 0 0 0 2px var(--lit), 0 5px 10px rgba(0, 0, 0, 0.45); }
+.button.primary svg { width: 20px; height: 20px; stroke: var(--lit); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 8px; }
+.note { font-size: 15px; }
+
+/* A live mini deck inside an app panel, showing that app's real keys. */
+.mini-deck { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 18px 0 10px; padding: 10px; border-radius: 18px; background: var(--well); box-shadow: inset 0 0 0 1px var(--hairline); }
+.mini-key { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; min-height: 72px; padding: 8px 6px; border-radius: 14px; background: linear-gradient(var(--cap-top), var(--cap-bottom)); box-shadow: inset 0 0 0 1px var(--hairline); text-align: center; }
+.mini-key b { font-size: 13px; font-weight: 600; line-height: 1.2; }
+.mini-key span { color: var(--secondary); font-size: 11px; }
+.mini-key.empty { background: var(--well); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035); }
+.mini-key[data-role="navigate"] b { color: var(--navigate); }
+.mini-key[data-role="danger"] b { color: var(--failure); }
+.mini-key[data-role="run"] b { color: var(--run); }
+.mini-key[data-role="create"] b { color: var(--create); }
+.mini-key[data-role="modify"] b { color: var(--modify); }
+
+/* Reading pages (privacy, support) */
+.doc { padding-bottom: clamp(40px, 8vw, 80px); }
+.doc h2 { margin: 36px 0 10px; font-family: var(--font-display); font-size: clamp(22px, 2.8vw, 28px); font-weight: 700; line-height: 1.2; letter-spacing: -0.015em; }
+.doc h3 { margin: 24px 0 6px; font-size: 19px; font-weight: 600; }
+.doc p, .doc li { max-width: var(--measure); color: var(--secondary); }
+.doc strong { color: var(--label); font-weight: 600; }
+.doc .updated { color: var(--secondary); font-size: 15px; }
+.doc table { border-collapse: collapse; width: 100%; max-width: 760px; margin: 12px 0; font-size: 15px; }
+.doc th, .doc td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--hairline); color: var(--secondary); }
+.doc th { color: var(--label); font-weight: 600; }
+
+footer { padding: 24px 0 40px; border-top: 1px solid var(--hairline); color: var(--secondary); font-size: 15px; }
+footer nav { display: flex; flex-wrap: wrap; gap: 18px; }
+
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  .deck { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .key { aspect-ratio: 1 / 0.92; }
+  .mini-deck { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .key, .js .panel.shown { transition: none; animation: none; }
+}

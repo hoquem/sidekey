@@ -8,7 +8,7 @@ ios
 
 ## Users
 
-A developer and power user working at a Mac, with an iPad propped beside the keyboard as a touch control surface. They move between developer tools (Xcode, Terminal, VS Code, Safari), communication apps (WhatsApp, Telegram, Zoom) and writing tools (MacDown) all day, and want the right shortcuts under their finger without remembering them. The iPad is glanced at mid-task, often from 50 to 70 cm away, and tapped without looking for long.
+A developer and power user working at a Mac, with an iPad propped beside the keyboard as a touch control surface. They move between developer tools (Xcode, Terminal, VS Code, Safari), communication apps (WhatsApp, Telegram, Zoom) and writing tools (MacDown, Word) all day, and want the right shortcuts under their finger without remembering them. The iPad is glanced at mid-task, often from 50 to 70 cm away, and tapped without looking for long.
 
 ## Product Purpose
 
@@ -22,8 +22,8 @@ The deck follows the Mac's focus automatically, connects over USB first for low 
 
 - Two processes: the Sidekey Mac app (menu bar companion, target `SidekeyMac`, Bonjour `_sidekey._tcp` on TCP 49200) and the iPadOS client. Messages are length-prefixed JSON (`Packages/iKeypadShared`).
 - The Mac needs Accessibility permission to post keystrokes; window titles and app state also come from the Accessibility API.
-- Profiles are 3 rows by 5 columns. Built-in profiles: System (fallback), VS Code, Terminal, Xcode, Safari, Chrome, Arc, WhatsApp, Telegram, Zoom, MacDown. Shortcuts are taken from each app's menu bar or published documentation; Zoom's in-meeting keys and state chips come from Zoom's documentation and are not yet tested in a live meeting.
-- Brand name: Sidekey (chosen 2026-10-07). The iPad app will ship through TestFlight, then the App Store (free); the Mac companion will ship as a Developer ID signed, notarized DMG on GitHub Releases, because a sandboxed Mac App Store app cannot post keystrokes to other apps. Source is public on GitHub under MIT.
+- Profiles are 3 rows by 5 columns. Built-in profiles: System (fallback), VS Code, Terminal, Xcode, Safari, Chrome, Arc, WhatsApp, Telegram, Zoom, MacDown, Word. Shortcuts are taken from each app's menu bar or published documentation; Zoom's in-meeting keys and state chips come from Zoom's documentation and are not yet tested in a live meeting.
+- Brand name: Sidekey (chosen 2026-10-07). The iPad app ships through TestFlight, then the App Store (free); the Mac companion ships as a Developer ID signed, notarized DMG on GitHub Releases, because it posts keystrokes to other apps and runs AppleScript and shell actions, which the Mac App Store sandbox does not allow. Mac 1.0.0 was withdrawn on 2026-10-07 for running client-sent actions without pairing; 1.1.0 adds pairing and runs only built-in actions. Source is public on GitHub under MIT.
 
 ## Capabilities and Constraints
 
@@ -47,6 +47,7 @@ No screenshots, testimonials, users or metrics beyond the author's own use. Do n
 3. Keys stay where muscle memory expects them within an orientation; layouts never reflow under the finger. Portrait (3 columns by 5 rows) and landscape (5 columns by 3 rows) each have their own fixed positions, chosen by the user (2026-10-07) so portrait fills the screen.
 4. Fail loudly: a missing permission or a lost connection is shown, never hidden behind live-looking keys.
 5. The Mac does the work; the iPad stays a thin, fast surface.
+6. Nothing controls the Mac without pairing, an unpaired device learns only the Mac's name, and the Mac runs only its own built-in actions.
 
 ## Accessibility & Inclusion
 

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sidekey support</title>
+  <meta name="description" content="Set up Sidekey on your iPad and Mac, fix connection and permission problems, and get in touch.">
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="masthead">
+      <a href="index.html"><img src="icon.png" alt="Sidekey home" width="84" height="84"></a>
+      <div>
+        <h1>Support</h1>
+        <p>Set up Sidekey and fix common problems</p>
+      </div>
+    </header>
+
+    <main class="doc">
+      <h2>Set up</h2>
+      <ol>
+        <li><strong>Install Sidekey on your Mac.</strong> Download <a href="https://github.com/hoquem/sidekey/releases/latest/download/Sidekey.dmg">Sidekey.dmg</a>, open it and drag Sidekey to Applications. Open Sidekey; it appears in the menu bar.</li>
+        <li><strong>Allow Accessibility.</strong> macOS asks the first time. Switch Sidekey on in System Settings › Privacy &amp; Security › Accessibility.</li>
+        <li><strong>Open Sidekey on your iPad</strong> and allow it to find devices on your local network.</li>
+        <li><strong>Connect the two.</strong> Plug the iPad into the Mac with a USB cable, or put both on the same Wi-Fi network.</li>
+        <li><strong>Pair once.</strong> On the Mac, choose <strong>Pair iPad...</strong> in the Sidekey menu. A window shows a 6-digit code for two minutes. Type it on the iPad and tap Pair. From then on the iPad connects to that Mac by itself, and the top of the iPad shows the Mac's name and whether the link is USB or Wi-Fi.</li>
+      </ol>
+
+      <h2>Pairing</h2>
+      <ul>
+        <li>Until an iPad is paired, the Mac sends it only its name and a pairing request, and runs none of its taps.</li>
+        <li>If the iPad says the code is wrong, check the code in the Mac's Pair iPad window. After five wrong codes, or two minutes, choose Pair iPad again for a new code.</li>
+        <li>To pair with a different Mac, press and hold the connection label on the iPad while it is connected and choose Forget This Mac. If the old Mac is no longer available, delete and reinstall Sidekey on the iPad.</li>
+        <li>To revoke access, choose Forget Paired iPads in the Mac's Sidekey menu. This removes every paired iPad from that Mac; Forget This Mac on the iPad only removes the iPad's copy.</li>
+        <li>Traffic between the iPad and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends and, by capturing the pairing exchange, press your Mac's built-in keys until you choose Forget Paired iPads. Use Sidekey over USB or on a network you trust.</li>
+      </ul>
+
+      <h2>The iPad keeps looking for your Mac</h2>
+      <ul>
+        <li>Check that Sidekey is running on the Mac: its icon should be in the menu bar.</li>
+        <li>A paired iPad looks only for the Mac it paired with. If that Mac is off or Sidekey is not running there, the iPad keeps looking.</li>
+        <li>Connect with a USB cable, or check both devices are on the same Wi-Fi network. Some guest and office networks block devices from seeing each other.</li>
+        <li>On the iPad, open Settings › Privacy &amp; Security › Local Network and make sure Sidekey is on. On macOS 15 or later, check the same setting on the Mac.</li>
+        <li>If you just restarted Sidekey on the Mac, give the iPad a few seconds to reconnect.</li>
+      </ul>
+
+      <h2>Keys light up red or say a permission is missing</h2>
+      <ul>
+        <li>Open System Settings › Privacy &amp; Security › Accessibility on the Mac and switch Sidekey on. If it is already on, switch it off and on again.</li>
+        <li>If Sidekey is not in the list, click <strong>+</strong>, choose Sidekey from Applications and switch it on.</li>
+        <li>Keys that run AppleScript, such as Play/Pause, also need Automation: check System Settings › Privacy &amp; Security › Automation.</li>
+      </ul>
+
+      <h2>A key says "Layout changed. Tap again."</h2>
+      <p>The app in front of the Mac changed between you looking at the key and tapping it. Sidekey refuses to send a shortcut meant for one app to another. Tap the key again on the new layout, or pin a layout with the pin button so it stays put while you switch apps.</p>
+
+      <h2>Some keys need a press and hold</h2>
+      <p>Keys that interrupt what you are doing, such as Lock Mac, Interrupt, End Call, Telegram Lock and Xcode Clean, fire only after you hold them for just over half a second. A short tap shows a reminder instead.</p>
+
+      <h2>Do Not Disturb does nothing</h2>
+      <p>The Do Not Disturb key runs a shortcut named Toggle Focus. Create a shortcut with that name in the Shortcuts app on your Mac, for example one that turns a Focus on or off.</p>
+
+      <h2>Zoom meeting state</h2>
+      <p>Sidekey shows Zoom meeting state, such as whether your mic is muted, by reading Zoom's menus. This is built from Zoom's documented menu wording and has not yet been tested in a live meeting. If it shows the wrong state, please let us know.</p>
+
+      <h2>Requirements</h2>
+      <ul>
+        <li>iPad with iPadOS 16 or later.</li>
+        <li>Mac with macOS 13 or later.</li>
+        <li>A USB cable between them, or both on the same Wi-Fi network.</li>
+      </ul>
+
+      <h2>Contact</h2>
+      <p>Email <a href="mailto:m.hoque@gmail.com">m.hoque@gmail.com</a>, or open an issue on <a href="https://github.com/hoquem/sidekey/issues">GitHub</a>.</p>
+    </main>
+
+    <footer>
+      <nav aria-label="Footer">
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://github.com/hoquem/sidekey">GitHub</a>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>
