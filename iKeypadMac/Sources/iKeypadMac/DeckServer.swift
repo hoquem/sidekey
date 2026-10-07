@@ -135,30 +135,11 @@ public final class DeckServer: ObservableObject {
 
         case .executeAction(let keyId, let action, let profileId, let pinned):
             print("[Server] Executing action for key \(keyId): \(action) (profile \(profileId ?? "-"), pinned \(pinned ?? false))")
-            let monitor = AppContextMonitor.shared
-            var delayBeforeFiring: TimeInterval = 0
-            if let profileId, profileId != monitor.activeProfile.id {
-                guard pinned == true else {
-                    // The layout changed between the user seeing the key and tapping it.
-                    send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: "Layout changed. Tap again."), over: connection)
-                    return
-                }
-                guard let pinnedProfile = monitor.profile(withId: profileId) else {
-                    send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: "Pinned layout is no longer available. Unpin and try again."), over: connection)
-                    return
-                }
-                guard let target = NSRunningApplication.runningApplications(withBundleIdentifier: pinnedProfile.appBundleIdentifier).first else {
-                    send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: "\(pinnedProfile.appName) isn't running."), over: connection)
-                    return
-                }
-                target.activate()
-                delayBeforeFiring = 0.25
-            }
-            DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + delayBeforeFiring) {
-                let result = ActionDispatcher.shared.execute(action: action)
-                Task { @MainActor [weak self] in
-                    self?.send(message: .actionExecuted(keyId: keyId, success: result.success, errorMessage: result.error), over: connection)
-                }
+            switch prepareTarget(forTapOn: profileId, pinned: pinned) {
+            case .failure(let rejection):
+                send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: rejection.reason), over: connection)
+            case .success(let delay):
+                fire(action, keyId: keyId, after: delay, over: connection)
             }
 
         case .ping:
@@ -166,6 +147,43 @@ public final class DeckServer: ObservableObject {
 
         default:
             break
+        }
+    }
+
+    /// A tap the Mac refuses to run, with the reason shown on the iPad.
+    struct TapRejected: Error {
+        let reason: String
+    }
+
+    /// Decide whether a tap on layout ``profileId`` may run, bringing a pinned layout's app
+    /// forward first.
+    ///
+    /// :returns: Seconds to wait before firing (time for a pinned app to come forward), or why
+    ///     the tap is rejected. A tap without a layout id is not checked.
+    private func prepareTarget(forTapOn profileId: String?, pinned: Bool?) -> Result<TimeInterval, TapRejected> {
+        let monitor = AppContextMonitor.shared
+        guard let profileId, profileId != monitor.activeProfile.id else { return .success(0) }
+        guard pinned == true else {
+            // The layout changed between the user seeing the key and tapping it.
+            return .failure(TapRejected(reason: "Layout changed. Tap again."))
+        }
+        guard let pinnedProfile = monitor.profile(withId: profileId) else {
+            return .failure(TapRejected(reason: "Pinned layout is no longer available. Unpin and try again."))
+        }
+        guard let target = NSRunningApplication.runningApplications(withBundleIdentifier: pinnedProfile.appBundleIdentifier).first else {
+            return .failure(TapRejected(reason: "\(pinnedProfile.appName) isn't running."))
+        }
+        target.activate()
+        return .success(0.25)
+    }
+
+    /// Run ``action`` off the main thread after ``delay`` and report the result to the iPad.
+    private func fire(_ action: KeyAction, keyId: String, after delay: TimeInterval, over connection: NWConnection) {
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + delay) {
+            let result = ActionDispatcher.shared.execute(action: action)
+            Task { @MainActor [weak self] in
+                self?.send(message: .actionExecuted(keyId: keyId, success: result.success, errorMessage: result.error), over: connection)
+            }
         }
     }
 
