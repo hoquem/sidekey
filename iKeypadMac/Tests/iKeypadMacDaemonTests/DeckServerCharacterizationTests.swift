@@ -376,5 +376,15 @@ final class ActionDispatcherTests: XCTestCase {
             }
         }
     }
+
+    /// Every built-in key icon must be a real SF Symbol; an unknown name draws a blank key.
+    func testEveryBuiltInIconIsAnSFSymbol() {
+        for profile in DefaultProfiles.allDefaultProfiles() {
+            for key in profile.keys {
+                guard let icon = key.iconSystemName else { continue }
+                XCTAssertNotNil(NSImage(systemSymbolName: icon, accessibilityDescription: nil), "\(profile.appName) › \(key.label) uses unknown icon \"\(icon)\"")
+            }
+        }
+    }
 }
 

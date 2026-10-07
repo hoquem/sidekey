@@ -131,5 +131,19 @@ final class ProtocolV2Tests: XCTestCase {
         XCTAssertEqual(chrome.keys.count, 15)
         XCTAssertEqual(chrome.keys.first { $0.label == "Search Tabs" }?.action, .hotkey(key: "a", modifiers: [.command, .shift]))
     }
+
+    func testPopularMacAppsHaveLayouts() {
+        let bundles = Set(DefaultProfiles.allDefaultProfiles().map(\.appBundleIdentifier))
+        let popular = ["com.apple.Safari", "com.google.Chrome", "com.apple.finder", "com.apple.mail", "com.apple.MobileSMS",
+                       "com.microsoft.Word", "com.microsoft.Excel", "com.microsoft.Powerpoint", "com.microsoft.Outlook",
+                       "com.microsoft.teams2", "com.tinyspeck.slackmacgap", "us.zoom.xos", "net.whatsapp.WhatsApp",
+                       "com.spotify.client", "com.apple.Notes", "com.apple.iCal", "com.apple.Music", "notion.id",
+                       "com.openai.chat", "com.apple.Photos"]
+        for bundle in popular {
+            XCTAssertTrue(bundles.contains(bundle), "no layout for \(bundle)")
+        }
+        let safari = DefaultProfiles.allDefaultProfiles().first { $0.appBundleIdentifier == "com.apple.Safari" }
+        XCTAssertEqual(safari?.keys.count, 15)
+    }
 }
 
