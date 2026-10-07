@@ -10,3 +10,6 @@ xcuserdata/
 
 # Runtime logs
 .impeccable/daemon.log
+
+# Design review captures (contain machine name and window titles)
+.impeccable/review/

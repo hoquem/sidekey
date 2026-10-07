@@ -20,24 +20,17 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.productivity</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Sidekey runs the AppleScript actions on your keys, such as Play/Pause in Music.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_sidekey._tcp</string>
 	</array>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Sidekey connects to the Sidekey app on your Mac to show its shortcut keys.</string>
-	<key>UILaunchScreen</key>
-	<dict/>
-	<key>UIRequiresFullScreen</key>
-	<true/>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
+	<string>Sidekey listens for your iPad on the local network and over USB.</string>
 </dict>
 </plist>

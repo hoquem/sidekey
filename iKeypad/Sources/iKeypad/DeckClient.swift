@@ -70,7 +70,7 @@ public final class DeckClient: ObservableObject {
         stop()
 
         let parameters = NWParameters()
-        let descriptor = NWBrowser.Descriptor.bonjour(type: "_ikeypad._tcp", domain: nil)
+        let descriptor = NWBrowser.Descriptor.bonjour(type: "_sidekey._tcp", domain: nil)
         let browser = NWBrowser(for: descriptor, using: parameters)
 
         browser.stateUpdateHandler = { [weak self] state in

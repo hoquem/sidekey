@@ -12,7 +12,7 @@ A developer and power user working at a Mac, with an iPad propped beside the key
 
 ## Product Purpose
 
-iKeypad turns an iPad into a context-aware macro deck for a Mac. A Mac companion service watches the frontmost app and pushes that app's key layout to the iPad; tapping a key makes the Mac fire a hotkey, AppleScript, shell command or Shortcut. Success means the user trusts every tap: they can see which app the deck is driving, that the key fired, and why it didn't when it fails.
+Sidekey turns an iPad into a context-aware macro deck for a Mac. A Mac companion service watches the frontmost app and pushes that app's key layout to the iPad; tapping a key makes the Mac fire a hotkey, AppleScript, shell command or Shortcut. Success means the user trusts every tap: they can see which app the deck is driving, that the key fired, and why it didn't when it fails.
 
 ## Positioning
 
@@ -20,10 +20,10 @@ The deck follows the Mac's focus automatically, connects over USB first for low 
 
 ## Operating Context
 
-- Two processes: `iKeypadMacDaemon` (macOS menu bar companion, Bonjour `_ikeypad._tcp` on TCP 49200) and the iPadOS client. Messages are length-prefixed JSON (`Packages/iKeypadShared`).
+- Two processes: the Sidekey Mac app (menu bar companion, target `SidekeyMac`, Bonjour `_sidekey._tcp` on TCP 49200) and the iPadOS client. Messages are length-prefixed JSON (`Packages/iKeypadShared`).
 - The Mac needs Accessibility permission to post keystrokes; window titles and app state also come from the Accessibility API.
 - Profiles are a 3 x 5 grid. Built-in profiles: System (fallback), VS Code, Terminal, Xcode, Safari, Chrome, Arc, WhatsApp, Telegram, Zoom, MacDown. Shortcuts are verified against each app's menu bar or published documentation.
-- The user runs and installs the app themselves on their own iPad Air (5th generation) and MacBook Pro; it is not on the App Store.
+- Brand name: Sidekey (chosen 2026-10-07). The iPad app ships through TestFlight, then the App Store (free); the Mac companion ships as a notarized DMG on GitHub Releases, because the Mac App Store sandbox forbids sending keystrokes to other apps. Source is public on GitHub under MIT.
 
 ## Capabilities and Constraints
 
@@ -33,7 +33,7 @@ The deck follows the Mac's focus automatically, connects over USB first for low 
 
 ## Brand Commitments
 
-- Name: iKeypad.
+- Name: Sidekey (internal module names still use the working name iKeypad).
 - The user chose a dark "hardware deck" visual direction and the "Lit key" app icon concept (dark keycaps, one glowing key).
 
 ## Evidence on Hand

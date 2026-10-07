@@ -34,7 +34,7 @@ public final class ActionDispatcher {
         // Without Accessibility trust macOS drops posted events without reporting an error,
         // so check up front rather than report a success that never happened.
         guard AXIsProcessTrusted() else {
-            return (false, "Allow iKeypad in System Settings › Privacy & Security › Accessibility on your Mac.")
+            return (false, "Allow Sidekey in System Settings › Privacy & Security › Accessibility on your Mac.")
         }
 
         var flags: CGEventFlags = []

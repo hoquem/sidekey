@@ -33,21 +33,21 @@ public final class DeckServer: ObservableObject {
     /// Start listening for iPads.
     ///
     /// :param port: TCP port to listen on.
-    /// :param serviceName: Bonjour name to advertise as ``_ikeypad._tcp``, or ``nil`` to listen
+    /// :param serviceName: Bonjour name to advertise as ``_sidekey._tcp``, or ``nil`` to listen
     ///     without advertising (tests use this so iPads on the network never find them).
-    public func start(port: UInt16 = 49200, serviceName: String? = "iKeypad Host") {
+    public func start(port: UInt16 = 49200, serviceName: String? = "Sidekey") {
         do {
             let parameters = NWParameters.tcp
             self.listener = try NWListener(using: parameters, on: NWEndpoint.Port(rawValue: port)!)
             // Advertise via Bonjour for zero-config Wi-Fi & USB peer-to-peer detection
             if let serviceName {
-                self.listener?.service = NWListener.Service(name: serviceName, type: "_ikeypad._tcp")
+                self.listener?.service = NWListener.Service(name: serviceName, type: "_sidekey._tcp")
             }
 
             self.listener?.stateUpdateHandler = { state in
                 switch state {
                 case .ready:
-                    print("[Server] Listening on port \(port), Bonjour service advertised (_ikeypad._tcp).")
+                    print("[Server] Listening on port \(port), Bonjour service advertised (_sidekey._tcp).")
                 case .failed(let error):
                     print("[Server] Listener failed: \(error)")
                 default:

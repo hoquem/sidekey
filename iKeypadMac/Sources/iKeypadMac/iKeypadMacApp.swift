@@ -8,12 +8,15 @@ struct iKeypadMacApp: App {
 
     init() {
         DeckServer.shared.start()
+        // Keys can't fire without Accessibility; ask macOS to prompt (and list Sidekey in
+        // System Settings) rather than failing silently on the first tap.
+        AppStateReader.requestAccessibilityIfNeeded()
     }
 
     var body: some Scene {
-        MenuBarExtra("iKeypad", systemImage: "keyboard.badge.ellipsis") {
+        MenuBarExtra("Sidekey", systemImage: "keyboard.badge.ellipsis") {
             VStack(alignment: .leading, spacing: 6) {
-                Text("iKeypad Companion")
+                Text("Sidekey")
                     .font(.headline)
 
                 Divider()
@@ -44,7 +47,7 @@ struct iKeypadMacApp: App {
                     // Open preferences window
                 }
 
-                Button("Quit iKeypad") {
+                Button("Quit Sidekey") {
                     NSApplication.shared.terminate(nil)
                 }
                 .keyboardShortcut("q")

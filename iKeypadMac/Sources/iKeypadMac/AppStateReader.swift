@@ -12,6 +12,14 @@ enum AppStateReader {
         AXIsProcessTrusted()
     }
 
+    /// Show macOS's Accessibility prompt if Sidekey isn't trusted yet; this also adds Sidekey
+    /// to the list in System Settings so the user only has to switch it on.
+    static func requestAccessibilityIfNeeded() {
+        guard !isAccessibilityTrusted else { return }
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        _ = AXIsProcessTrustedWithOptions(options)
+    }
+
     /// Title of the app's focused window, or ``nil`` when unavailable.
     static func focusedWindowTitle(of app: NSRunningApplication) -> String? {
         let element = AXUIElementCreateApplication(app.processIdentifier)

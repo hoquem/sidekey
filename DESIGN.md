@@ -1,5 +1,5 @@
 ---
-name: iKeypad
+name: Sidekey
 description: A dark hardware macro deck for the Mac, worn by the iPad beside the keyboard.
 colors:
   lit: "#FFB020"
@@ -108,13 +108,13 @@ components:
     padding: "12pt 18pt"
 ---
 
-# Design System: iKeypad
+# Design System: Sidekey
 
 ## Overview
 
 **Creative North Star: "The Lit Key"**
 
-iKeypad is a dark hardware deck: a graphite plate carrying a fixed grid of raised graphite keycaps, read from 50 to 70 cm away and tapped without looking. The surface is deliberately quiet so that the two things that matter can be seen at a glance: which Mac app the deck is driving (the real app icon, name and window title in the band) and what the Mac said about the last tap. Colour is never decoration. Each key's role tints its SF Symbol; a single warm amber, the lit signal, marks a key that is firing or has fired, a live state that needs attention, and the app icon's glowing centre key.
+Sidekey is a dark hardware deck: a graphite plate carrying a fixed grid of raised graphite keycaps, read from 50 to 70 cm away and tapped without looking. The surface is deliberately quiet so that the two things that matter can be seen at a glance: which Mac app the deck is driving (the real app icon, name and window title in the band) and what the Mac said about the last tap. Colour is never decoration. Each key's role tints its SF Symbol; a single warm amber, the lit signal, marks a key that is firing or has fired, a live state that needs attention, and the app icon's glowing centre key.
 
 The deck is forced dark whatever the system appearance (`preferredColorScheme(.dark)`). There is no light theme. Depth is physical: caps carry a soft drop shadow and a top-to-bottom gradient, sink and darken when pressed, and empty slots are recessed wells darker than the plate. Type is the platform's own: SF Pro through Dynamic Type text styles, SF Symbols for every glyph.
 

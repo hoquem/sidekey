@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.hoque
   deploymentTarget:
     iOS: "16.0"
+    macOS: "13.0"
 packages:
   iKeypadShared:
     path: Packages/iKeypadShared
@@ -18,7 +19,8 @@ targets:
     info:
       path: iKeypadApp/Info.plist
       properties:
-        CFBundleDisplayName: iKeypad
+        CFBundleDisplayName: Sidekey
+        ITSAppUsesNonExemptEncryption: false
         UILaunchScreen: {}
         UIRequiresFullScreen: true
         UISupportedInterfaceOrientations~ipad:
@@ -26,17 +28,17 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
-        NSLocalNetworkUsageDescription: iKeypad connects to the iKeypad companion app on your Mac to show shortcut keys.
+        NSLocalNetworkUsageDescription: Sidekey connects to the Sidekey app on your Mac to show its shortcut keys.
         NSBonjourServices:
-          - _ikeypad._tcp
+          - _sidekey._tcp
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.hoque.ikeypad
+        PRODUCT_BUNDLE_IDENTIFIER: com.hoque.sidekey
         TARGETED_DEVICE_FAMILY: "2"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: C67LAFG9Q4
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "1.0"
+        MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"
     scheme:
       testTargets:
@@ -52,7 +54,40 @@ targets:
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
-        PRODUCT_BUNDLE_IDENTIFIER: com.hoque.ikeypad.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.hoque.sidekey.tests
         TARGETED_DEVICE_FAMILY: "2"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: C67LAFG9Q4
+  SidekeyMac:
+    type: application
+    platform: macOS
+    sources:
+      - path: iKeypadMac/Sources/iKeypadMac
+      - path: SidekeyMac/Assets.xcassets
+    dependencies:
+      - package: iKeypadShared
+    entitlements:
+      path: SidekeyMac/Sidekey.entitlements
+      properties:
+        # Hardened runtime blocks Apple Events (the AppleScript keys) without this.
+        com.apple.security.automation.apple-events: true
+    info:
+      path: SidekeyMac/Info.plist
+      properties:
+        CFBundleDisplayName: Sidekey
+        LSUIElement: true
+        LSApplicationCategoryType: public.app-category.productivity
+        NSAppleEventsUsageDescription: Sidekey runs the AppleScript actions on your keys, such as Play/Pause in Music.
+        NSLocalNetworkUsageDescription: Sidekey listens for your iPad on the local network and over USB.
+        NSBonjourServices:
+          - _sidekey._tcp
+    settings:
+      base:
+        PRODUCT_NAME: Sidekey
+        PRODUCT_BUNDLE_IDENTIFIER: com.hoque.sidekey.mac
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: C67LAFG9Q4
+        ENABLE_HARDENED_RUNTIME: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
