@@ -1032,6 +1032,480 @@ public struct DefaultProfiles {
         )
     }
 
+    /// Cursor (``com.todesktop.230313mzl4w4u92``). New Agent, Changes, Files, Terminal, Browser, Command
+    /// Palette, Open IDE, New Terminal and Settings come from Cursor's menu bar; Accept All, Reject All,
+    /// Model, Mode, Mode Menu and Add to Chat from Cursor's published keyboard shortcuts.
+    public static func makeCursorProfile() -> DeckProfile {
+        return DeckProfile(
+            // Stable across launches so a pinned layout survives a Mac companion restart.
+            id: "com.todesktop.230313mzl4w4u92",
+            appBundleIdentifier: "com.todesktop.230313mzl4w4u92",
+            appName: "Cursor",
+            rows: 3,
+            columns: 5,
+            keys: [
+                DeckKey(
+                    position: 0,
+                    label: "New Agent",
+                    iconSystemName: "plus.bubble",
+                    action: .hotkey(key: "n", modifiers: [.command]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 1,
+                    label: "Accept All",
+                    iconSystemName: "checkmark.circle",
+                    action: .hotkey(key: "return", modifiers: [.command]),
+                    role: .run
+                ),
+                DeckKey(
+                    position: 2,
+                    label: "Reject All",
+                    iconSystemName: "xmark.circle",
+                    action: .hotkey(key: "delete", modifiers: [.command, .shift]),
+                    role: .danger
+                ),
+                DeckKey(
+                    position: 3,
+                    label: "Model",
+                    iconSystemName: "cpu",
+                    action: .hotkey(key: "/", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 4,
+                    label: "Mode",
+                    iconSystemName: "arrow.triangle.2.circlepath",
+                    action: .hotkey(key: "tab", modifiers: [.shift]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 5,
+                    label: "Changes",
+                    iconSystemName: "plusminus",
+                    action: .hotkey(key: "e", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 6,
+                    label: "Files",
+                    iconSystemName: "folder",
+                    action: .hotkey(key: "g", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 7,
+                    label: "Terminal",
+                    iconSystemName: "terminal",
+                    action: .hotkey(key: "j", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 8,
+                    label: "Browser",
+                    iconSystemName: "globe",
+                    action: .hotkey(key: "b", modifiers: [.command, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 9,
+                    label: "Command Palette",
+                    iconSystemName: "command",
+                    action: .hotkey(key: "k", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 10,
+                    label: "Add to Chat",
+                    iconSystemName: "text.badge.plus",
+                    action: .hotkey(key: "l", modifiers: [.command, .shift]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 11,
+                    label: "Mode Menu",
+                    iconSystemName: "list.bullet",
+                    action: .hotkey(key: ".", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 12,
+                    label: "Open IDE",
+                    iconSystemName: "chevron.left.forwardslash.chevron.right",
+                    action: .hotkey(key: "n", modifiers: [.command, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 13,
+                    label: "New Terminal",
+                    iconSystemName: "plus.rectangle",
+                    action: .hotkey(key: "`", modifiers: [.control, .shift]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 14,
+                    label: "Settings",
+                    iconSystemName: "gearshape",
+                    action: .hotkey(key: ",", modifiers: [.command]),
+                    role: .navigate
+                )
+            ]
+        )
+    }
+
+    /// Antigravity IDE (``com.google.antigravity-ide``). Agent Panel (Cmd L) comes from Google's
+    /// "Getting Started with Antigravity IDE" codelab; every other key from the IDE's menu bar.
+    public static func makeAntigravityProfile() -> DeckProfile {
+        return DeckProfile(
+            // Stable across launches so a pinned layout survives a Mac companion restart.
+            id: "com.google.antigravity-ide",
+            appBundleIdentifier: "com.google.antigravity-ide",
+            appName: "Antigravity",
+            rows: 3,
+            columns: 5,
+            keys: [
+                DeckKey(
+                    position: 0,
+                    label: "Agent Panel",
+                    iconSystemName: "sparkles",
+                    action: .hotkey(key: "l", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 1,
+                    label: "Command Palette",
+                    iconSystemName: "command",
+                    action: .hotkey(key: "p", modifiers: [.command, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 2,
+                    label: "Go to File",
+                    iconSystemName: "doc.text.magnifyingglass",
+                    action: .hotkey(key: "p", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 3,
+                    label: "Find in Files",
+                    iconSystemName: "magnifyingglass",
+                    action: .hotkey(key: "f", modifiers: [.command, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 4,
+                    label: "Source Control",
+                    iconSystemName: "arrow.triangle.branch",
+                    action: .hotkey(key: "g", modifiers: [.control, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 5,
+                    label: "Explorer",
+                    iconSystemName: "sidebar.left",
+                    action: .hotkey(key: "e", modifiers: [.command, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 6,
+                    label: "Terminal",
+                    iconSystemName: "terminal",
+                    action: .hotkey(key: "`", modifiers: [.control]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 7,
+                    label: "Problems",
+                    iconSystemName: "exclamationmark.triangle",
+                    action: .hotkey(key: "m", modifiers: [.command, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 8,
+                    label: "Run View",
+                    iconSystemName: "play.circle",
+                    action: .hotkey(key: "d", modifiers: [.command, .shift]),
+                    role: .run
+                ),
+                DeckKey(
+                    position: 9,
+                    label: "Save",
+                    iconSystemName: "square.and.arrow.down",
+                    action: .hotkey(key: "s", modifiers: [.command]),
+                    role: .run
+                ),
+                DeckKey(
+                    position: 10,
+                    label: "Save All",
+                    iconSystemName: "square.and.arrow.down.on.square",
+                    action: .hotkey(key: "s", modifiers: [.command, .option]),
+                    role: .run
+                ),
+                DeckKey(
+                    position: 11,
+                    label: "Comment",
+                    iconSystemName: "text.bubble",
+                    action: .hotkey(key: "/", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 12,
+                    label: "Back",
+                    iconSystemName: "chevron.backward",
+                    action: .hotkey(key: "-", modifiers: [.control]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 13,
+                    label: "Forward",
+                    iconSystemName: "chevron.forward",
+                    action: .hotkey(key: "-", modifiers: [.control, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 14,
+                    label: "Close Editor",
+                    iconSystemName: "xmark.square",
+                    action: .hotkey(key: "w", modifiers: [.command]),
+                    role: .danger
+                )
+            ]
+        )
+    }
+
+    /// OpenCode desktop app (``ai.opencode.desktop``). Every key comes from its menu bar except Stop
+    /// (Escape interrupts the current response, per OpenCode's keybind documentation).
+    public static func makeOpenCodeProfile() -> DeckProfile {
+        return DeckProfile(
+            // Stable across launches so a pinned layout survives a Mac companion restart.
+            id: "ai.opencode.desktop",
+            appBundleIdentifier: "ai.opencode.desktop",
+            appName: "OpenCode",
+            rows: 3,
+            columns: 5,
+            keys: [
+                DeckKey(
+                    position: 0,
+                    label: "New Session",
+                    iconSystemName: "plus.bubble",
+                    action: .hotkey(key: "s", modifiers: [.command, .shift]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 1,
+                    label: "Stop",
+                    iconSystemName: "stop.circle",
+                    action: .hotkey(key: "escape", modifiers: []),
+                    role: .danger
+                ),
+                DeckKey(
+                    position: 2,
+                    label: "Open Project",
+                    iconSystemName: "folder",
+                    action: .hotkey(key: "o", modifiers: [.command]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 3,
+                    label: "Prev Session",
+                    iconSystemName: "chevron.up",
+                    action: .hotkey(key: "up", modifiers: [.option]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 4,
+                    label: "Next Session",
+                    iconSystemName: "chevron.down",
+                    action: .hotkey(key: "down", modifiers: [.option]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 5,
+                    label: "Prev Project",
+                    iconSystemName: "arrow.up.square",
+                    action: .hotkey(key: "up", modifiers: [.command, .option]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 6,
+                    label: "Next Project",
+                    iconSystemName: "arrow.down.square",
+                    action: .hotkey(key: "down", modifiers: [.command, .option]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 7,
+                    label: "Back",
+                    iconSystemName: "chevron.backward",
+                    action: .hotkey(key: "[", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 8,
+                    label: "Forward",
+                    iconSystemName: "chevron.forward",
+                    action: .hotkey(key: "]", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 9,
+                    label: "Terminal",
+                    iconSystemName: "terminal",
+                    action: .hotkey(key: "`", modifiers: [.control]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 10,
+                    label: "Settings",
+                    iconSystemName: "gearshape",
+                    action: .hotkey(key: ",", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 11,
+                    label: "New Window",
+                    iconSystemName: "macwindow.badge.plus",
+                    action: .hotkey(key: "n", modifiers: [.command, .shift]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 12,
+                    label: "Zoom In",
+                    iconSystemName: "plus.magnifyingglass",
+                    action: .hotkey(key: "=", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 13,
+                    label: "Zoom Out",
+                    iconSystemName: "minus.magnifyingglass",
+                    action: .hotkey(key: "-", modifiers: [.command]),
+                    role: .modify
+                )
+            ]
+        )
+    }
+
+    /// Google Chrome (``com.google.Chrome``). Shortcuts from Chrome's menu bar (File, View, History,
+    /// Bookmarks, Tab and Window menus); Dev Tools from its View › Developer submenu.
+    public static func makeChromeProfile() -> DeckProfile {
+        return DeckProfile(
+            // Stable across launches so a pinned layout survives a Mac companion restart.
+            id: "com.google.Chrome",
+            appBundleIdentifier: "com.google.Chrome",
+            appName: "Google Chrome",
+            rows: 3,
+            columns: 5,
+            keys: [
+                DeckKey(
+                    position: 0,
+                    label: "New Tab",
+                    iconSystemName: "plus.square",
+                    action: .hotkey(key: "t", modifiers: [.command]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 1,
+                    label: "Close Tab",
+                    iconSystemName: "xmark.square",
+                    action: .hotkey(key: "w", modifiers: [.command]),
+                    role: .danger
+                ),
+                DeckKey(
+                    position: 2,
+                    label: "Reopen Tab",
+                    iconSystemName: "arrow.uturn.backward.square",
+                    action: .hotkey(key: "t", modifiers: [.command, .shift]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 3,
+                    label: "Reload",
+                    iconSystemName: "arrow.clockwise",
+                    action: .hotkey(key: "r", modifiers: [.command]),
+                    role: .run
+                ),
+                DeckKey(
+                    position: 4,
+                    label: "Dev Tools",
+                    iconSystemName: "curlybraces",
+                    action: .hotkey(key: "i", modifiers: [.command, .option]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 5,
+                    label: "Back",
+                    iconSystemName: "chevron.backward",
+                    action: .hotkey(key: "[", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 6,
+                    label: "Forward",
+                    iconSystemName: "chevron.forward",
+                    action: .hotkey(key: "]", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 7,
+                    label: "Prev Tab",
+                    iconSystemName: "chevron.left.square",
+                    action: .hotkey(key: "tab", modifiers: [.control, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 8,
+                    label: "Next Tab",
+                    iconSystemName: "chevron.right.square",
+                    action: .hotkey(key: "tab", modifiers: [.control]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 9,
+                    label: "Search Tabs",
+                    iconSystemName: "magnifyingglass",
+                    action: .hotkey(key: "a", modifiers: [.command, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 10,
+                    label: "Address Bar",
+                    iconSystemName: "link",
+                    action: .hotkey(key: "l", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 11,
+                    label: "Bookmark",
+                    iconSystemName: "star",
+                    action: .hotkey(key: "d", modifiers: [.command]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 12,
+                    label: "History",
+                    iconSystemName: "clock.arrow.circlepath",
+                    action: .hotkey(key: "y", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 13,
+                    label: "Downloads",
+                    iconSystemName: "arrow.down.circle",
+                    action: .hotkey(key: "j", modifiers: [.command, .shift]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 14,
+                    label: "Incognito",
+                    iconSystemName: "eyeglasses",
+                    action: .hotkey(key: "n", modifiers: [.command, .shift]),
+                    role: .create
+                )
+            ]
+        )
+    }
+
     public static func allDefaultProfiles() -> [DeckProfile] {
         return [
             makeDefaultFallbackProfile(),
@@ -1043,8 +1517,11 @@ public struct DefaultProfiles {
             makeZoomProfile(),
             makeMacDownProfile(),
             makeWordProfile(),
+            makeCursorProfile(),
+            makeAntigravityProfile(),
+            makeOpenCodeProfile(),
             makeBrowserProfile(bundleId: "com.apple.Safari", name: "Safari"),
-            makeBrowserProfile(bundleId: "com.google.Chrome", name: "Google Chrome"),
+            makeChromeProfile(),
             makeBrowserProfile(bundleId: "company.thebrowser.Browser", name: "Arc")
         ]
     }

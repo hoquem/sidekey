@@ -95,4 +95,41 @@ final class ProtocolV2Tests: XCTestCase {
         let ids = DefaultProfiles.allDefaultProfiles().map(\.id)
         XCTAssertEqual(Set(ids).count, ids.count, "profile ids must be unique")
     }
+
+    func testDeleteKeyHasItsGlyph() {
+        XCTAssertEqual(KeyAction.hotkey(key: "delete", modifiers: [.command, .shift]).shortcutHint, "⇧⌘⌫")
+    }
+
+    func testVibeCodingLayoutsAreRegistered() throws {
+        let profiles = DefaultProfiles.allDefaultProfiles()
+        func profile(_ bundle: String) throws -> DeckProfile {
+            try XCTUnwrap(profiles.first { $0.appBundleIdentifier == bundle }, bundle)
+        }
+        let cursor = try profile("com.todesktop.230313mzl4w4u92")
+        XCTAssertEqual(cursor.appName, "Cursor")
+        XCTAssertEqual(cursor.keys.first { $0.label == "Accept All" }?.action, .hotkey(key: "return", modifiers: [.command]))
+        XCTAssertEqual(cursor.keys.first { $0.label == "Reject All" }?.action, .hotkey(key: "delete", modifiers: [.command, .shift]))
+
+        let antigravity = try profile("com.google.antigravity-ide")
+        XCTAssertEqual(antigravity.appName, "Antigravity")
+        XCTAssertEqual(antigravity.keys.first { $0.label == "Agent Panel" }?.action, .hotkey(key: "l", modifiers: [.command]))
+
+        let opencode = try profile("ai.opencode.desktop")
+        XCTAssertEqual(opencode.appName, "OpenCode")
+        XCTAssertEqual(opencode.keys.first { $0.label == "New Session" }?.action, .hotkey(key: "s", modifiers: [.command, .shift]))
+        XCTAssertEqual(opencode.keys.first { $0.label == "Stop" }?.action, .hotkey(key: "escape", modifiers: []))
+
+        for layout in [cursor, antigravity, opencode] {
+            XCTAssertEqual(Set(layout.keys.map(\.position)).count, layout.keys.count, "\(layout.appName) has duplicate slots")
+            XCTAssertLessThanOrEqual(layout.keys.count, 15)
+        }
+    }
+
+    func testChromeHasItsOwnFullLayout() throws {
+        let chrome = try XCTUnwrap(DefaultProfiles.allDefaultProfiles().first { $0.appBundleIdentifier == "com.google.Chrome" })
+        XCTAssertEqual(chrome.appName, "Google Chrome")
+        XCTAssertEqual(chrome.keys.count, 15)
+        XCTAssertEqual(chrome.keys.first { $0.label == "Search Tabs" }?.action, .hotkey(key: "a", modifiers: [.command, .shift]))
+    }
 }
+

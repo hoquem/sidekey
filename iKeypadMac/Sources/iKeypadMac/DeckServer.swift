@@ -54,10 +54,14 @@ public final class DeckServer: ObservableObject {
     /// :param port: TCP port to listen on.
     /// :param serviceName: Bonjour name to advertise as ``_sidekey._tcp``, or ``nil`` to listen
     ///     without advertising (tests use this so iPads on the network never find them).
+    /// The port actually being listened on, once the listener is ready.
+    var listeningPort: UInt16? { listener?.port?.rawValue }
+
     public func start(port: UInt16 = 49200, serviceName: String? = "Sidekey") {
         do {
             let parameters = NWParameters.tcp
-            self.listener = try NWListener(using: parameters, on: NWEndpoint.Port(rawValue: port)!)
+            // Port 0 lets the system pick a free port (tests use this; iPads find the Mac by Bonjour).
+            self.listener = try NWListener(using: parameters, on: port == 0 ? .any : NWEndpoint.Port(rawValue: port)!)
             // Advertise via Bonjour for zero-config Wi-Fi & USB peer-to-peer detection. The TXT
             // record carries this Mac's id so a paired iPad reconnects only to it.
             if let serviceName {
@@ -68,7 +72,7 @@ public final class DeckServer: ObservableObject {
             self.listener?.stateUpdateHandler = { state in
                 switch state {
                 case .ready:
-                    print("[Server] Listening on port \(port), Bonjour service advertised (_sidekey._tcp).")
+                    print("[Server] Listening on port \(port == 0 ? "chosen by the system" : String(port)), Bonjour service advertised (_sidekey._tcp).")
                 case .failed(let error):
                     print("[Server] Listener failed: \(error)")
                 default:

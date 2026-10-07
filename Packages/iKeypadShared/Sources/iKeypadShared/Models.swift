@@ -129,6 +129,7 @@ public enum KeyAction: Codable, Equatable, Sendable {
         case "return", "enter": return "↩\u{FE0E}"
         case "escape", "esc": return "⎋\u{FE0E}"
         case "space": return "Space"
+        case "delete", "backspace": return "⌫"
         case "up": return "↑"
         case "down": return "↓"
         case "left": return "←"

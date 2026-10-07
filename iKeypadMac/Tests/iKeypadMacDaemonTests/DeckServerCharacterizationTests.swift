@@ -8,7 +8,8 @@ import iKeypadShared
 /// unadvertised port, with an in-memory pairing store so the real Keychain is never touched.
 @MainActor
 final class DeckServerCharacterizationTests: XCTestCase {
-    private static let port: UInt16 = 49_298
+    /// A free port chosen by the system, so the tests never collide with another app's sockets.
+    private static var port: UInt16 = 0
     static let store = InMemoryPairedDeviceStore()
     static let pairing = PairingWindow()
     static let server = DeckServer(store: store, hostId: "test-host", pairing: pairing)
@@ -18,8 +19,14 @@ final class DeckServerCharacterizationTests: XCTestCase {
 
     override func setUp() async throws {
         if !Self.started {
-            Self.server.start(port: Self.port, serviceName: nil)
+            Self.server.start(port: 0, serviceName: nil)
             Self.started = true
+            // The system assigns the port once the listener is ready; until then it reads 0 or nil.
+            for _ in 0..<100 where (Self.server.listeningPort ?? 0) == 0 {
+                try await Task.sleep(nanoseconds: 50_000_000)
+            }
+            Self.port = Self.server.listeningPort ?? 0
+            XCTAssertNotEqual(Self.port, 0, "test server never started listening")
         }
         try Self.store.removeAll()
         try Self.store.save(token: Self.token, for: Self.clientId, name: "Test iPad")
@@ -357,3 +364,17 @@ final class PairingWindowTests: XCTestCase {
         XCTAssertEqual(window.attempt(code), .closed)
     }
 }
+
+final class ActionDispatcherTests: XCTestCase {
+    /// Every hotkey in every built-in layout must name a key the Mac can send; an unknown name
+    /// would fail on the user's first tap with "Unrecognized key character".
+    func testEveryBuiltInHotkeyMapsToAKeyCode() {
+        for profile in DefaultProfiles.allDefaultProfiles() {
+            for key in profile.keys {
+                guard case .hotkey(let name, _) = key.action else { continue }
+                XCTAssertNotNil(ActionDispatcher.shared.keyCodeForString(name), "\(profile.appName) › \(key.label) uses unknown key \"\(name)\"")
+            }
+        }
+    }
+}
+

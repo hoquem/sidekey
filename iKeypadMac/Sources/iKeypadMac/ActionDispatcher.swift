@@ -97,7 +97,8 @@ public final class ActionDispatcher {
         }
     }
 
-    private func keyCodeForString(_ key: String) -> CGKeyCode? {
+    /// The virtual key code for a layout's key name; internal so tests can check every layout key maps.
+    func keyCodeForString(_ key: String) -> CGKeyCode? {
         let lower = key.lowercased()
         switch lower {
         case "a": return 0x00
@@ -151,6 +152,7 @@ public final class ActionDispatcher {
         case "return", "enter": return 0x24
         case "tab": return 0x30
         case "escape", "esc": return 0x35
+        case "delete", "backspace": return 0x33
         case "left": return 0x7B
         case "right": return 0x7C
         case "down": return 0x7D
