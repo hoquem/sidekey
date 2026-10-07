@@ -43,10 +43,6 @@ struct iKeypadMacApp: App {
 
                 Divider()
 
-                Button("Open Settings...") {
-                    // Open preferences window
-                }
-
                 Button("Quit Sidekey") {
                     NSApplication.shared.terminate(nil)
                 }

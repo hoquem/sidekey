@@ -911,6 +911,127 @@ public struct DefaultProfiles {
         )
     }
 
+    /// Microsoft Word (``com.microsoft.Word``). New, Open, Save, Print, Undo, Redo, Link and Focus
+    /// come from Word's menu bar; formatting, Comment and Track Changes from Microsoft's published
+    /// "Keyboard shortcuts in Word" (macOS).
+    public static func makeWordProfile() -> DeckProfile {
+        return DeckProfile(
+            // Stable across launches so a pinned layout survives a Mac companion restart.
+            id: "com.microsoft.Word",
+            appBundleIdentifier: "com.microsoft.Word",
+            appName: "Word",
+            rows: 3,
+            columns: 5,
+            keys: [
+                DeckKey(
+                    position: 0,
+                    label: "New",
+                    iconSystemName: "doc.badge.plus",
+                    action: .hotkey(key: "n", modifiers: [.command]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 1,
+                    label: "Open",
+                    iconSystemName: "folder",
+                    action: .hotkey(key: "o", modifiers: [.command]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 2,
+                    label: "Save",
+                    iconSystemName: "square.and.arrow.down",
+                    action: .hotkey(key: "s", modifiers: [.command]),
+                    role: .run
+                ),
+                DeckKey(
+                    position: 3,
+                    label: "Print",
+                    iconSystemName: "printer",
+                    action: .hotkey(key: "p", modifiers: [.command]),
+                    role: .run
+                ),
+                DeckKey(
+                    position: 4,
+                    label: "Find",
+                    iconSystemName: "magnifyingglass",
+                    action: .hotkey(key: "f", modifiers: [.command]),
+                    role: .navigate
+                ),
+                DeckKey(
+                    position: 5,
+                    label: "Bold",
+                    iconSystemName: "bold",
+                    action: .hotkey(key: "b", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 6,
+                    label: "Italic",
+                    iconSystemName: "italic",
+                    action: .hotkey(key: "i", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 7,
+                    label: "Underline",
+                    iconSystemName: "underline",
+                    action: .hotkey(key: "u", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 8,
+                    label: "Link",
+                    iconSystemName: "link",
+                    action: .hotkey(key: "k", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 9,
+                    label: "Center",
+                    iconSystemName: "text.aligncenter",
+                    action: .hotkey(key: "e", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 10,
+                    label: "Comment",
+                    iconSystemName: "text.bubble",
+                    action: .hotkey(key: "a", modifiers: [.command, .option]),
+                    role: .create
+                ),
+                DeckKey(
+                    position: 11,
+                    label: "Track Changes",
+                    iconSystemName: "pencil.line",
+                    action: .hotkey(key: "e", modifiers: [.command, .shift]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 12,
+                    label: "Undo",
+                    iconSystemName: "arrow.uturn.backward",
+                    action: .hotkey(key: "z", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 13,
+                    label: "Redo",
+                    iconSystemName: "arrow.uturn.forward",
+                    action: .hotkey(key: "y", modifiers: [.command]),
+                    role: .modify
+                ),
+                DeckKey(
+                    position: 14,
+                    label: "Focus",
+                    iconSystemName: "eye",
+                    action: .hotkey(key: "f", modifiers: [.command, .shift, .control]),
+                    role: .navigate
+                )
+            ]
+        )
+    }
+
     public static func allDefaultProfiles() -> [DeckProfile] {
         return [
             makeDefaultFallbackProfile(),
@@ -921,6 +1042,7 @@ public struct DefaultProfiles {
             makeTelegramProfile(),
             makeZoomProfile(),
             makeMacDownProfile(),
+            makeWordProfile(),
             makeBrowserProfile(bundleId: "com.apple.Safari", name: "Safari"),
             makeBrowserProfile(bundleId: "com.google.Chrome", name: "Google Chrome"),
             makeBrowserProfile(bundleId: "company.thebrowser.Browser", name: "Arc")

@@ -113,4 +113,17 @@ final class iKeypadSharedTests: XCTestCase {
             .hotkey(key: "b", modifiers: [.command])
         )
     }
+
+    func testWordProfileIsRegisteredWithFullGrid() throws {
+        let word = try XCTUnwrap(
+            DefaultProfiles.allDefaultProfiles().first { $0.appBundleIdentifier == "com.microsoft.Word" }
+        )
+
+        XCTAssertEqual(word.appName, "Word")
+        XCTAssertEqual(word.keys.map(\.position), Array(0..<15))
+        XCTAssertEqual(
+            word.keys.first { $0.label == "Track Changes" }?.action,
+            .hotkey(key: "e", modifiers: [.command, .shift])
+        )
+    }
 }

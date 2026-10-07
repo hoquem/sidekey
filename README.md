@@ -36,6 +36,7 @@ The Mac app 1.0.0 is available as a signed, notarized download. The iPad app is 
 | Telegram | Search, Saved Msgs, Pinned 1 to 4, Prev and Next Folder |
 | Zoom | Mute, Video, Share Screen, Raise Hand, Record |
 | MacDown | Bold, Italic, Code, Link, Numbered, Bullets, Copy HTML |
+| Word | Bold, Italic, Underline, Comment, Track Changes, Focus |
 
 Shortcuts are taken from each app's own menus or published documentation. Layouts are code in `Packages/iKeypadShared/Sources/iKeypadShared/DefaultProfiles.swift`; add an app by adding a profile there.
 
