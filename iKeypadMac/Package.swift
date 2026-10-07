@@ -16,6 +16,11 @@ let package = Package(
                 .product(name: "iKeypadShared", package: "iKeypadShared")
             ],
             path: "Sources"
+        ),
+        .testTarget(
+            name: "iKeypadMacDaemonTests",
+            dependencies: ["iKeypadMacDaemon"],
+            path: "Tests/iKeypadMacDaemonTests"
         )
     ]
 )

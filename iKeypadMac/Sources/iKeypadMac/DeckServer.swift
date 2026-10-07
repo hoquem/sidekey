@@ -30,14 +30,19 @@ public final class DeckServer: ObservableObject {
             .store(in: &cancellables)
     }
 
-    public func start(port: UInt16 = 49200) {
+    /// Start listening for iPads.
+    ///
+    /// :param port: TCP port to listen on.
+    /// :param serviceName: Bonjour name to advertise as ``_ikeypad._tcp``, or ``nil`` to listen
+    ///     without advertising (tests use this so iPads on the network never find them).
+    public func start(port: UInt16 = 49200, serviceName: String? = "iKeypad Host") {
         do {
             let parameters = NWParameters.tcp
-            // Advertise service via Bonjour for zero-config Wi-Fi & USB peer-to-peer detection
-            let service = NWListener.Service(name: "iKeypad Host", type: "_ikeypad._tcp")
-
             self.listener = try NWListener(using: parameters, on: NWEndpoint.Port(rawValue: port)!)
-            self.listener?.service = service
+            // Advertise via Bonjour for zero-config Wi-Fi & USB peer-to-peer detection
+            if let serviceName {
+                self.listener?.service = NWListener.Service(name: serviceName, type: "_ikeypad._tcp")
+            }
 
             self.listener?.stateUpdateHandler = { state in
                 switch state {
