@@ -36,7 +36,8 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geo in
             let isLandscape = geo.size.width > geo.size.height * 1.15
-            let margin: CGFloat = 24
+            // Phones get a tighter edge so the band and keys keep their width.
+            let margin: CGFloat = geo.size.width < 500 ? 16 : 24
 
             ZStack(alignment: .bottom) {
                 DeckTheme.plate.ignoresSafeArea()
