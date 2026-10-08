@@ -1793,93 +1793,130 @@ extension DefaultProfiles {
     }
 
     /// Citrix Viewer (``com.citrix.receiver.icaviewer.mac``), the window of a Citrix session to a
-    /// remote Windows desktop, as five modes: Windows, Outlook, Word, Excel and More (Teams call
-    /// keys over browser keys for Chrome and Edge). Sidekey
-    /// cannot see which Windows app is in front inside the session, so the bottom row of every
-    /// mode switches between them; the Mac remembers the mode and lights its key.
+    /// remote Windows desktop, as modes. Sidekey cannot see which Windows app is in front inside
+    /// the session, so the bottom row of every mode switches between Windows, Outlook, Word,
+    /// Excel and More; More is a picker for further modes (Teams, Browser, VS Code). The Mac
+    /// remembers the mode and lights its key.
     ///
-    /// Shortcuts from Microsoft's "Keyboard shortcuts in Windows" and the Windows shortcut pages
-    /// for classic Outlook, Word, Excel and Teams, and Chrome's and Edge's shared tab shortcuts;
-    /// Outlook's Delete uses Ctrl+D, to be confirmed live. Win+Tab (Task View) is left
-    /// out: macOS takes Command+Tab for its own app switcher before Citrix sees it (found live
-    /// 2026-10-08). Sent through ``CitrixKeyMapper`` on the Mac, which assumes the Citrix keyboard
-    /// settings it documents.
+    /// Shortcuts from Microsoft's "Keyboard shortcuts in Windows", the Windows shortcut pages for
+    /// classic Outlook, Word, Excel and Teams, VS Code's "Keyboard shortcuts for Windows", and
+    /// Chrome's and Edge's shared tab shortcuts; Outlook's Delete uses Ctrl+D, to be confirmed
+    /// live. Win+Tab (Task View) is left out: macOS takes Command+Tab for its own app switcher
+    /// before Citrix sees it (found live 2026-10-08). Sent through ``CitrixKeyMapper`` on the
+    /// Mac, which assumes the Citrix keyboard settings it documents.
     ///
-    /// :returns: The Windows mode first; it is the layout Citrix Viewer starts in.
+    /// :returns: The Windows mode first (the layout Citrix Viewer starts in), then the other mode
+    ///     row modes, then the modes reached through More.
     public static func makeCitrixViewerProfiles() -> [DeckProfile] {
-        typealias Key = (label: String, icon: String, key: String, modifiers: [WindowsModifier], role: KeyRole, hold: Bool)
+        typealias Key = (label: String, icon: String, action: KeyAction, role: KeyRole, hold: Bool)
         let bundle = "com.citrix.receiver.icaviewer.mac"
+        func win(_ label: String, _ icon: String, _ key: String, _ modifiers: [WindowsModifier],
+                 _ role: KeyRole, hold: Bool = false) -> Key {
+            (label, icon, .windowsHotkey(key: key, modifiers: modifiers), role, hold)
+        }
+        func open(_ label: String, _ icon: String, _ mode: String) -> Key {
+            (label, icon, .switchProfile(profileId: "\(bundle).\(mode)"), .navigate, false)
+        }
         let modes: [(id: String, label: String, icon: String, keys: [Key])] = [
             (bundle, "Windows", "macwindow", [
-                ("Start", "square.grid.2x2", "win", [], .navigate, false),
-                ("Ctrl+Alt+Del", "lock.shield", "forwarddelete", [.ctrl, .alt], .navigate, false),
-                ("File Explorer", "folder", "e", [.win], .navigate, false),
-                ("Show Desktop", "menubar.dock.rectangle", "d", [.win], .navigate, false),
-                ("Lock", "lock", "l", [.win], .danger, true),
-                ("Switch App", "arrow.left.arrow.right.square", "tab", [.alt], .navigate, false),
-                ("Snap Left", "rectangle.lefthalf.filled", "left", [.win], .modify, false),
-                ("Snap Right", "rectangle.righthalf.filled", "right", [.win], .modify, false),
-                ("Close App", "xmark.square", "f4", [.alt], .danger, true),
-                ("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify, false),
+                win("Start", "square.grid.2x2", "win", [], .navigate),
+                win("Ctrl+Alt+Del", "lock.shield", "forwarddelete", [.ctrl, .alt], .navigate),
+                win("File Explorer", "folder", "e", [.win], .navigate),
+                win("Show Desktop", "menubar.dock.rectangle", "d", [.win], .navigate),
+                win("Lock", "lock", "l", [.win], .danger, hold: true),
+                win("Switch App", "arrow.left.arrow.right.square", "tab", [.alt], .navigate),
+                win("Snap Left", "rectangle.lefthalf.filled", "left", [.win], .modify),
+                win("Snap Right", "rectangle.righthalf.filled", "right", [.win], .modify),
+                win("Close App", "xmark.square", "f4", [.alt], .danger, hold: true),
+                win("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify),
             ]),
             ("\(bundle).outlook", "Outlook", "envelope", [
-                ("New Email", "square.and.pencil", "m", [.ctrl, .shift], .create, false),
-                ("Reply", "arrowshape.turn.up.left", "r", [.ctrl], .create, false),
-                ("Reply All", "arrowshape.turn.up.left.2", "r", [.ctrl, .shift], .create, false),
-                ("Forward", "arrowshape.turn.up.right", "f", [.ctrl], .create, false),
-                ("Send", "paperplane", "return", [.ctrl], .run, false),
-                ("Mark Read", "envelope.open", "q", [.ctrl], .modify, false),
-                ("Mark Unread", "envelope.badge", "u", [.ctrl], .modify, false),
-                ("Delete", "trash", "d", [.ctrl], .danger, false),
-                ("Mail", "tray", "1", [.ctrl], .navigate, false),
-                ("Calendar", "calendar", "2", [.ctrl], .navigate, false),
+                win("New Email", "square.and.pencil", "m", [.ctrl, .shift], .create),
+                win("Reply", "arrowshape.turn.up.left", "r", [.ctrl], .create),
+                win("Reply All", "arrowshape.turn.up.left.2", "r", [.ctrl, .shift], .create),
+                win("Forward", "arrowshape.turn.up.right", "f", [.ctrl], .create),
+                win("Send", "paperplane", "return", [.ctrl], .run),
+                win("Mark Read", "envelope.open", "q", [.ctrl], .modify),
+                win("Mark Unread", "envelope.badge", "u", [.ctrl], .modify),
+                win("Delete", "trash", "d", [.ctrl], .danger),
+                win("Mail", "tray", "1", [.ctrl], .navigate),
+                win("Calendar", "calendar", "2", [.ctrl], .navigate),
             ]),
             ("\(bundle).word", "Word", "doc.text", [
-                ("Save", "square.and.arrow.down", "s", [.ctrl], .run, false),
-                ("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify, false),
-                ("Redo", "arrow.uturn.forward", "y", [.ctrl], .modify, false),
-                ("Bold", "bold", "b", [.ctrl], .modify, false),
-                ("Italic", "italic", "i", [.ctrl], .modify, false),
-                ("Underline", "underline", "u", [.ctrl], .modify, false),
-                ("Bullets", "list.bullet", "l", [.ctrl, .shift], .modify, false),
-                ("Find", "magnifyingglass", "f", [.ctrl], .navigate, false),
-                ("Comment", "text.bubble", "m", [.ctrl, .alt], .create, false),
-                ("Track Changes", "pencil.and.outline", "e", [.ctrl, .shift], .modify, false),
+                win("Save", "square.and.arrow.down", "s", [.ctrl], .run),
+                win("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify),
+                win("Redo", "arrow.uturn.forward", "y", [.ctrl], .modify),
+                win("Bold", "bold", "b", [.ctrl], .modify),
+                win("Italic", "italic", "i", [.ctrl], .modify),
+                win("Underline", "underline", "u", [.ctrl], .modify),
+                win("Bullets", "list.bullet", "l", [.ctrl, .shift], .modify),
+                win("Find", "magnifyingglass", "f", [.ctrl], .navigate),
+                win("Comment", "text.bubble", "m", [.ctrl, .alt], .create),
+                win("Track Changes", "pencil.and.outline", "e", [.ctrl, .shift], .modify),
             ]),
             ("\(bundle).excel", "Excel", "tablecells", [
-                ("Save", "square.and.arrow.down", "s", [.ctrl], .run, false),
-                ("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify, false),
-                ("AutoSum", "sum", "=", [.alt], .run, false),
-                ("Fill Down", "arrow.down.to.line", "d", [.ctrl], .modify, false),
-                ("Format Cells", "tablecells.badge.ellipsis", "1", [.ctrl], .modify, false),
-                ("Filter", "line.3.horizontal.decrease.circle", "l", [.ctrl, .shift], .modify, false),
-                ("Insert Cells", "plus.rectangle", "=", [.ctrl, .shift], .create, false),
-                ("Delete Cells", "minus.rectangle", "-", [.ctrl], .danger, false),
-                ("Edit Cell", "character.cursor.ibeam", "f2", [], .modify, false),
-                ("Today's Date", "calendar", ";", [.ctrl], .create, false),
+                win("Save", "square.and.arrow.down", "s", [.ctrl], .run),
+                win("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify),
+                win("AutoSum", "sum", "=", [.alt], .run),
+                win("Fill Down", "arrow.down.to.line", "d", [.ctrl], .modify),
+                win("Format Cells", "tablecells.badge.ellipsis", "1", [.ctrl], .modify),
+                win("Filter", "line.3.horizontal.decrease.circle", "l", [.ctrl, .shift], .modify),
+                win("Insert Cells", "plus.rectangle", "=", [.ctrl, .shift], .create),
+                win("Delete Cells", "minus.rectangle", "-", [.ctrl], .danger),
+                win("Edit Cell", "character.cursor.ibeam", "f2", [], .modify),
+                win("Today's Date", "calendar", ";", [.ctrl], .create),
             ]),
             ("\(bundle).more", "More", "ellipsis.circle", [
-                ("Mute", "mic.slash", "m", [.ctrl, .shift], .modify, false),
-                ("Video", "video", "o", [.ctrl, .shift], .modify, false),
-                ("Raise Hand", "hand.raised", "k", [.ctrl, .shift], .modify, false),
-                ("Share", "rectangle.on.rectangle", "e", [.ctrl, .shift], .run, false),
-                ("Leave", "phone.down.fill", "h", [.ctrl, .shift], .danger, true),
-                ("New Tab", "plus.square", "t", [.ctrl], .create, false),
-                ("Close Tab", "xmark.square", "w", [.ctrl], .danger, false),
-                ("Reopen Tab", "arrow.uturn.backward.square", "t", [.ctrl, .shift], .create, false),
-                ("Reload", "arrow.clockwise", "r", [.ctrl], .run, false),
-                ("Address Bar", "link", "l", [.ctrl], .navigate, false),
+                open("Teams", "person.2", "teams"),
+                open("Browser", "globe", "browser"),
+                open("VS Code", "chevron.left.forwardslash.chevron.right", "vscode"),
+            ]),
+            ("\(bundle).teams", "Teams", "person.2", [
+                win("Mute", "mic.slash", "m", [.ctrl, .shift], .modify),
+                win("Video", "video", "o", [.ctrl, .shift], .modify),
+                win("Raise Hand", "hand.raised", "k", [.ctrl, .shift], .modify),
+                win("Share", "rectangle.on.rectangle", "e", [.ctrl, .shift], .run),
+                win("Leave", "phone.down.fill", "h", [.ctrl, .shift], .danger, hold: true),
+                win("Accept Call", "phone.arrow.down.left", "s", [.ctrl, .shift], .run),
+                win("Decline", "phone.down.circle", "d", [.ctrl, .shift], .danger),
+                win("New Chat", "square.and.pencil", "n", [.ctrl], .create),
+                win("Search", "magnifyingglass", "e", [.ctrl], .navigate),
+                win("Chat", "bubble.left.and.bubble.right", "1", [.ctrl], .navigate),
+            ]),
+            ("\(bundle).browser", "Browser", "globe", [
+                win("New Tab", "plus.square", "t", [.ctrl], .create),
+                win("Close Tab", "xmark.square", "w", [.ctrl], .danger),
+                win("Reopen Tab", "arrow.uturn.backward.square", "t", [.ctrl, .shift], .create),
+                win("Reload", "arrow.clockwise", "r", [.ctrl], .run),
+                win("Address Bar", "link", "l", [.ctrl], .navigate),
+                win("Back", "chevron.backward", "left", [.alt], .navigate),
+                win("Forward", "chevron.forward", "right", [.alt], .navigate),
+                win("Next Tab", "chevron.right.square", "tab", [.ctrl], .navigate),
+                win("Prev Tab", "chevron.left.square", "tab", [.ctrl, .shift], .navigate),
+                win("Find", "magnifyingglass", "f", [.ctrl], .navigate),
+            ]),
+            ("\(bundle).vscode", "VS Code", "chevron.left.forwardslash.chevron.right", [
+                win("Command Palette", "command", "p", [.ctrl, .shift], .create),
+                win("Quick Open", "doc.text.magnifyingglass", "p", [.ctrl], .navigate),
+                win("Terminal", "terminal", "`", [.ctrl], .navigate),
+                win("Explorer", "sidebar.left", "e", [.ctrl, .shift], .navigate),
+                win("Search", "magnifyingglass", "f", [.ctrl, .shift], .navigate),
+                win("Source Control", "arrow.triangle.branch", "g", [.ctrl, .shift], .navigate),
+                win("Comment", "text.bubble", "/", [.ctrl], .modify),
+                win("Save", "square.and.arrow.down", "s", [.ctrl], .run),
+                win("Go to Definition", "arrow.right.circle", "f12", [], .navigate),
+                win("Run", "play", "f5", [], .run),
             ]),
         ]
-        let modeRow = modes.enumerated().map { index, mode in
-            DeckKey(position: 10 + index, label: mode.label,
-                    iconSystemName: mode.icon, action: .switchProfile(profileId: mode.id), role: .navigate,
-                    toggleChipId: "mode.\(mode.id)")
+        // The same bottom row on every mode: the first five modes, ending with the More picker.
+        let modeRow = modes.prefix(5).enumerated().map { index, mode in
+            DeckKey(position: 10 + index, label: mode.label, iconSystemName: mode.icon,
+                    action: .switchProfile(profileId: mode.id), role: .navigate, toggleChipId: "mode.\(mode.id)")
         }
         return modes.map { mode in
             let keys = mode.keys.enumerated().map { index, key in
                 DeckKey(position: index, label: key.label, iconSystemName: key.icon,
-                        action: .windowsHotkey(key: key.key, modifiers: key.modifiers), role: key.role, requiresConfirm: key.hold)
+                        action: key.action, role: key.role, requiresConfirm: key.hold)
             }
             return DeckProfile(id: mode.id, appBundleIdentifier: bundle, appName: "Citrix Viewer", rows: 3, columns: 5, keys: keys + modeRow)
         }

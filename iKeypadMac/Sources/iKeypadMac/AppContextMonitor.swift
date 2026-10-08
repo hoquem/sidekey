@@ -70,14 +70,20 @@ public final class AppContextMonitor: ObservableObject {
         return true
     }
 
-    /// The chip naming the active mode of an app with several, bound to that mode's key so the
-    /// iPad lights it; ``nil`` for apps with a single layout.
-    static func modeChip(for profile: DeckProfile) -> ContextChip? {
-        let modeKey = profile.keys.first { $0.action == .switchProfile(profileId: profile.id) }
-        guard let modeKey else { return nil }
+    /// The chip naming the active mode of an app with several, bound to the mode row key that
+    /// leads to it so the iPad lights that key: the mode's own key, or for a mode picked under
+    /// More, the More key. ``nil`` for apps with a single layout.
+    func modeChip(for profile: DeckProfile) -> ContextChip? {
+        let ownKey = profile.keys.first { $0.action == .switchProfile(profileId: profile.id) }
+        let pickerKey = profile.keys.first { key in
+            guard case .switchProfile(let pickerId) = key.action, let picker = profilesById[pickerId] else { return false }
+            return picker.keys.contains { $0.action == .switchProfile(profileId: profile.id) }
+        }
+        guard let rowKey = ownKey ?? pickerKey, case .switchProfile(let rowModeId) = rowKey.action else { return nil }
+        let name = ownKey?.label ?? profilesById[rowModeId]?.keys.first { $0.action == .switchProfile(profileId: profile.id) }?.label ?? rowKey.label
         // An attention tone is what lights a bound key on the iPad.
-        return ContextChip(id: "mode.\(profile.id)", label: "\(modeKey.label) mode",
-                           systemImage: modeKey.iconSystemName ?? "square.grid.2x2", tone: .warn, isOn: true)
+        return ContextChip(id: "mode.\(rowModeId)", label: "\(name) mode",
+                           systemImage: rowKey.iconSystemName ?? "square.grid.2x2", tone: .warn, isOn: true)
     }
 
     /// Full context for the current app, icon included, for a client that just connected.
@@ -149,7 +155,7 @@ public final class AppContextMonitor: ObservableObject {
             windowTitle: AppStateReader.focusedWindowTitle(of: app),
             iconPNG: includeIcon ? AppStateReader.iconPNG(of: app) : nil,
             accessibilityTrusted: AppStateReader.isAccessibilityTrusted,
-            chips: AppStateReader.chips(for: app) + [Self.modeChip(for: activeProfile)].compactMap { $0 }
+            chips: AppStateReader.chips(for: app) + [modeChip(for: activeProfile)].compactMap { $0 }
         )
     }
 

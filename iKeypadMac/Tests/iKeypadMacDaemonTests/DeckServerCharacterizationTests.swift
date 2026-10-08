@@ -295,13 +295,19 @@ final class AppContextMonitorCharacterizationTests: XCTestCase {
 
     func testTheActiveModeIsAnnouncedAsALitChip() throws {
         let outlook = try XCTUnwrap(AppContextMonitor.shared.profile(withId: "com.citrix.receiver.icaviewer.mac.outlook"))
-        let chip = try XCTUnwrap(AppContextMonitor.modeChip(for: outlook))
+        let chip = try XCTUnwrap(AppContextMonitor.shared.modeChip(for: outlook))
         XCTAssertEqual(chip.id, "mode.com.citrix.receiver.icaviewer.mac.outlook")
         XCTAssertEqual(chip.label, "Outlook mode")
         XCTAssertEqual(chip.tone, .warn, "attention tones light the bound key on the iPad")
         XCTAssertEqual(chip.isOn, true)
         let terminal = try XCTUnwrap(AppContextMonitor.shared.profile(withId: "com.apple.Terminal"))
-        XCTAssertNil(AppContextMonitor.modeChip(for: terminal), "apps without modes get no chip")
+        XCTAssertNil(AppContextMonitor.shared.modeChip(for: terminal), "apps without modes get no chip")
+
+        // A mode reached through More lights the More key and names itself.
+        let teams = try XCTUnwrap(AppContextMonitor.shared.profile(withId: "com.citrix.receiver.icaviewer.mac.teams"))
+        let teamsChip = try XCTUnwrap(AppContextMonitor.shared.modeChip(for: teams))
+        XCTAssertEqual(teamsChip.id, "mode.com.citrix.receiver.icaviewer.mac.more")
+        XCTAssertEqual(teamsChip.label, "Teams mode")
     }
 
     func testCurrentContextDescribesTheFrontmostAppWithItsIcon() throws {
