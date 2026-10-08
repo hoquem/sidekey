@@ -15,7 +15,7 @@ final class PairingCodeWindow {
         if window == nil {
             let hosting = NSHostingController(rootView: PairingCodeView(pairing: pairing, onStop: onStop))
             let window = NSWindow(contentViewController: hosting)
-            window.title = "Pair iPad"
+            window.title = "Pair Device"
             window.styleMask = [.titled, .closable]
             window.isReleasedWhenClosed = false
             window.level = .floating

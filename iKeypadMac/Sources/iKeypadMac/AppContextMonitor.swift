@@ -16,7 +16,12 @@ public final class AppContextMonitor: ObservableObject {
     /// chips change. The icon is included only when the app itself changed.
     public let contextChanges = PassthroughSubject<AppContext, Never>()
 
+    /// The layout each app starts in, by bundle identifier.
     private var profileRegistry: [String: DeckProfile] = [:]
+    /// Every layout by id, including the extra modes of apps that have several (Citrix Viewer).
+    private var profilesById: [String: DeckProfile] = [:]
+    /// The mode last chosen for an app, by bundle identifier; it survives switching apps.
+    private var modeByBundle: [String: String] = [:]
     private let defaultProfile: DeckProfile
     private var activeApp: NSRunningApplication?
     private var lastContext: AppContext?
@@ -36,14 +41,49 @@ public final class AppContextMonitor: ObservableObject {
         checkCurrentFrontmostApp()
     }
 
+    /// Register a layout. The first layout registered for an app is the one it starts in; later
+    /// ones are extra modes, reached with ``switchMode(to:)``.
     public func register(profile: DeckProfile) {
-        profileRegistry[profile.appBundleIdentifier] = profile
+        profilesById[profile.id] = profile
+        if profileRegistry[profile.appBundleIdentifier] == nil {
+            profileRegistry[profile.appBundleIdentifier] = profile
+        }
     }
 
     /// The registered profile with ``id``, including the fallback profile.
     public func profile(withId id: String) -> DeckProfile? {
         if defaultProfile.id == id { return defaultProfile }
-        return profileRegistry.values.first { $0.id == id }
+        return profilesById[id]
+    }
+
+    /// Show another mode of the app in front, such as Citrix Viewer's Outlook keys.
+    ///
+    /// :param profileId: A layout registered for the frontmost app.
+    /// :returns: ``false`` when ``profileId`` is unknown or belongs to another app; nothing changes.
+    @discardableResult
+    func switchMode(to profileId: String) -> Bool {
+        guard let profile = profilesById[profileId], profile.appBundleIdentifier == activeBundleId else { return false }
+        modeByBundle[activeBundleId] = profileId
+        activeProfile = profile
+        print("[Context] Switched \(activeAppName) to mode \(profileId)")
+        publishContextIfChanged(appChanged: false)
+        return true
+    }
+
+    /// The chip naming the active mode of an app with several, bound to the mode row key that
+    /// leads to it so the iPad lights that key: the mode's own key, or for a mode picked under
+    /// More, the More key. ``nil`` for apps with a single layout.
+    func modeChip(for profile: DeckProfile) -> ContextChip? {
+        let ownKey = profile.keys.first { $0.action == .switchProfile(profileId: profile.id) }
+        let pickerKey = profile.keys.first { key in
+            guard case .switchProfile(let pickerId) = key.action, let picker = profilesById[pickerId] else { return false }
+            return picker.keys.contains { $0.action == .switchProfile(profileId: profile.id) }
+        }
+        guard let rowKey = ownKey ?? pickerKey, case .switchProfile(let rowModeId) = rowKey.action else { return nil }
+        let name = ownKey?.label ?? profilesById[rowModeId]?.keys.first { $0.action == .switchProfile(profileId: profile.id) }?.label ?? rowKey.label
+        // An attention tone is what lights a bound key on the iPad.
+        return ContextChip(id: "mode.\(rowModeId)", label: "\(name) mode",
+                           systemImage: rowKey.iconSystemName ?? "square.grid.2x2", tone: .warn, isOn: true)
     }
 
     /// Full context for the current app, icon included, for a client that just connected.
@@ -90,11 +130,15 @@ public final class AppContextMonitor: ObservableObject {
         }
     }
 
-    private func updateActiveApp(bundleId: String, appName: String) {
+    /// Internal so tests can drive app switches; the app calls it only from focus changes.
+    func updateActiveApp(bundleId: String, appName: String) {
         self.activeBundleId = bundleId
         self.activeAppName = appName
 
-        if let matchingProfile = profileRegistry[bundleId] {
+        if let mode = modeByBundle[bundleId], let modeProfile = profilesById[mode] {
+            self.activeProfile = modeProfile
+            print("[Context] Switched to profile for \(appName) (\(bundleId)), mode \(mode)")
+        } else if let matchingProfile = profileRegistry[bundleId] {
             self.activeProfile = matchingProfile
             print("[Context] Switched to profile for \(appName) (\(bundleId))")
         } else {
@@ -111,7 +155,7 @@ public final class AppContextMonitor: ObservableObject {
             windowTitle: AppStateReader.focusedWindowTitle(of: app),
             iconPNG: includeIcon ? AppStateReader.iconPNG(of: app) : nil,
             accessibilityTrusted: AppStateReader.isAccessibilityTrusted,
-            chips: AppStateReader.chips(for: app)
+            chips: AppStateReader.chips(for: app) + [modeChip(for: activeProfile)].compactMap { $0 }
         )
     }
 

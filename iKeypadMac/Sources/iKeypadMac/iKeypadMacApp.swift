@@ -35,7 +35,7 @@ struct iKeypadMacApp: App {
                 }
 
                 HStack {
-                    Text("Connected iPads:")
+                    Text("Connected devices:")
                         .foregroundColor(.secondary)
                     Text("\(server.connectedClientsCount)")
                         .bold()
@@ -71,13 +71,13 @@ private struct PairingMenuSection: View {
             Button("Show Pairing Code...") { showCode() }
             Button("Stop Pairing") { pairing.close() }
         } else {
-            Button("Pair iPad...") {
+            Button("Pair Device...") {
                 server.openPairing()
                 showCode()
             }
         }
         if server.pairedDeviceCount > 0 {
-            Button("Forget Paired iPads (\(server.pairedDeviceCount))") { server.forgetPairedDevices() }
+            Button("Forget Paired Devices (\(server.pairedDeviceCount))") { server.forgetPairedDevices() }
         }
     }
 

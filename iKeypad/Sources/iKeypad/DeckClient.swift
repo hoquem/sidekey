@@ -71,6 +71,9 @@ public final class DeckClient: ObservableObject {
     private var consecutiveWiredFailures = 0
     private static let maxWiredFailures = 2
     private var receiveBuffer = Data()
+    /// How many times discovery has started; tests read it to see the client heal itself.
+    private(set) var discoveryStarts = 0
+    private static let discoveryRetryDelayNanoseconds: UInt64 = 1_000_000_000
 
     /// Internal (not private) so tests can create isolated clients; the app uses ``shared``.
     init(credentials: PairingCredentials) {
@@ -80,7 +83,7 @@ public final class DeckClient: ObservableObject {
     /// Name of the Mac this iPad paired with, if any.
     public var pairedMacName: String? { credentials.pairedHostName }
 
-    /// Send the 6-digit code shown in the Mac's Sidekey menu.
+    /// Send the 6-digit code shown in the Mac's Pair Device window.
     public func submitPairingCode(_ code: String) {
         let digits = code.filter(\.isNumber)
         send(message: .pair(code: digits, clientId: credentials.clientId, clientName: UIDevice.current.name))
@@ -95,6 +98,7 @@ public final class DeckClient: ObservableObject {
 
     public func startDiscovery() {
         stop()
+        discoveryStarts += 1
 
         let parameters = NWParameters()
         let descriptor = NWBrowser.Descriptor.bonjourWithTXTRecord(type: "_sidekey._tcp", domain: nil)
@@ -102,11 +106,7 @@ public final class DeckClient: ObservableObject {
 
         browser.stateUpdateHandler = { [weak self] state in
             Task { @MainActor [weak self] in
-                guard let self = self else { return }
-                if case .failed(let error) = state {
-                    print("[Client] Bonjour browsing failed: \(error)")
-                    self.showToast("Can't search the network: \(error.localizedDescription)", isError: true)
-                }
+                self?.handleBrowserState(state)
             }
         }
 
@@ -137,6 +137,31 @@ public final class DeckClient: ObservableObject {
 
         self.browser = browser
         browser.start(queue: .main)
+    }
+
+    /// React to the Bonjour browser's state.
+    ///
+    /// A failed browser never recovers by itself: iOS tears down Bonjour browsing while the app
+    /// is suspended, and the browse then fails when the app returns. Start a fresh search after
+    /// a short pause, unless a connection has been made or attempted in the meantime.
+    func handleBrowserState(_ state: NWBrowser.State) {
+        guard case .failed(let error) = state else { return }
+        print("[Client] Bonjour browsing failed: \(error)")
+        showToast("Can't search the network: \(error.localizedDescription)", isError: true)
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: Self.discoveryRetryDelayNanoseconds)
+            self?.restartDiscoveryIfIdle()
+        }
+    }
+
+    /// Start a fresh search for the Mac if nothing is connected or being connected.
+    ///
+    /// Called when the app comes back to the foreground and periodically while it is open, so a
+    /// search that went quiet (for example while the iPad was locked) cannot leave the deck
+    /// waiting forever.
+    public func restartDiscoveryIfIdle() {
+        guard !isConnected, !transportReady, connection == nil else { return }
+        startDiscovery()
     }
 
     /// Connect to the host.

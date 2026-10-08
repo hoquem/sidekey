@@ -5,6 +5,8 @@ import iKeypadShared
 /// state chips, and the link to the Mac. While not connected it explains what is happening.
 struct NowControllingView: View {
     @EnvironmentObject private var client: DeckClient
+    /// Compact on an iPhone in portrait, where one row cannot hold the whole band.
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     /// ``true`` in landscape, where the band becomes a column beside the grid.
     let isColumn: Bool
 
@@ -33,6 +35,23 @@ struct NowControllingView: View {
                 chips(vertical: true)
                 Spacer(minLength: 0)
                 linkAndPin
+            }
+        } else if horizontalSizeClass == .compact {
+            // Two rows: who is in front (and the pin), then state chips and the link.
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(alignment: .center, spacing: 12) {
+                    appIcon(size: 44)
+                    identity(nameFont: .title3.weight(.bold), titleLines: 1)
+                    Spacer(minLength: 8)
+                    pinButton
+                }
+                HStack(spacing: 8) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        chips(vertical: false)
+                    }
+                    linkLabel(alignment: .trailing)
+                        .fixedSize()
+                }
             }
         } else {
             HStack(alignment: .center, spacing: 18) {
@@ -129,37 +148,45 @@ struct NowControllingView: View {
 
     private var linkAndPin: some View {
         HStack(spacing: 12) {
-            VStack(alignment: isColumn ? .leading : .trailing, spacing: 2) {
-                Label(client.isUSB ? "USB" : "Wi-Fi", systemImage: client.isUSB ? "cable.connector" : "wifi")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(DeckTheme.label)
-                if let host = client.hostName {
-                    Text(host)
-                        .font(.caption)
-                        .foregroundStyle(DeckTheme.secondaryLabel)
-                        .lineLimit(1)
-                }
-            }
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel("Connected to \(client.hostName ?? "your Mac") over \(client.isUSB ? "USB" : "Wi-Fi")")
-            .contextMenu {
-                Button(role: .destructive) { client.forgetPairedMac() } label: {
-                    Label("Forget This Mac", systemImage: "link.badge.plus")
-                }
-            }
-
-            Button {
-                client.togglePin()
-            } label: {
-                Image(systemName: pinned == nil ? "pin" : "pin.fill")
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(pinned == nil ? DeckTheme.secondaryLabel : DeckTheme.lit)
-                    .frame(width: 44, height: 44)
-                    .background(Circle().fill(pinned == nil ? DeckTheme.raised : DeckTheme.lit.opacity(0.16)))
-            }
-            .accessibilityLabel(pinned == nil ? "Pin these keys" : "Unpin keys")
-            .accessibilityHint(pinned == nil ? "Keeps this layout on screen when you switch apps on your Mac." : "Keys follow your Mac's frontmost app again.")
+            linkLabel(alignment: isColumn ? .leading : .trailing)
+            pinButton
         }
+    }
+
+    /// The link to the Mac (USB or Wi-Fi) and the Mac's name; press and hold to forget the Mac.
+    private func linkLabel(alignment: HorizontalAlignment) -> some View {
+        VStack(alignment: alignment, spacing: 2) {
+            Label(client.isUSB ? "USB" : "Wi-Fi", systemImage: client.isUSB ? "cable.connector" : "wifi")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(DeckTheme.label)
+            if let host = client.hostName {
+                Text(host)
+                    .font(.caption)
+                    .foregroundStyle(DeckTheme.secondaryLabel)
+                    .lineLimit(1)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Connected to \(client.hostName ?? "your Mac") over \(client.isUSB ? "USB" : "Wi-Fi")")
+        .contextMenu {
+            Button(role: .destructive) { client.forgetPairedMac() } label: {
+                Label("Forget This Mac", systemImage: "link.badge.plus")
+            }
+        }
+    }
+
+    private var pinButton: some View {
+        Button {
+            client.togglePin()
+        } label: {
+            Image(systemName: pinned == nil ? "pin" : "pin.fill")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(pinned == nil ? DeckTheme.secondaryLabel : DeckTheme.lit)
+                .frame(width: 44, height: 44)
+                .background(Circle().fill(pinned == nil ? DeckTheme.raised : DeckTheme.lit.opacity(0.16)))
+        }
+        .accessibilityLabel(pinned == nil ? "Pin these keys" : "Unpin keys")
+        .accessibilityHint(pinned == nil ? "Keeps this layout on screen when you switch apps on your Mac." : "Keys follow your Mac's frontmost app again.")
     }
 
     // MARK: - Not connected
@@ -221,7 +248,7 @@ struct ChipView: View {
     }
 }
 
-/// Asks for the 6-digit code the Mac shows under Pair iPad in its Sidekey menu.
+/// Asks for the 6-digit code the Mac shows in its Pair Device window.
 private struct PairingPrompt: View {
     @EnvironmentObject private var client: DeckClient
     let hostName: String?
@@ -237,7 +264,7 @@ private struct PairingPrompt: View {
             Text("Pair with \(hostName ?? "your Mac")")
                 .font(isColumn ? .title2.weight(.bold) : .title3.weight(.bold))
                 .foregroundStyle(DeckTheme.label)
-            Text("On your Mac, open the Sidekey menu and choose Pair iPad. Enter the code it shows.")
+            Text("On your Mac, open the Sidekey menu and choose Pair Device. Enter the code it shows.")
                 .font(.subheadline)
                 .foregroundStyle(DeckTheme.secondaryLabel)
                 .fixedSize(horizontal: false, vertical: true)

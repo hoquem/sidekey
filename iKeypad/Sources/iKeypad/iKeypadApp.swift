@@ -5,6 +5,9 @@ import UIKit
 @main
 struct iKeypadApp: App {
     @StateObject private var client = DeckClient.shared
+    @Environment(\.scenePhase) private var scenePhase
+    /// While the app is open, look again for the Mac if the search has gone quiet.
+    private let discoveryWatchdog = Timer.publish(every: 15, on: .main, in: .common).autoconnect()
 
     var body: some Scene {
         WindowGroup {
@@ -14,6 +17,13 @@ struct iKeypadApp: App {
                 .preferredColorScheme(.dark)
                 .onAppear {
                     client.startDiscovery()
+                }
+                .onChange(of: scenePhase) { phase in
+                    // Bonjour browsing may have died while the app was suspended.
+                    if phase == .active { client.restartDiscoveryIfIdle() }
+                }
+                .onReceive(discoveryWatchdog) { _ in
+                    client.restartDiscoveryIfIdle()
                 }
         }
     }
@@ -26,7 +36,8 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geo in
             let isLandscape = geo.size.width > geo.size.height * 1.15
-            let margin: CGFloat = 24
+            // Phones get a tighter edge so the band and keys keep their width.
+            let margin: CGFloat = geo.size.width < 500 ? 16 : 24
 
             ZStack(alignment: .bottom) {
                 DeckTheme.plate.ignoresSafeArea()

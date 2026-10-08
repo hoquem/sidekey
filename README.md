@@ -7,7 +7,7 @@ Sidekey turns an iPad into a shortcut deck for your Mac. Prop the iPad beside yo
 - **Every tap gets an answer.** A key glows amber while the Mac works, lights up when the Mac reports the shortcut was sent, and shakes with the Mac's reason when it could not (for example, a missing permission).
 - **USB first.** Connects over the iPad's USB cable when it is plugged in and falls back to Wi-Fi.
 - **Paired, not open.** Only an iPad you pair with your Mac, using a code shown on the Mac, can see or control it. The Mac only ever runs actions from its own built-in layouts.
-- **Hold for disruptive keys.** Lock Mac, Interrupt, End Call, Telegram Lock and Xcode Clean fire only after a press and hold.
+- **Hold for disruptive keys.** Lock Mac, Interrupt, End Call, Telegram Lock, Xcode Clean, and Citrix Viewer's Lock, Close App and Teams Leave fire only after a press and hold.
 
 ## Requirements
 
@@ -34,7 +34,7 @@ Requires macOS 13 or later.
 
 **Updating:** Sidekey does not update itself; watch the [releases page](https://github.com/hoquem/sidekey/releases) for new versions. Quit Sidekey from its menu bar icon, download the new `Sidekey.dmg` and drag Sidekey to Applications again, replacing the old copy. If keys stop working after an update, switch Sidekey off and on again in the Accessibility list; if that does not help, remove it with the minus button, add it back with the plus button and switch it on.
 
-**Uninstalling:** first choose **Forget Paired iPads** in the Sidekey menu, so a later reinstall does not still trust your old iPads. Then quit Sidekey, delete it from Applications, and remove it from System Settings › Privacy & Security › Accessibility (and Automation and Local Network, if listed).
+**Uninstalling:** first choose **Forget Paired Devices** in the Sidekey menu, so a later reinstall does not still trust your old iPads. Then quit Sidekey, delete it from Applications, and remove it from System Settings › Privacy & Security › Accessibility (and Automation and Local Network, if listed).
 
 ### 2. iPad app (coming to the App Store)
 
@@ -50,8 +50,8 @@ However you install it, open **Sidekey** on the iPad and tap **Allow** when it a
 
 1. Plug the iPad into the Mac with a USB cable, or put both on the same Wi-Fi network.
 2. Open Sidekey on the iPad. When it finds the Mac, it asks for a pairing code.
-3. On the Mac, click the Sidekey menu bar icon and choose **Pair iPad...**. A window shows a 6-digit code for two minutes.
-4. On the iPad, type the code and tap **Pair**. After five wrong codes, or two minutes, choose Pair iPad again for a new code.
+3. On the Mac, click the Sidekey menu bar icon and choose **Pair Device...**. A window shows a 6-digit code for two minutes.
+4. On the iPad, type the code and tap **Pair**. After five wrong codes, or two minutes, choose Pair Device again for a new code.
 
 From then on the iPad connects to that Mac by itself whenever Sidekey is running on both. Switch apps on the Mac and the keys on the iPad change to match.
 
@@ -59,9 +59,9 @@ From then on the iPad connects to that Mac by itself whenever Sidekey is running
 
 - **Pairing:** a Mac accepts an iPad only after it has been paired with a short-lived code shown on the Mac. Until then the iPad receives only the Mac's name and identifier and a pairing request, and its taps are refused. Each side stores a pairing token in its Keychain; later connections prove the token without sending it.
 - **Only built-in actions:** a tap names a key; the Mac runs that key's action from its own built-in layout, never an action sent over the network.
-- **Not encrypted yet:** Traffic between the iPad and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends (app names, window titles, the keys you tap and both device names). If they capture the one-time pairing exchange or interfere with a live connection, they could also press your Mac's built-in keys, for example to open Terminal or lock the Mac, until you choose Forget Paired iPads on the Mac. Use Sidekey over USB or on a network you trust. Encryption is planned.
+- **Not encrypted yet:** Traffic between the iPad and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends (app names, window titles, the keys you tap and both device names). If they capture the one-time pairing exchange or interfere with a live connection, they could also press your Mac's built-in keys, for example to open Terminal or lock the Mac, until you choose Forget Paired Devices on the Mac. Use Sidekey over USB or on a network you trust. Encryption is planned.
 - **The iPad does not verify the Mac yet:** a paired iPad looks for its Mac by an identifier the Mac advertises on the network, which another device could copy.
-- **Forgetting:** Forget Paired iPads in the Mac's Sidekey menu revokes every paired iPad. Forget This Mac on the iPad (press and hold the connection label while connected) only removes the iPad's copy; to revoke access, use the Mac.
+- **Forgetting:** Forget Paired Devices in the Mac's Sidekey menu revokes every paired iPad. Forget This Mac on the iPad (press and hold the connection label while connected) only removes the iPad's copy; to revoke access, use the Mac.
 
 ## Built-in layouts
 
@@ -97,6 +97,7 @@ From then on the iPad connects to that Mac by itself whenever Sidekey is running
 | Spotify | Play/Pause, Like, Shuffle, Repeat, Search, Queue |
 | Notion | New Page, Search, Back, Forward, Copy Link, Comment |
 | ChatGPT | Chat Bar, Find, Stop, Share Desktop, Share Window, Browser |
+| Citrix Viewer | Modes for Windows, Outlook, Browser, VS Code and, under More, Word, Excel and Teams; the bottom row switches mode (Windows shortcuts from Microsoft's published lists, sent into the session; needs iPad build 5 or later and the Citrix keyboard settings in [Support](https://hoquem.github.io/sidekey/support.html)) |
 
 Shortcuts are taken from each app's own menus or published documentation. The Outlook, Slack, Spotify, Notion and ChatGPT layouts, most of the Excel and Teams keys, Cursor's Accept All, Reject All, Model, Mode, Mode Menu and Add to Chat keys, Antigravity's Agent Panel key and OpenCode's Stop key come from each vendor's published shortcuts. Not every key has been tried in its app yet. Notion and ChatGPT publish only a few shortcuts, so their decks are partly empty. Layouts are code in `Packages/iKeypadShared/Sources/iKeypadShared/` (`DefaultProfiles.swift` and `PopularAppProfiles.swift`); add an app by adding a profile there.
 

@@ -67,7 +67,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
             let client = try await TestClient.connect(port: Self.port)
             try client.send(.executeAction(keyId: profile.keys[1].id, profileId: profile.id, pinned: false))
             let messages = try await client.receive(until: { $0.contains(where: Self.isResult(for: profile.keys[1].id)) })
-            XCTAssertTrue(messages.contains(.actionExecuted(keyId: profile.keys[1].id, success: false, errorMessage: "Pair this iPad with your Mac first.")), "got \(messages)")
+            XCTAssertTrue(messages.contains(.actionExecuted(keyId: profile.keys[1].id, success: false, errorMessage: "Pair this device with your Mac first.")), "got \(messages)")
             try await Task.sleep(nanoseconds: 300_000_000)
             XCTAssertFalse(FileManager.default.fileExists(atPath: marker.path), "unpaired tap ran")
         }
@@ -114,7 +114,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
         _ = try await client.receive(until: { !$0.isEmpty })
         try client.send(.pair(code: wrong, clientId: "x", clientName: "X"))
         let messages = try await client.receive(until: { $0.contains(where: Self.isPairFailure) })
-        XCTAssertTrue(messages.contains(.pairingFailed(reason: "That code is wrong. Check the code in the Sidekey menu on your Mac.")), "got \(messages)")
+        XCTAssertTrue(messages.contains(.pairingFailed(reason: "That code is wrong. Check the code in the Pair Device window on your Mac.")), "got \(messages)")
         XCTAssertNil(Self.store.token(for: "x"))
     }
 
@@ -123,7 +123,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
         _ = try await client.receive(until: { !$0.isEmpty })
         try client.send(.pair(code: "123456", clientId: "x", clientName: "X"))
         let messages = try await client.receive(until: { $0.contains(where: Self.isPairFailure) })
-        XCTAssertTrue(messages.contains(.pairingFailed(reason: "Pairing isn't open. On your Mac, choose Pair iPad in the Sidekey menu to get a code.")), "got \(messages)")
+        XCTAssertTrue(messages.contains(.pairingFailed(reason: "Pairing isn't open. On your Mac, choose Pair Device in the Sidekey menu to get a code.")), "got \(messages)")
     }
 
     private static func isAuthFailure(_ m: DeckMessage) -> Bool { if case .authenticationFailed = m { return true }; return false }
@@ -159,11 +159,26 @@ final class DeckServerCharacterizationTests: XCTestCase {
         }
     }
 
+    func testTappingAModeKeySwitchesTheLayout() async throws {
+        let monitor = AppContextMonitor.shared
+        let citrix = "com.citrix.receiver.icaviewer.mac"
+        monitor.updateActiveApp(bundleId: citrix, appName: "Citrix Viewer")
+        defer {
+            _ = monitor.switchMode(to: citrix)
+            let front = NSWorkspace.shared.frontmostApplication
+            monitor.updateActiveApp(bundleId: front?.bundleIdentifier ?? "", appName: front?.localizedName ?? "")
+        }
+        let moreKey = try XCTUnwrap(monitor.activeProfile.keys.first { $0.label == "More" })
+        let result = try await execute(keyId: moreKey.id, profileId: citrix, pinned: false)
+        XCTAssertEqual(result.success, true)
+        XCTAssertEqual(monitor.activeProfile.id, "\(citrix).more")
+    }
+
     /// A tap must name a layout; without one the Mac cannot know which key's action to run.
     func testTapWithoutALayoutIdIsRejected() async throws {
         let result = try await execute(keyId: "anything", profileId: nil, pinned: nil)
         XCTAssertEqual(result.success, false)
-        XCTAssertEqual(result.error, "Update Sidekey on your iPad.")
+        XCTAssertEqual(result.error, "Update Sidekey on this device.")
     }
 
     /// Security: the Mac runs the action from its own layout. An action smuggled into the tap by
@@ -253,6 +268,46 @@ final class AppContextMonitorCharacterizationTests: XCTestCase {
         let frontmost = try XCTUnwrap(NSWorkspace.shared.frontmostApplication?.bundleIdentifier)
         let expected = AppContextMonitor.shared.profile(withId: frontmost)?.id ?? "default"
         XCTAssertEqual(AppContextMonitor.shared.activeProfile.id, expected)
+    }
+
+    func testModeKeysSwitchTheCitrixLayoutAndAreRemembered() throws {
+        let monitor = AppContextMonitor.shared
+        let citrix = "com.citrix.receiver.icaviewer.mac"
+        defer {
+            monitor.updateActiveApp(bundleId: citrix, appName: "Citrix Viewer")
+            XCTAssertTrue(monitor.switchMode(to: citrix))
+            let front = NSWorkspace.shared.frontmostApplication
+            monitor.updateActiveApp(bundleId: front?.bundleIdentifier ?? "", appName: front?.localizedName ?? "")
+        }
+        monitor.updateActiveApp(bundleId: citrix, appName: "Citrix Viewer")
+        XCTAssertEqual(monitor.activeProfile.id, citrix, "Windows mode first")
+
+        XCTAssertTrue(monitor.switchMode(to: "\(citrix).outlook"))
+        XCTAssertEqual(monitor.activeProfile.id, "\(citrix).outlook")
+
+        monitor.updateActiveApp(bundleId: "com.apple.Terminal", appName: "Terminal")
+        XCTAssertFalse(monitor.switchMode(to: "\(citrix).word"), "a mode of another app cannot be chosen")
+        XCTAssertEqual(monitor.activeProfile.id, "com.apple.Terminal")
+
+        monitor.updateActiveApp(bundleId: citrix, appName: "Citrix Viewer")
+        XCTAssertEqual(monitor.activeProfile.id, "\(citrix).outlook", "the mode is remembered")
+    }
+
+    func testTheActiveModeIsAnnouncedAsALitChip() throws {
+        let outlook = try XCTUnwrap(AppContextMonitor.shared.profile(withId: "com.citrix.receiver.icaviewer.mac.outlook"))
+        let chip = try XCTUnwrap(AppContextMonitor.shared.modeChip(for: outlook))
+        XCTAssertEqual(chip.id, "mode.com.citrix.receiver.icaviewer.mac.outlook")
+        XCTAssertEqual(chip.label, "Outlook mode")
+        XCTAssertEqual(chip.tone, .warn, "attention tones light the bound key on the iPad")
+        XCTAssertEqual(chip.isOn, true)
+        let terminal = try XCTUnwrap(AppContextMonitor.shared.profile(withId: "com.apple.Terminal"))
+        XCTAssertNil(AppContextMonitor.shared.modeChip(for: terminal), "apps without modes get no chip")
+
+        // A mode reached through More lights the More key and names itself.
+        let teams = try XCTUnwrap(AppContextMonitor.shared.profile(withId: "com.citrix.receiver.icaviewer.mac.teams"))
+        let teamsChip = try XCTUnwrap(AppContextMonitor.shared.modeChip(for: teams))
+        XCTAssertEqual(teamsChip.id, "mode.com.citrix.receiver.icaviewer.mac.more")
+        XCTAssertEqual(teamsChip.label, "Teams mode")
     }
 
     func testCurrentContextDescribesTheFrontmostAppWithItsIcon() throws {
@@ -371,8 +426,14 @@ final class ActionDispatcherTests: XCTestCase {
     func testEveryBuiltInHotkeyMapsToAKeyCode() {
         for profile in DefaultProfiles.allDefaultProfiles() {
             for key in profile.keys {
-                guard case .hotkey(let name, _) = key.action else { continue }
-                XCTAssertNotNil(ActionDispatcher.shared.keyCodeForString(name), "\(profile.appName) › \(key.label) uses unknown key \"\(name)\"")
+                switch key.action {
+                case .hotkey(let name, _):
+                    XCTAssertNotNil(ActionDispatcher.shared.keyCodeForString(name), "\(profile.appName) › \(key.label) uses unknown key \"\(name)\"")
+                case .windowsHotkey(let name, let modifiers):
+                    XCTAssertNoThrow(try CitrixKeyMapper.chord(key: name, modifiers: modifiers), "\(profile.appName) › \(key.label) uses unknown key \"\(name)\"")
+                default:
+                    continue
+                }
             }
         }
     }

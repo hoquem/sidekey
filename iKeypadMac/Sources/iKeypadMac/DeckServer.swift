@@ -7,7 +7,7 @@ import iKeypadShared
 /// Serves layouts and app state to paired iPads and runs their taps.
 ///
 /// Every connection starts unauthenticated and receives only a ``DeckMessage/challenge``. It
-/// becomes authenticated by pairing with the code shown in the menu or by proving a stored
+/// becomes authenticated by pairing with the code shown in the Pair Device window or by proving a stored
 /// token; only then does it receive layouts and app state, and only then are its taps run.
 @MainActor
 public final class DeckServer: ObservableObject {
@@ -157,7 +157,7 @@ public final class DeckServer: ObservableObject {
             handleAuthentication(clientId: clientId, proof: proof, from: connection)
             return
         case .executeAction(let keyId, _, _) where !authenticated.contains(id):
-            send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: "Pair this iPad with your Mac first."), over: connection)
+            send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: "Pair this device with your Mac first."), over: connection)
             return
         default:
             guard authenticated.contains(id) else { return }
@@ -173,6 +173,13 @@ public final class DeckServer: ObservableObject {
             case .failure(let rejection):
                 send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: rejection.reason), over: connection)
             case .success(let target):
+                if case .switchProfile(let modeId) = target.action {
+                    // Switching mode changes what the Mac shows; nothing is sent to the app.
+                    let switched = AppContextMonitor.shared.switchMode(to: modeId)
+                    send(message: .actionExecuted(keyId: keyId, success: switched,
+                                                  errorMessage: switched ? nil : "That mode isn't available for the app in front."), over: connection)
+                    return
+                }
                 fire(target.action, keyId: keyId, after: target.delay, over: connection)
             }
 
@@ -213,9 +220,9 @@ public final class DeckServer: ObservableObject {
                 send(message: .pairingFailed(reason: "The Mac couldn't save the pairing. Try again."), over: connection)
             }
         case .wrong:
-            send(message: .pairingFailed(reason: "That code is wrong. Check the code in the Sidekey menu on your Mac."), over: connection)
+            send(message: .pairingFailed(reason: "That code is wrong. Check the code in the Pair Device window on your Mac."), over: connection)
         case .closed:
-            send(message: .pairingFailed(reason: "Pairing isn't open. On your Mac, choose Pair iPad in the Sidekey menu to get a code."), over: connection)
+            send(message: .pairingFailed(reason: "Pairing isn't open. On your Mac, choose Pair Device in the Sidekey menu to get a code."), over: connection)
         }
     }
 
@@ -223,7 +230,7 @@ public final class DeckServer: ObservableObject {
         guard let nonce = nonces[ObjectIdentifier(connection)],
               let token = store.token(for: clientId),
               PairingCrypto.verify(proof: proof, token: token, nonce: nonce) else {
-            send(message: .authenticationFailed(reason: "This iPad isn't paired with this Mac. Pair again."), over: connection)
+            send(message: .authenticationFailed(reason: "This device isn't paired with this Mac. Pair again."), over: connection)
             return
         }
         welcome(connection)
@@ -292,7 +299,7 @@ public final class DeckServer: ObservableObject {
         let monitor = AppContextMonitor.shared
         guard let profileId else {
             // Taps from builds before layout ids existed cannot be matched to a key.
-            return .failure(TapRejected(reason: "Update Sidekey on your iPad."))
+            return .failure(TapRejected(reason: "Update Sidekey on this device."))
         }
         let profile: DeckProfile
         var delay: TimeInterval = 0

@@ -106,20 +106,55 @@ public enum KeyModifier: String, Codable, Equatable, Sendable {
     case control = "ctrl"
 }
 
+/// A modifier on a Windows keyboard, for shortcuts sent into a remote Windows session.
+public enum WindowsModifier: String, Codable, Equatable, Sendable {
+    case ctrl, alt, shift, win
+}
+
 public enum KeyAction: Codable, Equatable, Sendable {
     case hotkey(key: String, modifiers: [KeyModifier])
+    /// A Windows shortcut such as Ctrl+S, for a remote Windows session. The key ``"win"`` is the
+    /// Windows key pressed on its own. The Mac translates it to the keys its remote-desktop app
+    /// expects (see ``CitrixKeyMapper`` on the Mac).
+    case windowsHotkey(key: String, modifiers: [WindowsModifier])
     case shellScript(command: String)
     case appleScript(script: String)
     case runShortcut(name: String)
     case switchProfile(profileId: String)
     case none
 
-    /// The keyboard shortcut this action sends, in Mac menu notation (``⌃⌥⇧⌘`` then the key).
+    /// The keyboard shortcut this action sends: Mac menu notation (``⌃⌥⇧⌘`` then the key) for
+    /// ``hotkey``, Windows notation (``Ctrl+Shift+M``) for ``windowsHotkey``.
     public var shortcutHint: String? {
-        guard case .hotkey(let key, let modifiers) = self else { return nil }
-        let order: [(KeyModifier, String)] = [(.control, "⌃"), (.option, "⌥"), (.shift, "⇧"), (.command, "⌘")]
-        let prefix = order.filter { modifiers.contains($0.0) }.map(\.1).joined()
-        return prefix + Self.keyGlyph(key)
+        switch self {
+        case .hotkey(let key, let modifiers):
+            let order: [(KeyModifier, String)] = [(.control, "⌃"), (.option, "⌥"), (.shift, "⇧"), (.command, "⌘")]
+            let prefix = order.filter { modifiers.contains($0.0) }.map(\.1).joined()
+            return prefix + Self.keyGlyph(key)
+        case .windowsHotkey(let key, let modifiers):
+            let order: [(WindowsModifier, String)] = [(.ctrl, "Ctrl"), (.alt, "Alt"), (.shift, "Shift"), (.win, "Win")]
+            let names = order.filter { modifiers.contains($0.0) }.map(\.1)
+            return (names + [Self.windowsKeyName(key)]).joined(separator: "+")
+        default:
+            return nil
+        }
+    }
+
+    private static func windowsKeyName(_ key: String) -> String {
+        switch key.lowercased() {
+        case "win": return "Win"
+        case "return", "enter": return "Enter"
+        case "escape", "esc": return "Esc"
+        case "tab": return "Tab"
+        case "space": return "Space"
+        case "delete", "backspace": return "Backspace"
+        case "forwarddelete": return "Del"
+        case "up": return "↑"
+        case "down": return "↓"
+        case "left": return "←"
+        case "right": return "→"
+        default: return key.uppercased()
+        }
     }
 
     private static func keyGlyph(_ key: String) -> String {

@@ -26,7 +26,7 @@ EVERY TAP GETS AN ANSWER
 A key glows amber while the Mac works, lights up when the shortcut was sent, and shakes with the Mac's reason when it could not be, for example when a permission is missing. If the app in front changes just as you tap, Sidekey refuses the tap rather than sending it to the wrong app.
 
 BUILT-IN LAYOUTS
-Safari, Chrome, Arc, Finder, Mail, Messages, Notes, Calendar, Music, Photos, Microsoft Word, Excel, PowerPoint, Outlook, Teams, Slack, Zoom, WhatsApp, Telegram, Spotify, Notion, ChatGPT, Xcode, VS Code, Cursor, Antigravity, OpenCode, Terminal and MacDown, plus system keys for every other app: Play/Pause, Screenshot, Spotlight, Lock Mac and more. Shortcuts are taken from each app's own menus or published documentation.
+Safari, Chrome, Arc, Finder, Mail, Messages, Notes, Calendar, Music, Photos, Microsoft Word, Excel, PowerPoint, Outlook, Teams, Slack, Zoom, WhatsApp, Telegram, Spotify, Notion, ChatGPT, Citrix Viewer, Xcode, VS Code, Cursor, Antigravity, OpenCode, Terminal and MacDown, plus system keys for every other app: Play/Pause, Screenshot, Spotlight, Lock Mac and more. Shortcuts are taken from each app's own menus or published documentation.
 
 PAIRED WITH YOUR MAC
 Pair once with a code shown on your Mac. Until an iPad is paired, the Mac runs none of its taps, and the Mac only ever runs actions from its own built-in layouts.
@@ -41,7 +41,7 @@ PRIVATE
 Sidekey has no accounts, no analytics and no tracking. Your iPad talks only to Sidekey on a Mac, over USB or your local network; nothing is sent to the developer. The connection is not encrypted yet, so use USB or a network you trust.
 
 REQUIRES THE FREE MAC APP
-Sidekey needs its free companion app on your Mac (macOS 13 or later), available at hoquem.github.io/sidekey. The layouts listed above need Mac app 1.2.0 or later. The Mac app needs Accessibility permission to send shortcuts.
+Sidekey needs its free companion app on your Mac (macOS 13 or later), available at hoquem.github.io/sidekey. The Citrix Viewer layout needs Mac app 1.3.0 or later. The Mac app needs Accessibility permission to send shortcuts.
 
 ## Keywords [100]
 macropad,hotkeys,keypad,launcher,controller,buttons,keyboard,developer,meeting,writing,remote,touch
@@ -75,7 +75,7 @@ To test:
 1. On a Mac with macOS 13 or later, download Sidekey.dmg from https://github.com/hoquem/sidekey/releases/latest, drag Sidekey to Applications and open it (it appears in the menu bar).
 2. When macOS asks, switch Sidekey on in System Settings › Privacy & Security › Accessibility (and allow Local Network access if asked).
 3. Open Sidekey on the iPad and allow Local Network access. Connect the iPad to the Mac with a USB cable, or put both on the same Wi-Fi network.
-4. Pair: on the Mac, click the Sidekey menu bar icon and choose Pair iPad... A window shows a 6-digit code. On the iPad, type the code and tap Pair. The code is valid for two minutes; choose Pair iPad... again for a new one.
+4. Pair: on the Mac, click the Sidekey menu bar icon and choose Pair Device... A window shows a 6-digit code. On the iPad, type the code and tap Pair. The code is valid for two minutes; choose Pair Device... again for a new one.
 5. Switch apps on the Mac (for example Finder, then Safari): the iPad keys change. With Safari in front, tap Reload: the key lights up and Safari reloads.
 
 Without the Mac app running, the iPad shows "Looking for your Mac…" and setup instructions after a few seconds; this is expected.
