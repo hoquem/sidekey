@@ -2,6 +2,8 @@
 
 Status: built on branch citrix-layout-and-pairing, 2026-10-08; ships in Mac 1.3.0 and iPad build 5.
 
+> **Superseded in part.** The Goal, the single 15-key table, its notes, and the Tests and Out of scope sections describe the first design. Live testing replaced it with modes: see **Modes** below, which wins wherever the two differ. The code is `makeCitrixViewerProfiles()`. Task View became Ctrl+Alt+Del, and Teams now has its own mode.
+
 ## Goal
 
 When Citrix Viewer (`com.citrix.receiver.icaviewer.mac`) is in front on the Mac, the iPad shows
@@ -43,7 +45,7 @@ Outlook) keys. Tapping a key sends the matching Windows shortcut into the sessio
   layout and keep showing the previous one, and taps on it are refused as "Layout changed". Only
   the developer's own iPad runs those builds, so this is accepted. iPad build 5 is required.
 
-### The layout (`makeCitrixViewerProfile`)
+### The layout (first design; now `makeCitrixViewerProfiles()`)
 
 The id and bundle are `com.citrix.receiver.icaviewer.mac`, the app name is "Citrix Viewer", and the
 grid is 3 by 5. The sources are Microsoft's "Keyboard shortcuts in Windows" and "Keyboard
@@ -67,14 +69,27 @@ shortcuts for Outlook"; Ctrl+S and Ctrl+Z are the standard Office shortcuts.
 | 13 | Send | Ctrl+Enter | run | |
 | 14 | Undo | Ctrl+Z | modify | |
 
-- **New Email:** Microsoft lists Ctrl+Shift+M for classic Outlook and Ctrl+N for new Outlook. The
-  New key (Ctrl+N) already covers new Outlook. If the session runs new Outlook and Ctrl+Shift+M
-  does nothing there, the live test will show it, and the key is revisited then.
+- **New Email:** Microsoft lists Ctrl+Shift+M for classic Outlook and Ctrl+N for new Outlook.
+  Ctrl+Shift+M worked in the user's session (classic Outlook). The modes design has no Ctrl+N
+  key, so new Outlook would need one.
 - **Teams Mute** (also Ctrl+Shift+M) is deliberately left out because it clashes with New Email.
 - **Task View** (Win+Tab) was in the first design. In the live test on 2026-10-08, macOS took right ⌘+Tab as its own app switcher, so Ctrl+Alt+Del (sent as ⌃ + left ⌘ + ⌥ + Forward Delete, verified live) replaced it.
 - **Icons:** SF Symbols checked by the existing Mac icon test.
 
-### Mapping to Citrix (Mac)
+#### Modes (added 2026-10-08, after the live test)
+
+The single 15-key layout grew into modes, because the Windows app in front cannot be detected from the Mac:
+
+- **Mode row:** every mode's bottom row is the same: Windows, Outlook, Browser, VS Code and More (the user's most used apps).
+- **More:** a picker whose keys open the Word, Excel and Teams modes.
+- **Keys per mode:** each mode has ten keys above the row. They are listed in `makeCitrixViewerProfiles()` (`PopularAppProfiles.swift`), which also cites each source.
+- **Mac behaviour:**
+  - The Mac implements the switch-layout action (`AppContextMonitor.switchMode(to:)`) and remembers each app's mode.
+  - It sends a "<Mode> mode" chip that lights the mode key. A mode picked under More lights the More key.
+- **Rejected:** a scrolling mode row, because it breaks fixed key positions.
+- **Replaced:** the original table above is the first design. Task View there was replaced by Ctrl+Alt+Del.
+
+## Mapping to Citrix (Mac)
 
 `CitrixKeyMapper` is a pure function from `(key, [WindowsModifier])` to the Mac key code plus the
 modifier set to post:

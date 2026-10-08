@@ -1,5 +1,7 @@
 # Citrix Viewer Layout Implementation Plan
 
+> **Historical.** This plan built the first, single 15-key design. Live testing replaced it with modes (see the spec's Modes section and `makeCitrixViewerProfiles()`), and Task View with Ctrl+Alt+Del. Keep this file as a record of how the first version was built.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add a 15-key Citrix Viewer layout that sends Windows shortcuts into a Citrix session,

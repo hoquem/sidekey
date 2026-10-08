@@ -7,7 +7,7 @@ Sidekey turns an iPad into a shortcut deck for your Mac. Prop the iPad beside yo
 - **Every tap gets an answer.** A key glows amber while the Mac works, lights up when the Mac reports the shortcut was sent, and shakes with the Mac's reason when it could not (for example, a missing permission).
 - **USB first.** Connects over the iPad's USB cable when it is plugged in and falls back to Wi-Fi.
 - **Paired, not open.** Only an iPad you pair with your Mac, using a code shown on the Mac, can see or control it. The Mac only ever runs actions from its own built-in layouts.
-- **Hold for disruptive keys.** Lock Mac, Interrupt, End Call, Telegram Lock, Xcode Clean, and Citrix Viewer's Lock and Close App fire only after a press and hold.
+- **Hold for disruptive keys.** Lock Mac, Interrupt, End Call, Telegram Lock, Xcode Clean, and Citrix Viewer's Lock, Close App and Teams Leave fire only after a press and hold.
 
 ## Requirements
 
@@ -97,7 +97,7 @@ From then on the iPad connects to that Mac by itself whenever Sidekey is running
 | Spotify | Play/Pause, Like, Shuffle, Repeat, Search, Queue |
 | Notion | New Page, Search, Back, Forward, Copy Link, Comment |
 | ChatGPT | Chat Bar, Find, Stop, Share Desktop, Share Window, Browser |
-| Citrix Viewer | Start, Ctrl+Alt+Del, File Explorer, Lock, New Email, Send (Windows shortcuts from Microsoft's published Windows and Outlook lists, sent into the session; needs iPad build 5 or later and the Citrix keyboard settings in [Support](https://hoquem.github.io/sidekey/support.html)) |
+| Citrix Viewer | Modes for Windows, Outlook, Browser, VS Code and, under More, Word, Excel and Teams; the bottom row switches mode (Windows shortcuts from Microsoft's published lists, sent into the session; needs iPad build 5 or later and the Citrix keyboard settings in [Support](https://hoquem.github.io/sidekey/support.html)) |
 
 Shortcuts are taken from each app's own menus or published documentation. The Outlook, Slack, Spotify, Notion and ChatGPT layouts, most of the Excel and Teams keys, Cursor's Accept All, Reject All, Model, Mode, Mode Menu and Add to Chat keys, Antigravity's Agent Panel key and OpenCode's Stop key come from each vendor's published shortcuts. Not every key has been tried in its app yet. Notion and ChatGPT publish only a few shortcuts, so their decks are partly empty. Layouts are code in `Packages/iKeypadShared/Sources/iKeypadShared/` (`DefaultProfiles.swift` and `PopularAppProfiles.swift`); add an app by adding a profile there.
 
