@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sidekey privacy policy</title>
-  <meta name="description" content="Sidekey does not collect your data. What moves between your iPad and Mac, and the permissions Sidekey asks for.">
+  <meta name="description" content="Sidekey does not collect your data. What moves between your iPad or iPhone and Mac, and the permissions Sidekey asks for.">
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -14,43 +14,43 @@
       <a href="index.html"><img src="icon.png" alt="Sidekey home" width="84" height="84"></a>
       <div>
         <h1>Privacy</h1>
-        <p>Sidekey for iPad and Mac</p>
+        <p>Sidekey for iPad, iPhone and Mac</p>
       </div>
     </header>
 
     <main class="doc">
-      <p class="updated">Effective 7 October 2026</p>
+      <p class="updated">Effective 8 October 2026</p>
 
       <h2>The short version</h2>
-      <p><strong>Sidekey does not collect, store or share your personal data.</strong> It has no accounts, no analytics, no advertising and no tracking, and it includes no third-party code that does. Sidekey on your iPad talks only to Sidekey on a Mac, over USB or your local network; nothing is sent to the developer or to any server on the internet.</p>
+      <p><strong>Sidekey does not collect, store or share your personal data.</strong> It has no accounts, no analytics, no advertising and no tracking, and it includes no third-party code that does. Sidekey on your iPad or iPhone talks only to Sidekey on a Mac, over USB or your local network; nothing is sent to the developer or to any server on the internet.</p>
 
       <h2>Pairing</h2>
-      <p>Before an iPad can see or control your Mac, you pair them: the Mac shows a 6-digit code for two minutes when you choose Pair Device in its Sidekey menu, and you type it on the iPad. Until then the Mac sends that iPad only its name and a pairing request, and runs none of its taps. Before it has paired, the iPad connects to the first Sidekey Mac it finds and sends it the iPad's name and an identifier; after pairing it looks only for the Mac it paired with. Pairing creates a random token that each side keeps in its Keychain; later connections prove the token without sending it again. To revoke a pairing, choose Forget Paired Devices in the Mac's Sidekey menu; Forget This Mac on the iPad removes only the iPad's copy.</p>
+      <p>Before an iPad or iPhone can see or control your Mac, you pair them: the Mac shows a 6-digit code for two minutes when you choose Pair Device in its Sidekey menu, and you type it on the iPad or iPhone. Until then the Mac sends that device only its name and a pairing request, and runs none of its taps. Before it has paired, the device connects to the first Sidekey Mac it finds and sends it the device's name and an identifier; after pairing it looks only for the Mac it paired with. Pairing creates a random token that each side keeps in its Keychain; later connections prove the token without sending it again. To revoke a pairing, choose Forget Paired Devices in the Mac's Sidekey menu; Forget This Mac on the device removes only its own copy.</p>
 
-      <h2>What moves between your iPad and your Mac</h2>
-      <p>Once paired, the two apps talk to each other over the USB cable or your local network.</p>
+      <h2>What moves between your iPad or iPhone and your Mac</h2>
+      <p>Once paired, the two apps talk to each other over your local network, or over a USB cable for an iPad.</p>
       <table>
         <thead><tr><th>From</th><th>To</th><th>What</th></tr></thead>
         <tbody>
-          <tr><td>Mac</td><td>iPad</td><td>The Mac's name and identifier and a pairing request; once paired, a pairing token (sent once), the name, bundle identifier, icon and focused window title of the app in front, whether Sidekey has Accessibility permission, the key layout for that app including what each key does, and the result of each key you tap. For Zoom, also meeting state such as whether your mic is muted.</td></tr>
-          <tr><td>iPad</td><td>Mac</td><td>Its device name as iPadOS reports it, an identifier for the iPad, the pairing code you type, proof that it holds its pairing token, and which key you tapped on which layout and whether the layout is pinned.</td></tr>
+          <tr><td>Mac</td><td>iPad or iPhone</td><td>The Mac's name and identifier and a pairing request; once paired, a pairing token (sent once), the name, bundle identifier, icon and focused window title of the app in front, whether Sidekey has Accessibility permission, the key layout for that app including what each key does, and the result of each key you tap. For Zoom, also meeting state such as whether your mic is muted.</td></tr>
+          <tr><td>iPad or iPhone</td><td>Mac</td><td>Its device name as iPadOS or iOS reports it, an identifier for the device, the pairing code you type, proof that it holds its pairing token, and which key you tapped on which layout and whether the layout is pinned.</td></tr>
         </tbody>
       </table>
-      <p>To stay paired, the Mac keeps each paired iPad's identifier, name and token in its Keychain, and its own identifier in its settings. The iPad keeps its token in its Keychain, and its own identifier and the paired Mac's identifier and name in its settings. Neither app saves anything else it receives. The iPad keeps app icons in memory while it is running and forgets them when it closes.</p>
-      <p><strong>This connection is not encrypted yet.</strong> Traffic between the iPad and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends (app names, window titles, the keys you tap and both device names). If they capture the one-time pairing exchange or interfere with a live connection, they could also press your Mac's built-in keys, for example to open Terminal or lock the Mac, until you choose Forget Paired Devices on the Mac. Use Sidekey over USB or on a network you trust. Encryption is planned.</p>
+      <p>To stay paired, the Mac keeps each paired device's identifier, name and token in its Keychain, and its own identifier in its settings. The iPad or iPhone keeps its token in its Keychain, and its own identifier and the paired Mac's identifier and name in its settings. Neither app saves anything else it receives. The iPad or iPhone app keeps app icons in memory while it is running and forgets them when it closes.</p>
+      <p><strong>This connection is not encrypted yet.</strong> Traffic between the device and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends (app names, window titles, the keys you tap and both device names). If they capture the one-time pairing exchange or interfere with a live connection, they could also press your Mac's built-in keys, for example to open Terminal or lock the Mac, until you choose Forget Paired Devices on the Mac. Use Sidekey over USB (iPad) or on a network you trust. Encryption is planned.</p>
 
       <h2>Permissions Sidekey asks for</h2>
-      <h3>On the iPad</h3>
+      <h3>On the iPad or iPhone</h3>
       <p><strong>Local Network:</strong> to find and connect to Sidekey on your Mac.</p>
       <h3>On the Mac</h3>
       <p><strong>Accessibility:</strong> to send keyboard shortcuts to the app in front and to read its window title and menu state.</p>
       <p><strong>Automation:</strong> to run the AppleScript actions on some keys, such as Play/Pause in Music.</p>
-      <p><strong>Local Network</strong> (macOS 15 or later): to listen for your iPad.</p>
-      <p>You can turn any of these off at any time in Settings on the iPad or System Settings on the Mac. Sidekey will tell you when a key cannot run because a permission is missing.</p>
+      <p><strong>Local Network</strong> (macOS 15 or later): to listen for your iPad or iPhone.</p>
+      <p>You can turn any of these off at any time in Settings on the iPad or iPhone, or System Settings on the Mac. Sidekey will tell you when a key cannot run because a permission is missing.</p>
 
       <h2>Apple and GitHub</h2>
-      <p>If you install the iPad app from the App Store, Apple may share crash reports and usage information with the developer if you have chosen to share them in your device settings.</p>
-      <p>If you test the iPad app with TestFlight, Apple shares with the developer the name and email address you were invited with, and the crash reports and feedback that TestFlight collects while you test. Both are covered by <a href="https://www.apple.com/legal/privacy/">Apple's privacy policy</a>.</p>
+      <p>If you install the iPad and iPhone app from the App Store, Apple may share crash reports and usage information with the developer if you have chosen to share them in your device settings.</p>
+      <p>If you test the iPad and iPhone app with TestFlight, Apple shares with the developer the name and email address you were invited with, and the crash reports and feedback that TestFlight collects while you test. Both are covered by <a href="https://www.apple.com/legal/privacy/">Apple's privacy policy</a>.</p>
       <p>If you download the Mac app from GitHub, GitHub's <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy statement</a> covers that download.</p>
 
       <h2>Children</h2>
