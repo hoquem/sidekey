@@ -23,4 +23,16 @@ final class WindowsHotkeyTests: XCTestCase {
         var buffer = try FramedMessageProtocol.encode(.profileUpdated(profile: profile))
         XCTAssertEqual(FramedMessageProtocol.decode(from: &buffer), .profileUpdated(profile: profile))
     }
+
+    func testCitrixViewerLayout() throws {
+        let citrix = try XCTUnwrap(DefaultProfiles.allDefaultProfiles().first { $0.appBundleIdentifier == "com.citrix.receiver.icaviewer.mac" })
+        let expected: [(String, String)] = [
+            ("Start", "Win"), ("Task View", "Win+Tab"), ("File Explorer", "Win+E"), ("Show Desktop", "Win+D"), ("Lock", "Win+L"),
+            ("Switch App", "Alt+Tab"), ("Snap Left", "Win+←"), ("Snap Right", "Win+→"), ("Close App", "Alt+F4"), ("Save", "Ctrl+S"),
+            ("New", "Ctrl+N"), ("New Email", "Ctrl+Shift+M"), ("Reply", "Ctrl+R"), ("Send", "Ctrl+Enter"), ("Undo", "Ctrl+Z"),
+        ]
+        XCTAssertEqual(citrix.keys.map(\.label), expected.map(\.0))
+        XCTAssertEqual(citrix.keys.map { $0.action.shortcutHint }, expected.map(\.1))
+        XCTAssertEqual(citrix.keys.filter(\.requiresConfirm).map(\.label), ["Lock", "Close App"])
+    }
 }

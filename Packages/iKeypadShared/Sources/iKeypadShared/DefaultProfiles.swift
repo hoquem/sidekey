@@ -1535,6 +1535,7 @@ public struct DefaultProfiles {
             makePhotosProfile(),
             makeNotionProfile(),
             makeChatGPTProfile(),
+            makeCitrixViewerProfile(),
             makeSafariProfile(),
             makeChromeProfile(),
             makeBrowserProfile(bundleId: "company.thebrowser.Browser", name: "Arc")

@@ -1791,4 +1791,41 @@ extension DefaultProfiles {
             ]
         )
     }
+
+    /// Citrix Viewer (``com.citrix.receiver.icaviewer.mac``), the window of a Citrix session to a
+    /// remote Windows desktop. Sidekey cannot see which Windows app is in front inside the
+    /// session, so this one layout mixes Windows keys and Office keys. Shortcuts from Microsoft's
+    /// "Keyboard shortcuts in Windows" and "Keyboard shortcuts for Outlook" (classic Outlook for
+    /// New Email); Save and Undo are the standard Office shortcuts. Sent through
+    /// ``CitrixKeyMapper`` on the Mac, which assumes the Citrix keyboard settings it documents.
+    public static func makeCitrixViewerProfile() -> DeckProfile {
+        let keys: [(String, String, String, [WindowsModifier], KeyRole, Bool)] = [
+            ("Start", "square.grid.2x2", "win", [], .navigate, false),
+            ("Task View", "rectangle.stack", "tab", [.win], .navigate, false),
+            ("File Explorer", "folder", "e", [.win], .navigate, false),
+            ("Show Desktop", "menubar.dock.rectangle", "d", [.win], .navigate, false),
+            ("Lock", "lock", "l", [.win], .danger, true),
+            ("Switch App", "arrow.left.arrow.right.square", "tab", [.alt], .navigate, false),
+            ("Snap Left", "rectangle.lefthalf.filled", "left", [.win], .modify, false),
+            ("Snap Right", "rectangle.righthalf.filled", "right", [.win], .modify, false),
+            ("Close App", "xmark.square", "f4", [.alt], .danger, true),
+            ("Save", "square.and.arrow.down", "s", [.ctrl], .run, false),
+            ("New", "doc.badge.plus", "n", [.ctrl], .create, false),
+            ("New Email", "square.and.pencil", "m", [.ctrl, .shift], .create, false),
+            ("Reply", "arrowshape.turn.up.left", "r", [.ctrl], .create, false),
+            ("Send", "paperplane", "return", [.ctrl], .run, false),
+            ("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify, false),
+        ]
+        return DeckProfile(
+            id: "com.citrix.receiver.icaviewer.mac",
+            appBundleIdentifier: "com.citrix.receiver.icaviewer.mac",
+            appName: "Citrix Viewer",
+            rows: 3,
+            columns: 5,
+            keys: keys.enumerated().map { index, key in
+                DeckKey(position: index, label: key.0, iconSystemName: key.1,
+                        action: .windowsHotkey(key: key.2, modifiers: key.3), role: key.4, requiresConfirm: key.5)
+            }
+        )
+    }
 }
