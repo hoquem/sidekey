@@ -20,6 +20,7 @@
 		BCA2140EE000ED2F05A34C55 /* DeckKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */; };
 		BF68CA4897EDD57B41FF7A49 /* DeckClientPairingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57B8C32E5801300F0C9F3EF /* DeckClientPairingTests.swift */; };
 		C60B52E8C8CA6EEE7F5994D2 /* DeckRotaryDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */; };
+		C8E8D0E91B01DE686C8FAC0F /* CitrixKeyMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8EDC611C303856F76DECE /* CitrixKeyMapper.swift */; };
 		C9CD19EB506F4A60EFB3DA00 /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = B798A3E91C1453CF0038144E /* iKeypadShared */; };
 		DD49CA285073562750BDE4BB /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = EEEB7F49CCF79F6247BF1292 /* iKeypadShared */; };
 		DE925D7F3C8B0142F783FC09 /* AppStateReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77AA9BB916D950399D72DA7 /* AppStateReader.swift */; };
@@ -44,6 +45,7 @@
 /* Begin PBXFileReference section */
 		06C829FA5E3E27D4B01E0D3F /* AppContextMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContextMonitor.swift; sourceTree = "<group>"; };
 		08CE111B591B07C75936E526 /* iKeypadMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iKeypadMacApp.swift; sourceTree = "<group>"; };
+		0AB8EDC611C303856F76DECE /* CitrixKeyMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitrixKeyMapper.swift; sourceTree = "<group>"; };
 		347F366216B568BEC636A298 /* DeckClientReconnectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckClientReconnectTests.swift; sourceTree = "<group>"; };
 		352E2A3C6D0EE3B3B41DD60E /* DeckClientCharacterizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckClientCharacterizationTests.swift; sourceTree = "<group>"; };
 		3AF5AF288E06B91060D5116D /* DeckServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckServer.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				DA7975824A26AADE9117E8C4 /* ActionDispatcher.swift */,
 				06C829FA5E3E27D4B01E0D3F /* AppContextMonitor.swift */,
 				C77AA9BB916D950399D72DA7 /* AppStateReader.swift */,
+				0AB8EDC611C303856F76DECE /* CitrixKeyMapper.swift */,
 				3AF5AF288E06B91060D5116D /* DeckServer.swift */,
 				08CE111B591B07C75936E526 /* iKeypadMacApp.swift */,
 				E7A8E3E2C7DDB3D8690FC16E /* Pairing.swift */,
@@ -320,6 +323,7 @@
 				508724F6C31A8E58D119FC48 /* ActionDispatcher.swift in Sources */,
 				5BAE329C48E3FB1B24D1DE1B /* AppContextMonitor.swift in Sources */,
 				DE925D7F3C8B0142F783FC09 /* AppStateReader.swift in Sources */,
+				C8E8D0E91B01DE686C8FAC0F /* CitrixKeyMapper.swift in Sources */,
 				EE0B4A769C1E52BDC97DC2AC /* DeckServer.swift in Sources */,
 				F2BD1E5D33B7071F93857C45 /* Pairing.swift in Sources */,
 				02DA989E3EF732004143158E /* PairingCodeWindow.swift in Sources */,
