@@ -29,15 +29,15 @@ final class WindowsHotkeyTests: XCTestCase {
 
     func testCitrixViewerModesShareOneModeRowWithWindowsFirst() {
         let modes = DefaultProfiles.allDefaultProfiles().filter { $0.appBundleIdentifier == citrixBundle }
-        XCTAssertEqual(modes.map(\.id), [citrixBundle, "\(citrixBundle).outlook", "\(citrixBundle).word",
-                                          "\(citrixBundle).excel", "\(citrixBundle).more", "\(citrixBundle).teams",
-                                          "\(citrixBundle).browser", "\(citrixBundle).vscode"])
+        XCTAssertEqual(modes.map(\.id), [citrixBundle, "\(citrixBundle).outlook", "\(citrixBundle).browser",
+                                          "\(citrixBundle).vscode", "\(citrixBundle).more", "\(citrixBundle).word",
+                                          "\(citrixBundle).excel", "\(citrixBundle).teams"])
         let rowModes = Array(modes.prefix(5))
         for mode in modes {
             // The More picker has three app keys; every other mode fills its ten slots.
             XCTAssertEqual(mode.keys.count, mode.id.hasSuffix(".more") ? 8 : 15, mode.id)
             let modeRow = mode.keys.filter { $0.position >= 10 }.sorted { $0.position < $1.position }
-            XCTAssertEqual(modeRow.map(\.label), ["Windows", "Outlook", "Word", "Excel", "More"], mode.id)
+            XCTAssertEqual(modeRow.map(\.label), ["Windows", "Outlook", "Browser", "VS Code", "More"], mode.id)
             XCTAssertEqual(modeRow.map(\.action), rowModes.map { .switchProfile(profileId: $0.id) }, mode.id)
             XCTAssertEqual(modeRow.map(\.toggleChipId), rowModes.map { "mode.\($0.id)" }, mode.id)
         }
@@ -46,8 +46,8 @@ final class WindowsHotkeyTests: XCTestCase {
     func testMoreOpensAPickerOfFurtherModes() throws {
         let more = try XCTUnwrap(DefaultProfiles.allDefaultProfiles().first { $0.id == "\(citrixBundle).more" })
         let picker = more.keys.filter { $0.position < 10 }.sorted { $0.position < $1.position }
-        XCTAssertEqual(picker.map(\.label), ["Teams", "Browser", "VS Code"])
-        XCTAssertEqual(picker.map(\.action), ["teams", "browser", "vscode"].map { .switchProfile(profileId: "\(citrixBundle).\($0)") })
+        XCTAssertEqual(picker.map(\.label), ["Word", "Excel", "Teams"])
+        XCTAssertEqual(picker.map(\.action), ["word", "excel", "teams"].map { .switchProfile(profileId: "\(citrixBundle).\($0)") })
     }
 
     func testCitrixModeKeys() throws {

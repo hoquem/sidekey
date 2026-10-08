@@ -1794,8 +1794,9 @@ extension DefaultProfiles {
 
     /// Citrix Viewer (``com.citrix.receiver.icaviewer.mac``), the window of a Citrix session to a
     /// remote Windows desktop, as modes. Sidekey cannot see which Windows app is in front inside
-    /// the session, so the bottom row of every mode switches between Windows, Outlook, Word,
-    /// Excel and More; More is a picker for further modes (Teams, Browser, VS Code). The Mac
+    /// the session, so the bottom row of every mode switches between Windows, Outlook, Browser,
+    /// VS Code and More (the user's most used, chosen 2026-10-08); More is a picker for further
+    /// modes (Word, Excel, Teams). The Mac
     /// remembers the mode and lights its key.
     ///
     /// Shortcuts from Microsoft's "Keyboard shortcuts in Windows", the Windows shortcut pages for
@@ -1842,6 +1843,35 @@ extension DefaultProfiles {
                 win("Mail", "tray", "1", [.ctrl], .navigate),
                 win("Calendar", "calendar", "2", [.ctrl], .navigate),
             ]),
+            ("\(bundle).browser", "Browser", "globe", [
+                win("New Tab", "plus.square", "t", [.ctrl], .create),
+                win("Close Tab", "xmark.square", "w", [.ctrl], .danger),
+                win("Reopen Tab", "arrow.uturn.backward.square", "t", [.ctrl, .shift], .create),
+                win("Reload", "arrow.clockwise", "r", [.ctrl], .run),
+                win("Address Bar", "link", "l", [.ctrl], .navigate),
+                win("Back", "chevron.backward", "left", [.alt], .navigate),
+                win("Forward", "chevron.forward", "right", [.alt], .navigate),
+                win("Next Tab", "chevron.right.square", "tab", [.ctrl], .navigate),
+                win("Prev Tab", "chevron.left.square", "tab", [.ctrl, .shift], .navigate),
+                win("Find", "magnifyingglass", "f", [.ctrl], .navigate),
+            ]),
+            ("\(bundle).vscode", "VS Code", "chevron.left.forwardslash.chevron.right", [
+                win("Command Palette", "command", "p", [.ctrl, .shift], .create),
+                win("Quick Open", "doc.text.magnifyingglass", "p", [.ctrl], .navigate),
+                win("Terminal", "terminal", "`", [.ctrl], .navigate),
+                win("Explorer", "sidebar.left", "e", [.ctrl, .shift], .navigate),
+                win("Search", "magnifyingglass", "f", [.ctrl, .shift], .navigate),
+                win("Source Control", "arrow.triangle.branch", "g", [.ctrl, .shift], .navigate),
+                win("Comment", "text.bubble", "/", [.ctrl], .modify),
+                win("Save", "square.and.arrow.down", "s", [.ctrl], .run),
+                win("Go to Definition", "arrow.right.circle", "f12", [], .navigate),
+                win("Run", "play", "f5", [], .run),
+            ]),
+            ("\(bundle).more", "More", "ellipsis.circle", [
+                open("Word", "doc.text", "word"),
+                open("Excel", "tablecells", "excel"),
+                open("Teams", "person.2", "teams"),
+            ]),
             ("\(bundle).word", "Word", "doc.text", [
                 win("Save", "square.and.arrow.down", "s", [.ctrl], .run),
                 win("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify),
@@ -1866,11 +1896,6 @@ extension DefaultProfiles {
                 win("Edit Cell", "character.cursor.ibeam", "f2", [], .modify),
                 win("Today's Date", "calendar", ";", [.ctrl], .create),
             ]),
-            ("\(bundle).more", "More", "ellipsis.circle", [
-                open("Teams", "person.2", "teams"),
-                open("Browser", "globe", "browser"),
-                open("VS Code", "chevron.left.forwardslash.chevron.right", "vscode"),
-            ]),
             ("\(bundle).teams", "Teams", "person.2", [
                 win("Mute", "mic.slash", "m", [.ctrl, .shift], .modify),
                 win("Video", "video", "o", [.ctrl, .shift], .modify),
@@ -1882,30 +1907,6 @@ extension DefaultProfiles {
                 win("New Chat", "square.and.pencil", "n", [.ctrl], .create),
                 win("Search", "magnifyingglass", "e", [.ctrl], .navigate),
                 win("Chat", "bubble.left.and.bubble.right", "1", [.ctrl], .navigate),
-            ]),
-            ("\(bundle).browser", "Browser", "globe", [
-                win("New Tab", "plus.square", "t", [.ctrl], .create),
-                win("Close Tab", "xmark.square", "w", [.ctrl], .danger),
-                win("Reopen Tab", "arrow.uturn.backward.square", "t", [.ctrl, .shift], .create),
-                win("Reload", "arrow.clockwise", "r", [.ctrl], .run),
-                win("Address Bar", "link", "l", [.ctrl], .navigate),
-                win("Back", "chevron.backward", "left", [.alt], .navigate),
-                win("Forward", "chevron.forward", "right", [.alt], .navigate),
-                win("Next Tab", "chevron.right.square", "tab", [.ctrl], .navigate),
-                win("Prev Tab", "chevron.left.square", "tab", [.ctrl, .shift], .navigate),
-                win("Find", "magnifyingglass", "f", [.ctrl], .navigate),
-            ]),
-            ("\(bundle).vscode", "VS Code", "chevron.left.forwardslash.chevron.right", [
-                win("Command Palette", "command", "p", [.ctrl, .shift], .create),
-                win("Quick Open", "doc.text.magnifyingglass", "p", [.ctrl], .navigate),
-                win("Terminal", "terminal", "`", [.ctrl], .navigate),
-                win("Explorer", "sidebar.left", "e", [.ctrl, .shift], .navigate),
-                win("Search", "magnifyingglass", "f", [.ctrl, .shift], .navigate),
-                win("Source Control", "arrow.triangle.branch", "g", [.ctrl, .shift], .navigate),
-                win("Comment", "text.bubble", "/", [.ctrl], .modify),
-                win("Save", "square.and.arrow.down", "s", [.ctrl], .run),
-                win("Go to Definition", "arrow.right.circle", "f12", [], .navigate),
-                win("Run", "play", "f5", [], .run),
             ]),
         ]
         // The same bottom row on every mode: the first five modes, ending with the More picker.
