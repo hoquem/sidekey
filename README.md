@@ -97,7 +97,7 @@ From then on the iPad connects to that Mac by itself whenever Sidekey is running
 | Spotify | Play/Pause, Like, Shuffle, Repeat, Search, Queue |
 | Notion | New Page, Search, Back, Forward, Copy Link, Comment |
 | ChatGPT | Chat Bar, Find, Stop, Share Desktop, Share Window, Browser |
-| Citrix Viewer | Start, Task View, File Explorer, Lock, New Email, Send (Windows shortcuts from Microsoft's published Windows and Outlook lists, sent into the session; needs iPad build 5 or later and the Citrix keyboard settings in [Support](https://hoquem.github.io/sidekey/support.html)) |
+| Citrix Viewer | Start, Ctrl+Alt+Del, File Explorer, Lock, New Email, Send (Windows shortcuts from Microsoft's published Windows and Outlook lists, sent into the session; needs iPad build 5 or later and the Citrix keyboard settings in [Support](https://hoquem.github.io/sidekey/support.html)) |
 
 Shortcuts are taken from each app's own menus or published documentation. The Outlook, Slack, Spotify, Notion and ChatGPT layouts, most of the Excel and Teams keys, Cursor's Accept All, Reject All, Model, Mode, Mode Menu and Add to Chat keys, Antigravity's Agent Panel key and OpenCode's Stop key come from each vendor's published shortcuts. Not every key has been tried in its app yet. Notion and ChatGPT publish only a few shortcuts, so their decks are partly empty. Layouts are code in `Packages/iKeypadShared/Sources/iKeypadShared/` (`DefaultProfiles.swift` and `PopularAppProfiles.swift`); add an app by adding a profile there.
 

@@ -148,6 +148,7 @@ public enum KeyAction: Codable, Equatable, Sendable {
         case "tab": return "Tab"
         case "space": return "Space"
         case "delete", "backspace": return "Backspace"
+        case "forwarddelete": return "Del"
         case "up": return "↑"
         case "down": return "↓"
         case "left": return "←"

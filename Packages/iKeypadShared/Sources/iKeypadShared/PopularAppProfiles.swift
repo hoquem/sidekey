@@ -1794,14 +1794,16 @@ extension DefaultProfiles {
 
     /// Citrix Viewer (``com.citrix.receiver.icaviewer.mac``), the window of a Citrix session to a
     /// remote Windows desktop. Sidekey cannot see which Windows app is in front inside the
-    /// session, so this one layout mixes Windows keys and Office keys. Shortcuts from Microsoft's
+    /// session, so this one layout mixes Windows keys and Office keys. Win+Tab (Task View) is left
+    /// out: macOS takes Command+Tab for its own app switcher before Citrix sees it (found live
+    /// 2026-10-08); Ctrl+Alt+Del, verified live the same day, takes its place. Shortcuts from Microsoft's
     /// "Keyboard shortcuts in Windows" and "Keyboard shortcuts for Outlook" (classic Outlook for
     /// New Email); Save and Undo are the standard Office shortcuts. Sent through
     /// ``CitrixKeyMapper`` on the Mac, which assumes the Citrix keyboard settings it documents.
     public static func makeCitrixViewerProfile() -> DeckProfile {
         let keys: [(String, String, String, [WindowsModifier], KeyRole, Bool)] = [
             ("Start", "square.grid.2x2", "win", [], .navigate, false),
-            ("Task View", "rectangle.stack", "tab", [.win], .navigate, false),
+            ("Ctrl+Alt+Del", "lock.shield", "forwarddelete", [.ctrl, .alt], .navigate, false),
             ("File Explorer", "folder", "e", [.win], .navigate, false),
             ("Show Desktop", "menubar.dock.rectangle", "d", [.win], .navigate, false),
             ("Lock", "lock", "l", [.win], .danger, true),

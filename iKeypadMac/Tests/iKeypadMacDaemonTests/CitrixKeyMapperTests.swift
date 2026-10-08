@@ -45,6 +45,12 @@ final class CitrixKeyMapperTests: XCTestCase {
                        KeyChord(modifierKeys: [rightCommand], keyCode: nil, flags: winFlags))
     }
 
+    func testCtrlAltDelIsControlCommandOptionForwardDelete() throws {
+        // Verified live 2026-10-08: brings up the Windows security screen in the user's session.
+        XCTAssertEqual(try CitrixKeyMapper.chord(key: "forwarddelete", modifiers: [.ctrl, .alt]),
+                       KeyChord(modifierKeys: [leftControl, leftCommand, leftOption], keyCode: 0x75, flags: ctrlFlags.union(altFlags)))
+    }
+
     func testUnknownKeyThrows() {
         XCTAssertThrowsError(try CitrixKeyMapper.chord(key: "pageup", modifiers: [.ctrl])) { error in
             XCTAssertEqual(error as? CitrixKeyMapper.UnknownKey, CitrixKeyMapper.UnknownKey(key: "pageup"))

@@ -185,6 +185,7 @@ public final class ActionDispatcher {
         case "tab": return 0x30
         case "escape", "esc": return 0x35
         case "delete", "backspace": return 0x33
+        case "forwarddelete": return 0x75
         case "left": return 0x7B
         case "right": return 0x7C
         case "down": return 0x7D

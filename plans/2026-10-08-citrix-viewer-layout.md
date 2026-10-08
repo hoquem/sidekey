@@ -52,7 +52,7 @@ shortcuts for Outlook"; Ctrl+S and Ctrl+Z are the standard Office shortcuts.
 | # | Label | Shortcut | Role | Hold |
 |---|---|---|---|---|
 | 0 | Start | Win | navigate | |
-| 1 | Task View | Win+Tab | navigate | |
+| 1 | Ctrl+Alt+Del | Ctrl+Alt+Del | navigate | |
 | 2 | File Explorer | Win+E | navigate | |
 | 3 | Show Desktop | Win+D | navigate | |
 | 4 | Lock | Win+L | danger | yes |
@@ -71,6 +71,7 @@ shortcuts for Outlook"; Ctrl+S and Ctrl+Z are the standard Office shortcuts.
   New key (Ctrl+N) already covers new Outlook. If the session runs new Outlook and Ctrl+Shift+M
   does nothing there, the live test will show it, and the key is revisited then.
 - **Teams Mute** (also Ctrl+Shift+M) is deliberately left out because it clashes with New Email.
+- **Task View** (Win+Tab) was in the first design. In the live test on 2026-10-08, macOS took right ⌘+Tab as its own app switcher, so Ctrl+Alt+Del (sent as ⌃ + left ⌘ + ⌥ + Forward Delete, verified live) replaced it.
 - **Icons:** SF Symbols checked by the existing Mac icon test.
 
 ### Mapping to Citrix (Mac)
@@ -130,5 +131,4 @@ This needs nothing new:
 
 - Detecting the Windows app inside the session.
 - Supporting other Citrix keyboard settings.
-- Ctrl+Alt+Del (it stays on Citrix's toolbar button).
 - Teams-specific keys.

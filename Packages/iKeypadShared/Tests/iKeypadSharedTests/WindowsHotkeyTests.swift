@@ -11,6 +11,7 @@ final class WindowsHotkeyTests: XCTestCase {
             (.windowsHotkey(key: "m", modifiers: [.shift, .ctrl]), "Ctrl+Shift+M"),
             (.windowsHotkey(key: "return", modifiers: [.ctrl]), "Ctrl+Enter"),
             (.windowsHotkey(key: "escape", modifiers: []), "Esc"),
+            (.windowsHotkey(key: "forwarddelete", modifiers: [.alt, .ctrl]), "Ctrl+Alt+Del"),
         ]
         for (action, hint) in cases {
             XCTAssertEqual(action.shortcutHint, hint)
@@ -27,7 +28,7 @@ final class WindowsHotkeyTests: XCTestCase {
     func testCitrixViewerLayout() throws {
         let citrix = try XCTUnwrap(DefaultProfiles.allDefaultProfiles().first { $0.appBundleIdentifier == "com.citrix.receiver.icaviewer.mac" })
         let expected: [(String, String)] = [
-            ("Start", "Win"), ("Task View", "Win+Tab"), ("File Explorer", "Win+E"), ("Show Desktop", "Win+D"), ("Lock", "Win+L"),
+            ("Start", "Win"), ("Ctrl+Alt+Del", "Ctrl+Alt+Del"), ("File Explorer", "Win+E"), ("Show Desktop", "Win+D"), ("Lock", "Win+L"),
             ("Switch App", "Alt+Tab"), ("Snap Left", "Win+←"), ("Snap Right", "Win+→"), ("Close App", "Alt+F4"), ("Save", "Ctrl+S"),
             ("New", "Ctrl+N"), ("New Email", "Ctrl+Shift+M"), ("Reply", "Ctrl+R"), ("Send", "Ctrl+Enter"), ("Undo", "Ctrl+Z"),
         ]
