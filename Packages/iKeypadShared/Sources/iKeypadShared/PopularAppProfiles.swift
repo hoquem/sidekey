@@ -1793,41 +1793,94 @@ extension DefaultProfiles {
     }
 
     /// Citrix Viewer (``com.citrix.receiver.icaviewer.mac``), the window of a Citrix session to a
-    /// remote Windows desktop. Sidekey cannot see which Windows app is in front inside the
-    /// session, so this one layout mixes Windows keys and Office keys. Win+Tab (Task View) is left
+    /// remote Windows desktop, as five modes: Windows, Outlook, Word, Excel and Teams. Sidekey
+    /// cannot see which Windows app is in front inside the session, so the bottom row of every
+    /// mode switches between them; the Mac remembers the mode and lights its key.
+    ///
+    /// Shortcuts from Microsoft's "Keyboard shortcuts in Windows" and the Windows shortcut pages
+    /// for classic Outlook, Word, Excel and Teams; Outlook's Delete uses Ctrl+D, and Teams' Chat
+    /// is the first app bar slot (Ctrl+1), both to be confirmed live. Win+Tab (Task View) is left
     /// out: macOS takes Command+Tab for its own app switcher before Citrix sees it (found live
-    /// 2026-10-08); Ctrl+Alt+Del, verified live the same day, takes its place. Shortcuts from Microsoft's
-    /// "Keyboard shortcuts in Windows" and "Keyboard shortcuts for Outlook" (classic Outlook for
-    /// New Email); Save and Undo are the standard Office shortcuts. Sent through
-    /// ``CitrixKeyMapper`` on the Mac, which assumes the Citrix keyboard settings it documents.
-    public static func makeCitrixViewerProfile() -> DeckProfile {
-        let keys: [(String, String, String, [WindowsModifier], KeyRole, Bool)] = [
-            ("Start", "square.grid.2x2", "win", [], .navigate, false),
-            ("Ctrl+Alt+Del", "lock.shield", "forwarddelete", [.ctrl, .alt], .navigate, false),
-            ("File Explorer", "folder", "e", [.win], .navigate, false),
-            ("Show Desktop", "menubar.dock.rectangle", "d", [.win], .navigate, false),
-            ("Lock", "lock", "l", [.win], .danger, true),
-            ("Switch App", "arrow.left.arrow.right.square", "tab", [.alt], .navigate, false),
-            ("Snap Left", "rectangle.lefthalf.filled", "left", [.win], .modify, false),
-            ("Snap Right", "rectangle.righthalf.filled", "right", [.win], .modify, false),
-            ("Close App", "xmark.square", "f4", [.alt], .danger, true),
-            ("Save", "square.and.arrow.down", "s", [.ctrl], .run, false),
-            ("New", "doc.badge.plus", "n", [.ctrl], .create, false),
-            ("New Email", "square.and.pencil", "m", [.ctrl, .shift], .create, false),
-            ("Reply", "arrowshape.turn.up.left", "r", [.ctrl], .create, false),
-            ("Send", "paperplane", "return", [.ctrl], .run, false),
-            ("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify, false),
+    /// 2026-10-08). Sent through ``CitrixKeyMapper`` on the Mac, which assumes the Citrix keyboard
+    /// settings it documents.
+    ///
+    /// :returns: The Windows mode first; it is the layout Citrix Viewer starts in.
+    public static func makeCitrixViewerProfiles() -> [DeckProfile] {
+        typealias Key = (label: String, icon: String, key: String, modifiers: [WindowsModifier], role: KeyRole, hold: Bool)
+        let bundle = "com.citrix.receiver.icaviewer.mac"
+        let modes: [(id: String, label: String, icon: String, keys: [Key])] = [
+            (bundle, "Windows", "macwindow", [
+                ("Start", "square.grid.2x2", "win", [], .navigate, false),
+                ("Ctrl+Alt+Del", "lock.shield", "forwarddelete", [.ctrl, .alt], .navigate, false),
+                ("File Explorer", "folder", "e", [.win], .navigate, false),
+                ("Show Desktop", "menubar.dock.rectangle", "d", [.win], .navigate, false),
+                ("Lock", "lock", "l", [.win], .danger, true),
+                ("Switch App", "arrow.left.arrow.right.square", "tab", [.alt], .navigate, false),
+                ("Snap Left", "rectangle.lefthalf.filled", "left", [.win], .modify, false),
+                ("Snap Right", "rectangle.righthalf.filled", "right", [.win], .modify, false),
+                ("Close App", "xmark.square", "f4", [.alt], .danger, true),
+                ("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify, false),
+            ]),
+            ("\(bundle).outlook", "Outlook", "envelope", [
+                ("New Email", "square.and.pencil", "m", [.ctrl, .shift], .create, false),
+                ("Reply", "arrowshape.turn.up.left", "r", [.ctrl], .create, false),
+                ("Reply All", "arrowshape.turn.up.left.2", "r", [.ctrl, .shift], .create, false),
+                ("Forward", "arrowshape.turn.up.right", "f", [.ctrl], .create, false),
+                ("Send", "paperplane", "return", [.ctrl], .run, false),
+                ("Mark Read", "envelope.open", "q", [.ctrl], .modify, false),
+                ("Mark Unread", "envelope.badge", "u", [.ctrl], .modify, false),
+                ("Delete", "trash", "d", [.ctrl], .danger, false),
+                ("Mail", "tray", "1", [.ctrl], .navigate, false),
+                ("Calendar", "calendar", "2", [.ctrl], .navigate, false),
+            ]),
+            ("\(bundle).word", "Word", "doc.text", [
+                ("Save", "square.and.arrow.down", "s", [.ctrl], .run, false),
+                ("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify, false),
+                ("Redo", "arrow.uturn.forward", "y", [.ctrl], .modify, false),
+                ("Bold", "bold", "b", [.ctrl], .modify, false),
+                ("Italic", "italic", "i", [.ctrl], .modify, false),
+                ("Underline", "underline", "u", [.ctrl], .modify, false),
+                ("Bullets", "list.bullet", "l", [.ctrl, .shift], .modify, false),
+                ("Find", "magnifyingglass", "f", [.ctrl], .navigate, false),
+                ("Comment", "text.bubble", "m", [.ctrl, .alt], .create, false),
+                ("Track Changes", "pencil.and.outline", "e", [.ctrl, .shift], .modify, false),
+            ]),
+            ("\(bundle).excel", "Excel", "tablecells", [
+                ("Save", "square.and.arrow.down", "s", [.ctrl], .run, false),
+                ("Undo", "arrow.uturn.backward", "z", [.ctrl], .modify, false),
+                ("AutoSum", "sum", "=", [.alt], .run, false),
+                ("Fill Down", "arrow.down.to.line", "d", [.ctrl], .modify, false),
+                ("Format Cells", "tablecells.badge.ellipsis", "1", [.ctrl], .modify, false),
+                ("Filter", "line.3.horizontal.decrease.circle", "l", [.ctrl, .shift], .modify, false),
+                ("Insert Cells", "plus.rectangle", "=", [.ctrl, .shift], .create, false),
+                ("Delete Cells", "minus.rectangle", "-", [.ctrl], .danger, false),
+                ("Edit Cell", "character.cursor.ibeam", "f2", [], .modify, false),
+                ("Today's Date", "calendar", ";", [.ctrl], .create, false),
+            ]),
+            ("\(bundle).teams", "Teams", "person.2", [
+                ("Mute", "mic.slash", "m", [.ctrl, .shift], .modify, false),
+                ("Video", "video", "o", [.ctrl, .shift], .modify, false),
+                ("Raise Hand", "hand.raised", "k", [.ctrl, .shift], .modify, false),
+                ("Share", "rectangle.on.rectangle", "e", [.ctrl, .shift], .run, false),
+                ("Leave", "phone.down.fill", "h", [.ctrl, .shift], .danger, true),
+                ("Accept Call", "phone.arrow.down.left", "s", [.ctrl, .shift], .run, false),
+                ("Decline", "phone.down.circle", "d", [.ctrl, .shift], .danger, false),
+                ("New Chat", "square.and.pencil", "n", [.ctrl], .create, false),
+                ("Search", "magnifyingglass", "e", [.ctrl], .navigate, false),
+                ("Chat", "bubble.left.and.bubble.right", "1", [.ctrl], .navigate, false),
+            ]),
         ]
-        return DeckProfile(
-            id: "com.citrix.receiver.icaviewer.mac",
-            appBundleIdentifier: "com.citrix.receiver.icaviewer.mac",
-            appName: "Citrix Viewer",
-            rows: 3,
-            columns: 5,
-            keys: keys.enumerated().map { index, key in
-                DeckKey(position: index, label: key.0, iconSystemName: key.1,
-                        action: .windowsHotkey(key: key.2, modifiers: key.3), role: key.4, requiresConfirm: key.5)
+        let modeRow = modes.enumerated().map { index, mode in
+            DeckKey(position: 10 + index, label: mode.label,
+                    iconSystemName: mode.icon, action: .switchProfile(profileId: mode.id), role: .navigate,
+                    toggleChipId: "mode.\(mode.id)")
+        }
+        return modes.map { mode in
+            let keys = mode.keys.enumerated().map { index, key in
+                DeckKey(position: index, label: key.label, iconSystemName: key.icon,
+                        action: .windowsHotkey(key: key.key, modifiers: key.modifiers), role: key.role, requiresConfirm: key.hold)
             }
-        )
+            return DeckProfile(id: mode.id, appBundleIdentifier: bundle, appName: "Citrix Viewer", rows: 3, columns: 5, keys: keys + modeRow)
+        }
     }
 }

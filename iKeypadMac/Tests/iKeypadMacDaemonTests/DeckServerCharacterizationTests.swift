@@ -159,6 +159,21 @@ final class DeckServerCharacterizationTests: XCTestCase {
         }
     }
 
+    func testTappingAModeKeySwitchesTheLayout() async throws {
+        let monitor = AppContextMonitor.shared
+        let citrix = "com.citrix.receiver.icaviewer.mac"
+        monitor.updateActiveApp(bundleId: citrix, appName: "Citrix Viewer")
+        defer {
+            _ = monitor.switchMode(to: citrix)
+            let front = NSWorkspace.shared.frontmostApplication
+            monitor.updateActiveApp(bundleId: front?.bundleIdentifier ?? "", appName: front?.localizedName ?? "")
+        }
+        let teamsKey = try XCTUnwrap(monitor.activeProfile.keys.first { $0.label == "Teams" })
+        let result = try await execute(keyId: teamsKey.id, profileId: citrix, pinned: false)
+        XCTAssertEqual(result.success, true)
+        XCTAssertEqual(monitor.activeProfile.id, "\(citrix).teams")
+    }
+
     /// A tap must name a layout; without one the Mac cannot know which key's action to run.
     func testTapWithoutALayoutIdIsRejected() async throws {
         let result = try await execute(keyId: "anything", profileId: nil, pinned: nil)
@@ -253,6 +268,40 @@ final class AppContextMonitorCharacterizationTests: XCTestCase {
         let frontmost = try XCTUnwrap(NSWorkspace.shared.frontmostApplication?.bundleIdentifier)
         let expected = AppContextMonitor.shared.profile(withId: frontmost)?.id ?? "default"
         XCTAssertEqual(AppContextMonitor.shared.activeProfile.id, expected)
+    }
+
+    func testModeKeysSwitchTheCitrixLayoutAndAreRemembered() throws {
+        let monitor = AppContextMonitor.shared
+        let citrix = "com.citrix.receiver.icaviewer.mac"
+        defer {
+            monitor.updateActiveApp(bundleId: citrix, appName: "Citrix Viewer")
+            XCTAssertTrue(monitor.switchMode(to: citrix))
+            let front = NSWorkspace.shared.frontmostApplication
+            monitor.updateActiveApp(bundleId: front?.bundleIdentifier ?? "", appName: front?.localizedName ?? "")
+        }
+        monitor.updateActiveApp(bundleId: citrix, appName: "Citrix Viewer")
+        XCTAssertEqual(monitor.activeProfile.id, citrix, "Windows mode first")
+
+        XCTAssertTrue(monitor.switchMode(to: "\(citrix).outlook"))
+        XCTAssertEqual(monitor.activeProfile.id, "\(citrix).outlook")
+
+        monitor.updateActiveApp(bundleId: "com.apple.Terminal", appName: "Terminal")
+        XCTAssertFalse(monitor.switchMode(to: "\(citrix).word"), "a mode of another app cannot be chosen")
+        XCTAssertEqual(monitor.activeProfile.id, "com.apple.Terminal")
+
+        monitor.updateActiveApp(bundleId: citrix, appName: "Citrix Viewer")
+        XCTAssertEqual(monitor.activeProfile.id, "\(citrix).outlook", "the mode is remembered")
+    }
+
+    func testTheActiveModeIsAnnouncedAsALitChip() throws {
+        let outlook = try XCTUnwrap(AppContextMonitor.shared.profile(withId: "com.citrix.receiver.icaviewer.mac.outlook"))
+        let chip = try XCTUnwrap(AppContextMonitor.modeChip(for: outlook))
+        XCTAssertEqual(chip.id, "mode.com.citrix.receiver.icaviewer.mac.outlook")
+        XCTAssertEqual(chip.label, "Outlook mode")
+        XCTAssertEqual(chip.tone, .warn, "attention tones light the bound key on the iPad")
+        XCTAssertEqual(chip.isOn, true)
+        let terminal = try XCTUnwrap(AppContextMonitor.shared.profile(withId: "com.apple.Terminal"))
+        XCTAssertNil(AppContextMonitor.modeChip(for: terminal), "apps without modes get no chip")
     }
 
     func testCurrentContextDescribesTheFrontmostAppWithItsIcon() throws {

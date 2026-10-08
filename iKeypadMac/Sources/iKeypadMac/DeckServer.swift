@@ -173,6 +173,13 @@ public final class DeckServer: ObservableObject {
             case .failure(let rejection):
                 send(message: .actionExecuted(keyId: keyId, success: false, errorMessage: rejection.reason), over: connection)
             case .success(let target):
+                if case .switchProfile(let modeId) = target.action {
+                    // Switching mode changes what the Mac shows; nothing is sent to the app.
+                    let switched = AppContextMonitor.shared.switchMode(to: modeId)
+                    send(message: .actionExecuted(keyId: keyId, success: switched,
+                                                  errorMessage: switched ? nil : "That mode isn't available for the app in front."), over: connection)
+                    return
+                }
                 fire(target.action, keyId: keyId, after: target.delay, over: connection)
             }
 
