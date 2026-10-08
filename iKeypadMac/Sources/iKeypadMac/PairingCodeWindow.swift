@@ -38,7 +38,7 @@ private struct PairingCodeView: View {
 
     var body: some View {
         VStack(spacing: 18) {
-            Text("Enter this code on your iPad")
+            Text("Enter this code on your iPad or iPhone")
                 .font(.title3.weight(.semibold))
             if let code = pairing.code {
                 Text("\(String(code.prefix(3))) \(String(code.suffix(3)))")
@@ -55,7 +55,7 @@ private struct PairingCodeView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            Text("In Sidekey on the iPad, type the code and tap Pair.")
+            Text("In Sidekey on your iPad or iPhone, type the code and tap Pair.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
             Button("Stop Pairing", action: onStop)

@@ -223,7 +223,7 @@ struct NowControllingView: View {
     private func help(at now: Date) -> String? {
         switch client.phase {
         case .searching(let since) where now.timeIntervalSince(since) >= Self.setupHintDelay:
-            return "Open Sidekey on your Mac, then connect this iPad with a USB cable or join the same Wi-Fi network."
+            return "Open Sidekey on your Mac, then connect this \(UIDevice.current.model) with a USB cable or join the same Wi-Fi network."
         case .reconnecting:
             return "Keys are paused until the Mac is back."
         default:
