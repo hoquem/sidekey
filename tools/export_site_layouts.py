@@ -70,7 +70,7 @@ def render(site_id, layout):
         hint = f"Hold · {key['shortcut'] or ''}" if key["hold"] else (key["shortcut"] or "Runs on Mac")
         cells.append(f'<div class="mini-key" role="listitem" data-role="{key["role"]}">'
                      f'<b>{html.escape(key["label"])}</b><span>{html.escape(hint)}</span></div>')
-    return (f"<!-- layout:{site_id} -->\n          <p>When {html.escape(names)} is in front, the iPad shows these keys "
+    return (f"<!-- layout:{site_id} -->\n          <p>When {html.escape(names)} is in front, Sidekey shows these keys "
             f"and the shortcut each one sends.</p>\n          <div class=\"mini-deck\" role=\"list\">"
             + "".join(cells) + "</div>\n          <!-- /layout -->")
 
