@@ -371,8 +371,14 @@ final class ActionDispatcherTests: XCTestCase {
     func testEveryBuiltInHotkeyMapsToAKeyCode() {
         for profile in DefaultProfiles.allDefaultProfiles() {
             for key in profile.keys {
-                guard case .hotkey(let name, _) = key.action else { continue }
-                XCTAssertNotNil(ActionDispatcher.shared.keyCodeForString(name), "\(profile.appName) › \(key.label) uses unknown key \"\(name)\"")
+                switch key.action {
+                case .hotkey(let name, _):
+                    XCTAssertNotNil(ActionDispatcher.shared.keyCodeForString(name), "\(profile.appName) › \(key.label) uses unknown key \"\(name)\"")
+                case .windowsHotkey(let name, let modifiers):
+                    XCTAssertNoThrow(try CitrixKeyMapper.chord(key: name, modifiers: modifiers), "\(profile.appName) › \(key.label) uses unknown key \"\(name)\"")
+                default:
+                    continue
+                }
             }
         }
     }

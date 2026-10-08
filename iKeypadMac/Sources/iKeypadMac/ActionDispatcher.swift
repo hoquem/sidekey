@@ -13,6 +13,13 @@ public final class ActionDispatcher {
         case .hotkey(let key, let modifiers):
             return triggerHotkey(key: key, modifiers: modifiers)
 
+        case .windowsHotkey(let key, let modifiers):
+            do {
+                return triggerChord(try CitrixKeyMapper.chord(key: key, modifiers: modifiers))
+            } catch {
+                return (false, "Unrecognized key character: \(key)")
+            }
+
         case .appleScript(let script):
             return executeAppleScript(script)
 
@@ -62,6 +69,31 @@ public final class ActionDispatcher {
         keyUp.post(tap: .cghidEventTap)
 
         return (true, nil)
+    }
+
+    /// Post a chord as a keyboard would: each modifier key down, the key, then modifiers up.
+    ///
+    /// Remote-desktop apps such as Citrix Viewer read the modifier keys themselves (including
+    /// which side was pressed), so flags on the main key alone are not enough.
+    private func triggerChord(_ chord: KeyChord) -> (Bool, String?) {
+        guard AXIsProcessTrusted() else {
+            return (false, "Allow Sidekey in System Settings › Privacy & Security › Accessibility on your Mac.")
+        }
+        let source = CGEventSource(stateID: .hidSystemState)
+        func post(_ code: CGKeyCode, down: Bool, flags: CGEventFlags) -> Bool {
+            guard let event = CGEvent(keyboardEventSource: source, virtualKey: code, keyDown: down) else { return false }
+            event.flags = flags
+            event.post(tap: .cghidEventTap)
+            usleep(20_000)
+            return true
+        }
+        var ok = chord.modifierKeys.allSatisfy { post($0, down: true, flags: chord.flags) }
+        if let key = chord.keyCode {
+            ok = ok && post(key, down: true, flags: chord.flags) && post(key, down: false, flags: chord.flags)
+        }
+        // Release in reverse even after a failure, so no modifier is left held down.
+        for code in chord.modifierKeys.reversed() { ok = post(code, down: false, flags: []) && ok }
+        return ok ? (true, nil) : (false, "Failed to create CGEvent keyboard events")
     }
 
     private func executeAppleScript(_ scriptText: String) -> (Bool, String?) {
