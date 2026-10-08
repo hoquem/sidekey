@@ -81,5 +81,6 @@ To test:
 Without the Mac app running, the iPad shows "Looking for your Mac…" and setup instructions after a few seconds; this is expected.
 Source code: https://github.com/hoquem/sidekey
 
-## Screenshots (13-inch iPad, 2064 x 2752 portrait / 2752 x 2064 landscape)
-See appstore/screenshots/.
+## Screenshots
+- 13-inch iPad (2064 x 2752 portrait / 2752 x 2064 landscape): appstore/screenshots/.
+- 6.9-inch iPhone (1320 x 2868 portrait): appstore/screenshots/iphone/ (Citrix, Xcode, Cursor, Chrome). The Citrix shot has the remote desktop's name covered.
