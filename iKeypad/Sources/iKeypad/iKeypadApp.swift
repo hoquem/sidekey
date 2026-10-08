@@ -5,6 +5,9 @@ import UIKit
 @main
 struct iKeypadApp: App {
     @StateObject private var client = DeckClient.shared
+    @Environment(\.scenePhase) private var scenePhase
+    /// While the app is open, look again for the Mac if the search has gone quiet.
+    private let discoveryWatchdog = Timer.publish(every: 15, on: .main, in: .common).autoconnect()
 
     var body: some Scene {
         WindowGroup {
@@ -14,6 +17,13 @@ struct iKeypadApp: App {
                 .preferredColorScheme(.dark)
                 .onAppear {
                     client.startDiscovery()
+                }
+                .onChange(of: scenePhase) { phase in
+                    // Bonjour browsing may have died while the app was suspended.
+                    if phase == .active { client.restartDiscoveryIfIdle() }
+                }
+                .onReceive(discoveryWatchdog) { _ in
+                    client.restartDiscoveryIfIdle()
                 }
         }
     }
