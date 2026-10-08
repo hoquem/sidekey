@@ -173,3 +173,12 @@ footer nav { display: flex; flex-wrap: wrap; gap: 18px; }
 @media (prefers-reduced-motion: reduce) {
   .key, .js .panel.shown { transition: none; animation: none; }
 }
+
+/* Press kit */
+.doc .lede { font-size: clamp(18px, 2.2vw, 20px); color: var(--secondary); max-width: var(--measure); }
+.doc .shots { list-style: none; padding: 0; margin: 16px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: var(--gap); max-width: none; }
+.doc .shots li { max-width: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.doc .shots img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--hairline); background: var(--well); }
+.doc .shots a:hover img { border-color: rgba(255, 176, 32, 0.6); }
+.doc .icon-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.doc .icon-row img { border-radius: 22%; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); }
