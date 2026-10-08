@@ -80,7 +80,7 @@ public final class DeckClient: ObservableObject {
     /// Name of the Mac this iPad paired with, if any.
     public var pairedMacName: String? { credentials.pairedHostName }
 
-    /// Send the 6-digit code shown in the Mac's Sidekey menu.
+    /// Send the 6-digit code shown in the Mac's Pair iPad window.
     public func submitPairingCode(_ code: String) {
         let digits = code.filter(\.isNumber)
         send(message: .pair(code: digits, clientId: credentials.clientId, clientName: UIDevice.current.name))

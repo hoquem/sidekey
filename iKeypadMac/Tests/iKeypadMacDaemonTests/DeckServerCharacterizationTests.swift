@@ -114,7 +114,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
         _ = try await client.receive(until: { !$0.isEmpty })
         try client.send(.pair(code: wrong, clientId: "x", clientName: "X"))
         let messages = try await client.receive(until: { $0.contains(where: Self.isPairFailure) })
-        XCTAssertTrue(messages.contains(.pairingFailed(reason: "That code is wrong. Check the code in the Sidekey menu on your Mac.")), "got \(messages)")
+        XCTAssertTrue(messages.contains(.pairingFailed(reason: "That code is wrong. Check the code in the Pair iPad window on your Mac.")), "got \(messages)")
         XCTAssertNil(Self.store.token(for: "x"))
     }
 

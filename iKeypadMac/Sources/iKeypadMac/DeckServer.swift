@@ -7,7 +7,7 @@ import iKeypadShared
 /// Serves layouts and app state to paired iPads and runs their taps.
 ///
 /// Every connection starts unauthenticated and receives only a ``DeckMessage/challenge``. It
-/// becomes authenticated by pairing with the code shown in the menu or by proving a stored
+/// becomes authenticated by pairing with the code shown in the Pair iPad window or by proving a stored
 /// token; only then does it receive layouts and app state, and only then are its taps run.
 @MainActor
 public final class DeckServer: ObservableObject {
@@ -213,7 +213,7 @@ public final class DeckServer: ObservableObject {
                 send(message: .pairingFailed(reason: "The Mac couldn't save the pairing. Try again."), over: connection)
             }
         case .wrong:
-            send(message: .pairingFailed(reason: "That code is wrong. Check the code in the Sidekey menu on your Mac."), over: connection)
+            send(message: .pairingFailed(reason: "That code is wrong. Check the code in the Pair iPad window on your Mac."), over: connection)
         case .closed:
             send(message: .pairingFailed(reason: "Pairing isn't open. On your Mac, choose Pair iPad in the Sidekey menu to get a code."), over: connection)
         }

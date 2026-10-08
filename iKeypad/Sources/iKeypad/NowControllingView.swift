@@ -221,7 +221,7 @@ struct ChipView: View {
     }
 }
 
-/// Asks for the 6-digit code the Mac shows under Pair iPad in its Sidekey menu.
+/// Asks for the 6-digit code the Mac shows in its Pair iPad window.
 private struct PairingPrompt: View {
     @EnvironmentObject private var client: DeckClient
     let hostName: String?
