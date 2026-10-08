@@ -67,7 +67,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
             let client = try await TestClient.connect(port: Self.port)
             try client.send(.executeAction(keyId: profile.keys[1].id, profileId: profile.id, pinned: false))
             let messages = try await client.receive(until: { $0.contains(where: Self.isResult(for: profile.keys[1].id)) })
-            XCTAssertTrue(messages.contains(.actionExecuted(keyId: profile.keys[1].id, success: false, errorMessage: "Pair this iPad with your Mac first.")), "got \(messages)")
+            XCTAssertTrue(messages.contains(.actionExecuted(keyId: profile.keys[1].id, success: false, errorMessage: "Pair this device with your Mac first.")), "got \(messages)")
             try await Task.sleep(nanoseconds: 300_000_000)
             XCTAssertFalse(FileManager.default.fileExists(atPath: marker.path), "unpaired tap ran")
         }
@@ -114,7 +114,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
         _ = try await client.receive(until: { !$0.isEmpty })
         try client.send(.pair(code: wrong, clientId: "x", clientName: "X"))
         let messages = try await client.receive(until: { $0.contains(where: Self.isPairFailure) })
-        XCTAssertTrue(messages.contains(.pairingFailed(reason: "That code is wrong. Check the code in the Pair iPad window on your Mac.")), "got \(messages)")
+        XCTAssertTrue(messages.contains(.pairingFailed(reason: "That code is wrong. Check the code in the Pair Device window on your Mac.")), "got \(messages)")
         XCTAssertNil(Self.store.token(for: "x"))
     }
 
@@ -123,7 +123,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
         _ = try await client.receive(until: { !$0.isEmpty })
         try client.send(.pair(code: "123456", clientId: "x", clientName: "X"))
         let messages = try await client.receive(until: { $0.contains(where: Self.isPairFailure) })
-        XCTAssertTrue(messages.contains(.pairingFailed(reason: "Pairing isn't open. On your Mac, choose Pair iPad in the Sidekey menu to get a code.")), "got \(messages)")
+        XCTAssertTrue(messages.contains(.pairingFailed(reason: "Pairing isn't open. On your Mac, choose Pair Device in the Sidekey menu to get a code.")), "got \(messages)")
     }
 
     private static func isAuthFailure(_ m: DeckMessage) -> Bool { if case .authenticationFailed = m { return true }; return false }
@@ -163,7 +163,7 @@ final class DeckServerCharacterizationTests: XCTestCase {
     func testTapWithoutALayoutIdIsRejected() async throws {
         let result = try await execute(keyId: "anything", profileId: nil, pinned: nil)
         XCTAssertEqual(result.success, false)
-        XCTAssertEqual(result.error, "Update Sidekey on your iPad.")
+        XCTAssertEqual(result.error, "Update Sidekey on this device.")
     }
 
     /// Security: the Mac runs the action from its own layout. An action smuggled into the tap by

@@ -221,7 +221,7 @@ struct ChipView: View {
     }
 }
 
-/// Asks for the 6-digit code the Mac shows in its Pair iPad window.
+/// Asks for the 6-digit code the Mac shows in its Pair Device window.
 private struct PairingPrompt: View {
     @EnvironmentObject private var client: DeckClient
     let hostName: String?
@@ -237,7 +237,7 @@ private struct PairingPrompt: View {
             Text("Pair with \(hostName ?? "your Mac")")
                 .font(isColumn ? .title2.weight(.bold) : .title3.weight(.bold))
                 .foregroundStyle(DeckTheme.label)
-            Text("On your Mac, open the Sidekey menu and choose Pair iPad. Enter the code it shows.")
+            Text("On your Mac, open the Sidekey menu and choose Pair Device. Enter the code it shows.")
                 .font(.subheadline)
                 .foregroundStyle(DeckTheme.secondaryLabel)
                 .fixedSize(horizontal: false, vertical: true)

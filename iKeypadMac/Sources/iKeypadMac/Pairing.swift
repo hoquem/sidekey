@@ -67,7 +67,7 @@ final class InMemoryPairedDeviceStore: PairedDeviceStore {
 
 /// The short window in which the Mac accepts a pairing code.
 ///
-/// The code exists only after the user chooses Pair iPad in the menu, lasts ``lifetime``
+/// The code exists only after the user chooses Pair Device in the menu, lasts ``lifetime``
 /// seconds, and closes after ``maxAttempts`` wrong guesses across all connections, so it cannot
 /// be brute-forced.
 @MainActor
