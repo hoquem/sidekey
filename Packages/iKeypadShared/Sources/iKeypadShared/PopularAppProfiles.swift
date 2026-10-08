@@ -1793,13 +1793,14 @@ extension DefaultProfiles {
     }
 
     /// Citrix Viewer (``com.citrix.receiver.icaviewer.mac``), the window of a Citrix session to a
-    /// remote Windows desktop, as five modes: Windows, Outlook, Word, Excel and Teams. Sidekey
+    /// remote Windows desktop, as five modes: Windows, Outlook, Word, Excel and More (Teams call
+    /// keys over browser keys for Chrome and Edge). Sidekey
     /// cannot see which Windows app is in front inside the session, so the bottom row of every
     /// mode switches between them; the Mac remembers the mode and lights its key.
     ///
     /// Shortcuts from Microsoft's "Keyboard shortcuts in Windows" and the Windows shortcut pages
-    /// for classic Outlook, Word, Excel and Teams; Outlook's Delete uses Ctrl+D, and Teams' Chat
-    /// is the first app bar slot (Ctrl+1), both to be confirmed live. Win+Tab (Task View) is left
+    /// for classic Outlook, Word, Excel and Teams, and Chrome's and Edge's shared tab shortcuts;
+    /// Outlook's Delete uses Ctrl+D, to be confirmed live. Win+Tab (Task View) is left
     /// out: macOS takes Command+Tab for its own app switcher before Citrix sees it (found live
     /// 2026-10-08). Sent through ``CitrixKeyMapper`` on the Mac, which assumes the Citrix keyboard
     /// settings it documents.
@@ -1857,17 +1858,17 @@ extension DefaultProfiles {
                 ("Edit Cell", "character.cursor.ibeam", "f2", [], .modify, false),
                 ("Today's Date", "calendar", ";", [.ctrl], .create, false),
             ]),
-            ("\(bundle).teams", "Teams", "person.2", [
+            ("\(bundle).more", "More", "ellipsis.circle", [
                 ("Mute", "mic.slash", "m", [.ctrl, .shift], .modify, false),
                 ("Video", "video", "o", [.ctrl, .shift], .modify, false),
                 ("Raise Hand", "hand.raised", "k", [.ctrl, .shift], .modify, false),
                 ("Share", "rectangle.on.rectangle", "e", [.ctrl, .shift], .run, false),
                 ("Leave", "phone.down.fill", "h", [.ctrl, .shift], .danger, true),
-                ("Accept Call", "phone.arrow.down.left", "s", [.ctrl, .shift], .run, false),
-                ("Decline", "phone.down.circle", "d", [.ctrl, .shift], .danger, false),
-                ("New Chat", "square.and.pencil", "n", [.ctrl], .create, false),
-                ("Search", "magnifyingglass", "e", [.ctrl], .navigate, false),
-                ("Chat", "bubble.left.and.bubble.right", "1", [.ctrl], .navigate, false),
+                ("New Tab", "plus.square", "t", [.ctrl], .create, false),
+                ("Close Tab", "xmark.square", "w", [.ctrl], .danger, false),
+                ("Reopen Tab", "arrow.uturn.backward.square", "t", [.ctrl, .shift], .create, false),
+                ("Reload", "arrow.clockwise", "r", [.ctrl], .run, false),
+                ("Address Bar", "link", "l", [.ctrl], .navigate, false),
             ]),
         ]
         let modeRow = modes.enumerated().map { index, mode in

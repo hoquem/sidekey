@@ -30,11 +30,11 @@ final class WindowsHotkeyTests: XCTestCase {
     func testCitrixViewerHasFiveModesWithWindowsFirst() {
         let modes = DefaultProfiles.allDefaultProfiles().filter { $0.appBundleIdentifier == citrixBundle }
         XCTAssertEqual(modes.map(\.id), [citrixBundle, "\(citrixBundle).outlook", "\(citrixBundle).word",
-                                          "\(citrixBundle).excel", "\(citrixBundle).teams"])
+                                          "\(citrixBundle).excel", "\(citrixBundle).more"])
         for mode in modes {
             XCTAssertEqual(mode.keys.count, 15, mode.id)
             let modeRow = mode.keys.filter { $0.position >= 10 }.sorted { $0.position < $1.position }
-            XCTAssertEqual(modeRow.map(\.label), ["Windows", "Outlook", "Word", "Excel", "Teams"], mode.id)
+            XCTAssertEqual(modeRow.map(\.label), ["Windows", "Outlook", "Word", "Excel", "More"], mode.id)
             XCTAssertEqual(modeRow.map(\.action), modes.map { .switchProfile(profileId: $0.id) }, mode.id)
             XCTAssertEqual(modeRow.map(\.toggleChipId), modes.map { "mode.\($0.id)" }, mode.id)
         }
@@ -50,10 +50,10 @@ final class WindowsHotkeyTests: XCTestCase {
                                      ("Underline", "Ctrl+U"), ("Bullets", "Ctrl+Shift+L"), ("Find", "Ctrl+F"), ("Comment", "Ctrl+Alt+M"), ("Track Changes", "Ctrl+Shift+E")],
             "\(citrixBundle).excel": [("Save", "Ctrl+S"), ("Undo", "Ctrl+Z"), ("AutoSum", "Alt+="), ("Fill Down", "Ctrl+D"), ("Format Cells", "Ctrl+1"),
                                       ("Filter", "Ctrl+Shift+L"), ("Insert Cells", "Ctrl+Shift+="), ("Delete Cells", "Ctrl+-"), ("Edit Cell", "F2"), ("Today's Date", "Ctrl+;")],
-            "\(citrixBundle).teams": [("Mute", "Ctrl+Shift+M"), ("Video", "Ctrl+Shift+O"), ("Raise Hand", "Ctrl+Shift+K"), ("Share", "Ctrl+Shift+E"), ("Leave", "Ctrl+Shift+H"),
-                                      ("Accept Call", "Ctrl+Shift+S"), ("Decline", "Ctrl+Shift+D"), ("New Chat", "Ctrl+N"), ("Search", "Ctrl+E"), ("Chat", "Ctrl+1")],
+            "\(citrixBundle).more": [("Mute", "Ctrl+Shift+M"), ("Video", "Ctrl+Shift+O"), ("Raise Hand", "Ctrl+Shift+K"), ("Share", "Ctrl+Shift+E"), ("Leave", "Ctrl+Shift+H"),
+                                     ("New Tab", "Ctrl+T"), ("Close Tab", "Ctrl+W"), ("Reopen Tab", "Ctrl+Shift+T"), ("Reload", "Ctrl+R"), ("Address Bar", "Ctrl+L")],
         ]
-        let holds: [String: [String]] = [citrixBundle: ["Lock", "Close App"], "\(citrixBundle).teams": ["Leave"]]
+        let holds: [String: [String]] = [citrixBundle: ["Lock", "Close App"], "\(citrixBundle).more": ["Leave"]]
         for (id, keys) in expected {
             let mode = try XCTUnwrap(DefaultProfiles.allDefaultProfiles().first { $0.id == id }, id)
             let top = mode.keys.filter { $0.position < 10 }.sorted { $0.position < $1.position }

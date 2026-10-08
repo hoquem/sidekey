@@ -168,10 +168,10 @@ final class DeckServerCharacterizationTests: XCTestCase {
             let front = NSWorkspace.shared.frontmostApplication
             monitor.updateActiveApp(bundleId: front?.bundleIdentifier ?? "", appName: front?.localizedName ?? "")
         }
-        let teamsKey = try XCTUnwrap(monitor.activeProfile.keys.first { $0.label == "Teams" })
-        let result = try await execute(keyId: teamsKey.id, profileId: citrix, pinned: false)
+        let moreKey = try XCTUnwrap(monitor.activeProfile.keys.first { $0.label == "More" })
+        let result = try await execute(keyId: moreKey.id, profileId: citrix, pinned: false)
         XCTAssertEqual(result.success, true)
-        XCTAssertEqual(monitor.activeProfile.id, "\(citrix).teams")
+        XCTAssertEqual(monitor.activeProfile.id, "\(citrix).more")
     }
 
     /// A tap must name a layout; without one the Mac cannot know which key's action to run.
