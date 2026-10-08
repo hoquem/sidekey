@@ -1,6 +1,6 @@
 # Spec: Citrix Viewer layout
 
-Status: approved design, 2026-10-08. Not built yet.
+Status: built on branch citrix-layout-and-pairing, 2026-10-08; ships in Mac 1.3.0 and iPad build 5.
 
 ## Goal
 

@@ -25,16 +25,16 @@
         <li><strong>Allow Accessibility.</strong> macOS asks the first time. Switch Sidekey on in System Settings › Privacy &amp; Security › Accessibility.</li>
         <li><strong>Open Sidekey on your iPad</strong> and allow it to find devices on your local network.</li>
         <li><strong>Connect the two.</strong> Plug the iPad into the Mac with a USB cable, or put both on the same Wi-Fi network.</li>
-        <li><strong>Pair once.</strong> On the Mac, choose <strong>Pair iPad...</strong> in the Sidekey menu. A window shows a 6-digit code for two minutes. Type it on the iPad and tap Pair. From then on the iPad connects to that Mac by itself, and the top of the iPad shows the Mac's name and whether the link is USB or Wi-Fi.</li>
+        <li><strong>Pair once.</strong> On the Mac, choose <strong>Pair Device...</strong> in the Sidekey menu. A window shows a 6-digit code for two minutes. Type it on the iPad and tap Pair. From then on the iPad connects to that Mac by itself, and the top of the iPad shows the Mac's name and whether the link is USB or Wi-Fi.</li>
       </ol>
 
       <h2>Pairing</h2>
       <ul>
         <li>Until an iPad is paired, the Mac sends it only its name and a pairing request, and runs none of its taps.</li>
-        <li>If the iPad says the code is wrong, check the code in the Mac's Pair iPad window. After five wrong codes, or two minutes, choose Pair iPad again for a new code.</li>
+        <li>If the iPad says the code is wrong, check the code in the Mac's Pair Device window. After five wrong codes, or two minutes, choose Pair Device again for a new code.</li>
         <li>To pair with a different Mac, press and hold the connection label on the iPad while it is connected and choose Forget This Mac. If the old Mac is no longer available, delete and reinstall Sidekey on the iPad.</li>
-        <li>To revoke access, choose Forget Paired iPads in the Mac's Sidekey menu. This removes every paired iPad from that Mac; Forget This Mac on the iPad only removes the iPad's copy.</li>
-        <li>Traffic between the iPad and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends and, by capturing the pairing exchange, press your Mac's built-in keys until you choose Forget Paired iPads. Use Sidekey over USB or on a network you trust.</li>
+        <li>To revoke access, choose Forget Paired Devices in the Mac's Sidekey menu. This removes every paired iPad from that Mac; Forget This Mac on the iPad only removes the iPad's copy.</li>
+        <li>Traffic between the iPad and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends and, by capturing the pairing exchange, press your Mac's built-in keys until you choose Forget Paired Devices. Use Sidekey over USB or on a network you trust.</li>
       </ul>
 
       <h2>The iPad keeps looking for your Mac</h2>
@@ -57,7 +57,17 @@
       <p>The app in front of the Mac changed between you looking at the key and tapping it. Sidekey refuses to send a shortcut meant for one app to another. Tap the key again on the new layout, or pin a layout with the pin button so it stays put while you switch apps.</p>
 
       <h2>Some keys need a press and hold</h2>
-      <p>Keys that interrupt what you are doing, such as Lock Mac, Interrupt, End Call, Telegram Lock and Xcode Clean, fire only after you hold them for just over half a second. A short tap shows a reminder instead.</p>
+      <p>Keys that interrupt what you are doing, such as Lock Mac, Interrupt, End Call, Telegram Lock, Xcode Clean, and Citrix Viewer's Lock and Close App, fire only after you hold them for just over half a second. A short tap shows a reminder instead.</p>
+
+      <h2>Citrix Viewer</h2>
+      <p>With a Citrix session in front, Sidekey shows Windows keys such as Start, File Explorer, Ctrl+S and Alt+F4 and sends them into the session. Citrix turns Mac keys into Windows keys according to its own settings, so the layout needs these in Citrix Viewer › Settings › Keyboard:</p>
+      <ul>
+        <li>Send Control character using: Command (left) or Control.</li>
+        <li>Send Alt character using: Command (left)-Option.</li>
+        <li>Send Windows logo key using Command (right): on.</li>
+        <li>Send F1 - F12 keys with Option: on.</li>
+      </ul>
+      <p>With other settings the Alt, Windows and function keys send the wrong shortcut. Sidekey cannot see which Windows app is in front inside the session, so one layout covers the whole session. The Citrix layout needs Sidekey for Mac 1.3.0 or later and iPad build 5 or later; older iPad builds keep showing the previous layout while Citrix is in front.</p>
 
       <h2>Do Not Disturb does nothing</h2>
       <p>The Do Not Disturb key runs a shortcut named Toggle Focus. Create a shortcut with that name in the Shortcuts app on your Mac, for example one that turns a Focus on or off.</p>
