@@ -1,6 +1,6 @@
 # Plan: Sidekey for Windows
 
-Status: approved 2026-10-07; VM software chosen (UTM). Nothing here is built yet.
+Status: paused 2026-10-08. Nothing here is built yet. The Windows build and testing will run on a family member's Windows PC instead of a VM on this Mac; the VM section below is kept for reference only.
 
 ## Goal
 
