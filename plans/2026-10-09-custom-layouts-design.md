@@ -106,8 +106,14 @@ errors..." and the editor lists each file with its reason. Nothing is silently s
 
 ## Edge cases
 
-- **Built-in layout removed in a later release:** its customisation is kept, resolved on an
-  empty base, and flagged as orphaned in the editor.
+- **Built-in layout removed in a later release:** if the app has no built-in layout left, the
+  file keeps working as that app's own layout (an empty base). If the app still has a built-in
+  layout under another id, the validator refuses the file and says which layout id to customise
+  instead. (Changed while planning, 2026-10-09: no separate "orphaned" state is needed.)
+- **Built-in keys with script actions** (4 in the System layout): user layouts cannot hold
+  shell or AppleScript actions, so these keys can be replaced or removed but not edited or moved.
+- **Editing a built-in key that shows live state** (for example Zoom's mute, through
+  `toggleChipId`): the edited copy no longer lights with that state. The inspector says so.
 - **Two files for the same layout id:** impossible by naming; the file name is the layout id.
   A file whose name does not match its `layoutId` is rejected.
 - **Fallback (System) layout:** customisable like any other, by its id.
@@ -133,8 +139,9 @@ errors..." and the editor lists each file with its reason. Nothing is silently s
 - **Grid:** the resolved layout in landscape order (3 rows by 5 columns) with role colours, and a
   small portrait preview (the iPad keeps reading order in portrait, `iKeypadApp.swift`
   `keyGrid`). Click to select; drag to move or swap.
-- **Key inspector:** label; icon from a searchable list of about 150 curated SF Symbols (macOS
-  has no public API listing them); colour as one of the five roles; action type; hold-to-fire.
+- **Key inspector:** label; icon from a searchable list of SF Symbols: every symbol the built-in
+  layouts use (216 on 2026-10-09) plus a curated set of common extras (macOS has no public API
+  listing them); colour as one of the five roles; action type; hold-to-fire.
   - Keyboard shortcut: **Record** captures the next key press. macOS keeps some combinations
     (Command-Tab, Command-Space), so a key menu plus modifier checkboxes is the fallback, with a
     warning when the shortcut matches a system one.
