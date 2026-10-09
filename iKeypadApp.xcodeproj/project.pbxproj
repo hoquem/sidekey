@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		02DA989E3EF732004143158E /* PairingCodeWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609308EB61815D710AD1107 /* PairingCodeWindow.swift */; };
 		108BC765C39C8879E2B6DAC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78649CBB69AC98598A9A5736 /* Assets.xcassets */; };
+		1730F78C3AEABA332FD0EB5E /* UserLayoutStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856575F99F0F0B52FA92C733 /* UserLayoutStore.swift */; };
 		20C1670D9C43FF7A5002A548 /* DeckClientReconnectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347F366216B568BEC636A298 /* DeckClientReconnectTests.swift */; };
 		22E0C4AE2AE8FB82CC902980 /* DeckClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6876AAE119F49D350E6A3542 /* DeckClient.swift */; };
 		4E08DA389DAA37612D3CBD48 /* DeckClientCharacterizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 352E2A3C6D0EE3B3B41DD60E /* DeckClientCharacterizationTests.swift */; };
@@ -55,6 +56,7 @@
 		6F373BB288407BA133B72DD2 /* iKeypadTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = iKeypadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71192AD8239744B4140C2154 /* iKeypad.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iKeypad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78649CBB69AC98598A9A5736 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		856575F99F0F0B52FA92C733 /* UserLayoutStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLayoutStore.swift; sourceTree = "<group>"; };
 		8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckKeyView.swift; sourceTree = "<group>"; };
 		948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRotaryDialView.swift; sourceTree = "<group>"; };
 		9609308EB61815D710AD1107 /* PairingCodeWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCodeWindow.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				DF6B4B27F453E61A8F0E4048 /* LayoutValidator.swift */,
 				E7A8E3E2C7DDB3D8690FC16E /* Pairing.swift */,
 				9609308EB61815D710AD1107 /* PairingCodeWindow.swift */,
+				856575F99F0F0B52FA92C733 /* UserLayoutStore.swift */,
 			);
 			name = iKeypadMac;
 			path = iKeypadMac/Sources/iKeypadMac;
@@ -331,6 +334,7 @@
 				6AC58A2F58E527785AA20DD6 /* LayoutValidator.swift in Sources */,
 				F2BD1E5D33B7071F93857C45 /* Pairing.swift in Sources */,
 				02DA989E3EF732004143158E /* PairingCodeWindow.swift in Sources */,
+				1730F78C3AEABA332FD0EB5E /* UserLayoutStore.swift in Sources */,
 				5EC070841EA09B30DF8A3867 /* iKeypadMacApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
