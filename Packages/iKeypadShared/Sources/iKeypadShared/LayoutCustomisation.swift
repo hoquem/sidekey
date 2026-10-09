@@ -4,7 +4,7 @@ import Foundation
 /// the Mac. Slots not listed keep the base layout's key: the built-in layout with the same id, or
 /// nothing for an app Sidekey has no layout for. See ``LayoutResolver``.
 public struct LayoutCustomisation: Codable, Equatable, Sendable {
-    /// The only format this build reads; a file with another version is rejected, never guessed at.
+    /// The only format this build reads; ``LayoutValidator`` on the Mac rejects a file with any other version rather than guessing at it.
     public static let currentVersion = 1
 
     public var version: Int
