@@ -27,7 +27,7 @@ public final class ActionDispatcher {
             return executeShellScript(command)
 
         case .runShortcut(let name):
-            return executeShellScript("/usr/bin/shortcuts run \"\(name)\"")
+            return runShortcut(named: name)
 
         case .switchProfile, .none:
             return (true, nil)
@@ -108,9 +108,22 @@ public final class ActionDispatcher {
     }
 
     private func executeShellScript(_ command: String) -> (Bool, String?) {
+        runProcess(URL(fileURLWithPath: "/bin/zsh"), arguments: ["-c", command])
+    }
+
+    /// Run the Apple Shortcut called ``name``. The name goes to the shortcuts tool as a single
+    /// argument after ``--``, never through a shell: user layouts make it untrusted text.
+    private func runShortcut(named name: String) -> (Bool, String?) {
+        runProcess(URL(fileURLWithPath: "/usr/bin/shortcuts"), arguments: ["run", "--", name])
+    }
+
+    /// Run ``executable`` and wait for it.
+    ///
+    /// :returns: Success, or the tool's standard error (or exit code) when it fails.
+    private func runProcess(_ executable: URL, arguments: [String]) -> (Bool, String?) {
         let task = Process()
-        task.launchPath = "/bin/zsh"
-        task.arguments = ["-c", command]
+        task.executableURL = executable
+        task.arguments = arguments
 
         let pipe = Pipe()
         task.standardError = pipe
