@@ -34,6 +34,18 @@ with those permissions by planting one. Restricting user layouts to shortcut-typ
 that, and the check happens when files are loaded, not only in the editor, because files can be
 edited by hand or tampered with.
 
+**Prerequisite fix (found 2026-10-09 while planning):** `ActionDispatcher` runs `runShortcut` as
+`zsh -c '/usr/bin/shortcuts run "<name>"'`, so a shortcut name containing `"` or `$(...)` runs
+arbitrary shell. It is not exploitable in 1.3.0 (the only built-in name is "Toggle Focus" and the
+iPad cannot send actions), but user layouts would make the name attacker-controlled. Before any
+user layout loads, `runShortcut` must run `/usr/bin/shortcuts` directly with the arguments
+`["run", "--", name]` (no shell; `--` checked 2026-10-09 to stop a name like `-h` being read as
+an option).
+
+**Accepted risk:** a user's own Apple Shortcut can contain a "Run Shell Script" step. A layout can
+only name a shortcut the user already has, so this gives a tampered file nothing the user did not
+set up themselves.
+
 ## Components
 
 | Unit | Lives in | Responsibility |
@@ -41,7 +53,7 @@ edited by hand or tampered with.
 | `LayoutCustomisation` | `Packages/iKeypadShared` | The file format (below). `Codable`. |
 | `LayoutResolver` | `Packages/iKeypadShared` | Pure function: base layout (built-in, or empty) + customisation gives the `DeckProfile` the Mac registers. No disk, no UI. |
 | `UserLayoutStore` | `iKeypadMac` | Reads, validates and writes the files in `~/Library/Application Support/Sidekey/Layouts/`. Reports every rejected file with its reason. |
-| `AppContextMonitor` (changed) | `iKeypadMac` | Registers resolved layouts at launch. On every save, replaces the registered layout and, if it is the active one, publishes it to the iPad. |
+| `AppContextMonitor` (changed) | `iKeypadMac` | Keeps the untouched built-in layouts as bases. Installs a resolved layout by id, replacing the built-in one (including as the app's start layout), and uninstalls it on reset. When the replaced layout is the active one it reassigns `activeProfile`, which the iPad already receives. The store's folder is passed in at launch from `iKeypadMacApp`, never read in the monitor's own `init`, so tests never see the user's real files. |
 | Layout editor window | `iKeypadMac` | The visual editor (below), opened from a new "Edit Layouts..." menu item. |
 
 The tap path does not change: the iPad sends only key and layout ids, and `ActionDispatcher`
@@ -84,6 +96,10 @@ A file is rejected as a whole, never partly applied, when any of these hold:
 - A key's action is `shellScript`, `appleScript`, or anything other than `hotkey`,
   `windowsHotkey`, `runShortcut` or `switchProfile`.
 - A `switchProfile` action names a layout that is not another mode of the same app.
+- A `hotkey` or `windowsHotkey` names a key the Mac cannot send (checked with the same key tables
+  `ActionDispatcher` and `CitrixKeyMapper` use), so a bad key fails at load, not at tap.
+- A `runShortcut` name is empty.
+- `layoutId` contains `/` or starts with `.`, or the file name is not `<layoutId>.json`.
 
 A rejected file leaves the built-in layout in place. The menu shows "1 layout file has
 errors..." and the editor lists each file with its reason. Nothing is silently skipped.
