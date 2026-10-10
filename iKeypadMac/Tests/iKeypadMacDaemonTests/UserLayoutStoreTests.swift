@@ -52,6 +52,7 @@ final class UserLayoutStoreTests: XCTestCase {
     }
 
     func testDeleteCannotReachOutsideTheFolder() throws {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let sibling = directory.deletingLastPathComponent().appendingPathComponent("sibling-\(UUID().uuidString).json")
         try Data("keep me".utf8).write(to: sibling)
         defer { try? FileManager.default.removeItem(at: sibling) }
