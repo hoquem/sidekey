@@ -70,7 +70,11 @@ struct UserLayoutStore {
     }
 
     /// Remove ``<layoutId>.json``. Throws if there is no such file.
+    /// :raises LayoutStoreError.invalid: when ``layoutId`` could escape the folder.
     func delete(layoutId: String) throws {
+        guard LayoutValidator.isSafeLayoutId(layoutId) else {
+            throw LayoutStoreError.invalid("Invalid layoutId \"\(layoutId)\".")
+        }
         try FileManager.default.removeItem(at: directory.appendingPathComponent("\(layoutId).json"))
     }
 }

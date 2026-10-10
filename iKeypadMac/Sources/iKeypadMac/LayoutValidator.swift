@@ -20,7 +20,7 @@ enum LayoutValidator {
         guard c.version == LayoutCustomisation.currentVersion else {
             return "Unsupported version \(c.version); this Sidekey reads version \(LayoutCustomisation.currentVersion)."
         }
-        guard !c.layoutId.isEmpty, !c.layoutId.contains("/"), !c.layoutId.hasPrefix(".") else {
+        guard isSafeLayoutId(c.layoutId) else {
             return "Invalid layoutId \"\(c.layoutId)\"."
         }
         guard fileName == "\(c.layoutId).json" else { return "File name must be \(c.layoutId).json." }
@@ -41,6 +41,15 @@ enum LayoutValidator {
             if let problem = problem(in: key, modeIds: modeIds) { return "Slot \(position): \(problem)" }
         }
         return nil
+    }
+
+    /// Whether ``id`` can name a file in the layouts folder: non-empty, no path separator, and not
+    /// hidden. Stops a layout id from reaching outside the folder.
+    ///
+    /// :param id: A layout id, from a file or from the editor.
+    /// :returns: ``true`` when ``id`` is safe to use as a file name stem.
+    static func isSafeLayoutId(_ id: String) -> Bool {
+        !id.isEmpty && !id.contains("/") && !id.hasPrefix(".")
     }
 
     private static func problem(in key: CustomKey, modeIds: Set<String>) -> String? {

@@ -51,6 +51,16 @@ final class UserLayoutStoreTests: XCTestCase {
         XCTAssertThrowsError(try store.delete(layoutId: zoom))
     }
 
+    func testDeleteCannotReachOutsideTheFolder() throws {
+        let sibling = directory.deletingLastPathComponent().appendingPathComponent("sibling-\(UUID().uuidString).json")
+        try Data("keep me".utf8).write(to: sibling)
+        defer { try? FileManager.default.removeItem(at: sibling) }
+        let escape = "../" + sibling.deletingPathExtension().lastPathComponent
+
+        XCTAssertThrowsError(try store.delete(layoutId: escape))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: sibling.path))
+    }
+
     func testSaveRefusesALayoutTheValidatorRejects() {
         XCTAssertThrowsError(try store.save(zoomChange(.shellScript(command: "true"))))
         XCTAssertFalse(FileManager.default.fileExists(atPath: directory.appendingPathComponent("\(zoom).json").path))
