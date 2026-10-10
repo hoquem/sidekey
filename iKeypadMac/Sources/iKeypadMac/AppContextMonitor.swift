@@ -22,7 +22,14 @@ public final class AppContextMonitor: ObservableObject {
     private var profilesById: [String: DeckProfile] = [:]
     /// The mode last chosen for an app, by bundle identifier; it survives switching apps.
     private var modeByBundle: [String: String] = [:]
-    private let defaultProfile: DeckProfile
+    /// The layouts as shipped, untouched by the user: the bases user layouts apply to, and what
+    /// ``uninstall(layoutId:)`` restores.
+    let builtInProfiles: [DeckProfile]
+    /// Ids of the user layouts installed by the last ``reloadUserLayouts(from:)``.
+    private var userLayoutIds: Set<String> = []
+    /// User layout files the last reload refused, with the reason, for the menu and the editor.
+    @Published private(set) var layoutFileErrors: [LayoutFileError] = []
+    private var defaultProfile: DeckProfile
     private var activeApp: NSRunningApplication?
     private var lastContext: AppContext?
     private var pollTimer: Timer?
@@ -31,9 +38,8 @@ public final class AppContextMonitor: ObservableObject {
     private init() {
         self.defaultProfile = DefaultProfiles.makeDefaultFallbackProfile()
         self.activeProfile = defaultProfile
-
-        // Register defaults
-        for prof in DefaultProfiles.allDefaultProfiles() {
+        self.builtInProfiles = DefaultProfiles.allDefaultProfiles()
+        for prof in builtInProfiles {
             register(profile: prof)
         }
 
@@ -54,6 +60,56 @@ public final class AppContextMonitor: ObservableObject {
     public func profile(withId id: String) -> DeckProfile? {
         if defaultProfile.id == id { return defaultProfile }
         return profilesById[id]
+    }
+
+    /// The built-in layout with ``id`` as shipped, ignoring any user layout.
+    func builtInProfile(withId id: String) -> DeckProfile? {
+        builtInProfiles.first { $0.id == id }
+    }
+
+    /// Show a layout in place of the one with the same id: a built-in layout (as the app's start
+    /// layout too, when it is that) or a new app's layout. When it is on screen it is reassigned
+    /// to ``activeProfile``, which the server already sends to every iPad.
+    ///
+    /// :param profile: The layout to show.
+    func install(_ profile: DeckProfile) {
+        profilesById[profile.id] = profile
+        if profile.id == defaultProfile.id { defaultProfile = profile }
+        let bundle = profile.appBundleIdentifier
+        if profileRegistry[bundle] == nil || profileRegistry[bundle]?.id == profile.id {
+            profileRegistry[bundle] = profile
+        }
+        if activeProfile.id == profile.id { activeProfile = profile }
+    }
+
+    /// Undo ``install(_:)``: the built-in layout with ``layoutId`` comes back, or a new app's
+    /// layout is removed and that app falls back to the System layout.
+    ///
+    /// :param layoutId: The id of the layout to uninstall.
+    func uninstall(layoutId: String) {
+        if let builtIn = builtInProfile(withId: layoutId) {
+            install(builtIn)
+            return
+        }
+        guard let removed = profilesById.removeValue(forKey: layoutId) else { return }
+        let bundle = removed.appBundleIdentifier
+        if profileRegistry[bundle]?.id == layoutId { profileRegistry[bundle] = nil }
+        if modeByBundle[bundle] == layoutId { modeByBundle[bundle] = nil }
+        if activeProfile.id == layoutId { updateActiveApp(bundleId: activeBundleId, appName: activeAppName) }
+    }
+
+    /// Replace every installed user layout with the valid files in a store, and record the files
+    /// that were refused in ``layoutFileErrors``.
+    ///
+    /// :param store: The folder of user layout files to load.
+    func reloadUserLayouts(from store: UserLayoutStore) {
+        for id in userLayoutIds { uninstall(layoutId: id) }
+        let loaded = store.loadAll(builtIns: builtInProfiles)
+        for customisation in loaded.customisations {
+            install(LayoutResolver.resolve(customisation, base: builtInProfile(withId: customisation.layoutId)))
+        }
+        userLayoutIds = Set(loaded.customisations.map(\.layoutId))
+        layoutFileErrors = loaded.errors
     }
 
     /// Show another mode of the app in front, such as Citrix Viewer's Outlook keys.
