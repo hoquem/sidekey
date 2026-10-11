@@ -31,6 +31,7 @@ Requires macOS 13 or later.
 4. Open **Sidekey** from your Applications folder. The first time, macOS says it was downloaded from the internet; click **Open**. The app is signed with Developer ID and notarized by Apple. Sidekey has no Dock icon: it appears in the menu bar as a keyboard icon with three dots. On a crowded menu bar it may be hidden behind other icons.
 5. When macOS asks, open System Settings › Privacy & Security › **Accessibility** and switch **Sidekey** on. Sidekey needs this to send shortcuts and read window titles. If Sidekey is not in the list, click **+**, choose Sidekey from Applications and switch it on.
 6. On macOS 15 or later, allow Sidekey to find devices on your local network if asked. Keys that run AppleScript, such as Play/Pause, may also ask for Automation access the first time.
+7. To start Sidekey when you log in, tick **Launch at Login** in the Sidekey menu (Mac 1.4.0 or later). It is off until you turn it on. If macOS needs your approval, System Settings opens at Login Items; if macOS refuses, Sidekey shows why.
 
 **Updating:** Sidekey does not update itself; watch the [releases page](https://github.com/hoquem/sidekey/releases) for new versions. Quit Sidekey from its menu bar icon, download the new `Sidekey.dmg` and drag Sidekey to Applications again, replacing the old copy. If keys stop working after an update, switch Sidekey off and on again in the Accessibility list; if that does not help, remove it with the minus button, add it back with the plus button and switch it on.
 
