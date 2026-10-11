@@ -17,6 +17,7 @@
 		5BAE329C48E3FB1B24D1DE1B /* AppContextMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C829FA5E3E27D4B01E0D3F /* AppContextMonitor.swift */; };
 		5EC070841EA09B30DF8A3867 /* iKeypadMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CE111B591B07C75936E526 /* iKeypadMacApp.swift */; };
 		6AC58A2F58E527785AA20DD6 /* LayoutValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6B4B27F453E61A8F0E4048 /* LayoutValidator.swift */; };
+		733ED076CE77CA2599049B38 /* SymbolCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2E6F3AFF454C8840ADA9B3 /* SymbolCatalog.swift */; };
 		986CB87BD752D654082CC132 /* PairingCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2499A2D7703C7855202ADDB /* PairingCredentials.swift */; };
 		A3FDF19AF9C6FFDC1A54E288 /* NowControllingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2328F3C3DE9811908410F05 /* NowControllingView.swift */; };
 		BCA2140EE000ED2F05A34C55 /* DeckKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */; };
@@ -27,6 +28,7 @@
 		DD49CA285073562750BDE4BB /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = EEEB7F49CCF79F6247BF1292 /* iKeypadShared */; };
 		DE925D7F3C8B0142F783FC09 /* AppStateReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77AA9BB916D950399D72DA7 /* AppStateReader.swift */; };
 		E58FB833DBAC073EF3D05D73 /* iKeypadShared in Frameworks */ = {isa = PBXBuildFile; productRef = C830920EDA055DB0CF158CB3 /* iKeypadShared */; };
+		EAACD75D46F70E7F51577362 /* KeyNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831F2F62C01C9EA029EDBC0A /* KeyNames.swift */; };
 		EE0B4A769C1E52BDC97DC2AC /* DeckServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF5AF288E06B91060D5116D /* DeckServer.swift */; };
 		F142C3232B7E1DC1DEE8D7F4 /* DeckTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCDA982494BE16D9CA7A091 /* DeckTheme.swift */; };
 		F2BD1E5D33B7071F93857C45 /* Pairing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A8E3E2C7DDB3D8690FC16E /* Pairing.swift */; };
@@ -56,10 +58,12 @@
 		6F373BB288407BA133B72DD2 /* iKeypadTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = iKeypadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71192AD8239744B4140C2154 /* iKeypad.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iKeypad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78649CBB69AC98598A9A5736 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		831F2F62C01C9EA029EDBC0A /* KeyNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyNames.swift; sourceTree = "<group>"; };
 		856575F99F0F0B52FA92C733 /* UserLayoutStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLayoutStore.swift; sourceTree = "<group>"; };
 		8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckKeyView.swift; sourceTree = "<group>"; };
 		948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRotaryDialView.swift; sourceTree = "<group>"; };
 		9609308EB61815D710AD1107 /* PairingCodeWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCodeWindow.swift; sourceTree = "<group>"; };
+		AA2E6F3AFF454C8840ADA9B3 /* SymbolCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolCatalog.swift; sourceTree = "<group>"; };
 		B2499A2D7703C7855202ADDB /* PairingCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCredentials.swift; sourceTree = "<group>"; };
 		B5418E667911A23A5003A13F /* iKeypadShared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iKeypadShared; path = Packages/iKeypadShared; sourceTree = SOURCE_ROOT; };
 		BFFAA2F4D26EBC38A5AD4966 /* SidekeyMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SidekeyMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,9 +114,11 @@
 				0AB8EDC611C303856F76DECE /* CitrixKeyMapper.swift */,
 				3AF5AF288E06B91060D5116D /* DeckServer.swift */,
 				08CE111B591B07C75936E526 /* iKeypadMacApp.swift */,
+				831F2F62C01C9EA029EDBC0A /* KeyNames.swift */,
 				DF6B4B27F453E61A8F0E4048 /* LayoutValidator.swift */,
 				E7A8E3E2C7DDB3D8690FC16E /* Pairing.swift */,
 				9609308EB61815D710AD1107 /* PairingCodeWindow.swift */,
+				AA2E6F3AFF454C8840ADA9B3 /* SymbolCatalog.swift */,
 				856575F99F0F0B52FA92C733 /* UserLayoutStore.swift */,
 			);
 			name = iKeypadMac;
@@ -331,9 +337,11 @@
 				DE925D7F3C8B0142F783FC09 /* AppStateReader.swift in Sources */,
 				C8E8D0E91B01DE686C8FAC0F /* CitrixKeyMapper.swift in Sources */,
 				EE0B4A769C1E52BDC97DC2AC /* DeckServer.swift in Sources */,
+				EAACD75D46F70E7F51577362 /* KeyNames.swift in Sources */,
 				6AC58A2F58E527785AA20DD6 /* LayoutValidator.swift in Sources */,
 				F2BD1E5D33B7071F93857C45 /* Pairing.swift in Sources */,
 				02DA989E3EF732004143158E /* PairingCodeWindow.swift in Sources */,
+				733ED076CE77CA2599049B38 /* SymbolCatalog.swift in Sources */,
 				1730F78C3AEABA332FD0EB5E /* UserLayoutStore.swift in Sources */,
 				5EC070841EA09B30DF8A3867 /* iKeypadMacApp.swift in Sources */,
 			);
