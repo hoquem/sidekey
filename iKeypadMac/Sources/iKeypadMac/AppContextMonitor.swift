@@ -99,7 +99,9 @@ public final class AppContextMonitor: ObservableObject {
     }
 
     /// Replace every installed user layout with the valid files in a store, and record the files
-    /// that were refused in ``layoutFileErrors``.
+    /// that were refused in ``layoutFileErrors``. It ends by selecting the layout for the app in
+    /// front again, because uninstalling a new app's layout moves that app to the System layout and
+    /// installing one does not move it back.
     ///
     /// :param store: The folder of user layout files to load.
     func reloadUserLayouts(from store: UserLayoutStore) {
@@ -110,6 +112,7 @@ public final class AppContextMonitor: ObservableObject {
         }
         userLayoutIds = Set(loaded.customisations.map(\.layoutId))
         layoutFileErrors = loaded.errors
+        updateActiveApp(bundleId: activeBundleId, appName: activeAppName)
     }
 
     /// Show another mode of the app in front, such as Citrix Viewer's Outlook keys.

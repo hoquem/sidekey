@@ -114,4 +114,17 @@ final class UserLayoutInstallTests: XCTestCase {
         monitor.reloadUserLayouts(from: store)
         XCTAssertEqual(monitor.profile(withId: zoom), monitor.builtInProfile(withId: zoom))
     }
+
+    func testReloadKeepsTheLayoutOfTheAppInFront() throws {
+        let app = "com.example.SidekeyTest"
+        monitor.updateActiveApp(bundleId: app, appName: "Example")
+        XCTAssertEqual(monitor.activeProfile.id, "default")
+        try store.save(raiseHand(at: 0, in: app))
+
+        monitor.reloadUserLayouts(from: store)
+        XCTAssertEqual(monitor.activeProfile.id, app, "a layout added for the app in front shows at once")
+
+        monitor.reloadUserLayouts(from: store)
+        XCTAssertEqual(monitor.activeProfile.id, app, "a second reload keeps it")
+    }
 }
