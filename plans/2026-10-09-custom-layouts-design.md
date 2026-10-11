@@ -83,7 +83,7 @@ One file per layout: `~/Library/Application Support/Sidekey/Layouts/<layout id>.
   own id, so each mode is customised separately), or the app's bundle id for a new app.
 - A slot is either a replacement key or `"removed"`. Slots not listed come from the base layout.
 - `action` uses the existing `KeyAction` JSON encoding, so the iPad needs no change.
-- Key ids are not stored. `DeckProfile.init` derives them as `<layout id>#<slot>`, so a tap from a
+- Key ids are not stored. `DeckProfile.init` derives untouched keys' ids as `<layout id>#<slot>`, so a tap from a
   layout pinned on the iPad still finds a key the user did not change. `LayoutResolver` gives a
   user's key `<layout id>#<slot>#<digest>`, where the digest is the first 8 hex characters of
   SHA-256 over the key's JSON with sorted keys. A pinned layout is a frozen copy on the iPad, so a
@@ -168,7 +168,8 @@ errors..." and the editor lists each file with its reason. Nothing is silently s
 
 ## Tests
 
-- `LayoutResolver`: replaced slot, removed slot, new app on an empty base, key ids stable.
+- `LayoutResolver`: replaced slot, removed slot, new app on an empty base, untouched keys keep `<layoutId>#<slot>`, user keys carry a content
+  digest that is the same on every launch and changes when the key changes.
 - `UserLayoutStore`: one test per validation rule above, and a rejected file leaves the
   built-in layout untouched.
 - Security: with a tampered file putting a `shellScript` on slot 3, a tap on slot 3 runs the
