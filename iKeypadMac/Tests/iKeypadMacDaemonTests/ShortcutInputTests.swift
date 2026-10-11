@@ -32,4 +32,27 @@ final class ShortcutInputTests: XCTestCase {
         XCTAssertEqual(AppleShortcuts.parse("Toggle Focus\nStart Timer\n\n"), ["Start Timer", "Toggle Focus"])
         XCTAssertEqual(AppleShortcuts.parse(""), [])
     }
+
+    func testStopRemovesTheMonitorAndIsRepeatable() {
+        let recorder = ShortcutRecorder()
+        recorder.start { _, _ in }
+        XCTAssertTrue(recorder.isMonitoring)
+        recorder.stop()
+        XCTAssertFalse(recorder.isMonitoring)
+        recorder.stop()
+        XCTAssertFalse(recorder.isMonitoring)
+    }
+
+    /// The monitor holds its handler weakly, so a released recorder is deallocated (and its
+    /// ``deinit`` removes the monitor). The removal itself is not observable from a test; this
+    /// checks that the monitor does not keep the recorder alive.
+    func testAReleasedRecorderWhileRecordingIsDeallocated() {
+        weak var released: ShortcutRecorder?
+        do {
+            let recorder = ShortcutRecorder()
+            recorder.start { _, _ in }
+            released = recorder
+        }
+        XCTAssertNil(released)
+    }
 }
