@@ -93,7 +93,8 @@ private struct PairingMenuSection: View {
 }
 
 /// Reload hand-edited layout files, and say when any were refused. The error count changes only
-/// on reload, from a menu action, never while the menu is open (see ``PairingMenuSection``).
+/// on a reload, which comes from a menu action or an editor save, never from a timer
+/// (see ``PairingMenuSection``).
 private struct LayoutsMenuSection: View {
     @ObservedObject var monitor: AppContextMonitor
 
