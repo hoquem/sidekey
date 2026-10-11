@@ -164,4 +164,14 @@ final class LayoutEditorModelTests: XCTestCase {
         XCTAssertTrue(model.errorMessage?.hasPrefix("Fix or delete \(zoom).json first: ") == true, model.errorMessage ?? "nil")
         XCTAssertEqual(try Data(contentsOf: directory.appendingPathComponent("\(zoom).json")), bytes)
     }
+
+    /// A drag after a valid hand edit moves the hand-edited key, not the one the editor loaded.
+    func testMovingAKeyUsesTheFileAsItIsNow() throws {
+        var handEdited = raiseHand
+        handEdited.label = "Hand Edited"
+        try store.save(LayoutCustomisation(layoutId: zoom, appBundleIdentifier: zoom, appName: "Zoom", slots: [4: .key(handEdited)]))
+        model.moveKey(from: 4, to: 0, in: zoom)
+        XCTAssertNil(model.errorMessage)
+        XCTAssertEqual(model.layout(zoom)?.keys.first { $0.position == 0 }?.label, "Hand Edited")
+    }
 }

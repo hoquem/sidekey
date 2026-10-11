@@ -120,6 +120,8 @@ final class LayoutEditorModel: ObservableObject {
     /// :param to: The slot it is dropped on.
     /// :param id: The layout id.
     func moveKey(from: Int, to: Int, in id: String) {
+        // Read the keys being moved from the files as they are now, not as the editor last loaded them.
+        reload()
         guard from != to, let layout = layout(id) else { return }
         let moving = layout.keys.first { $0.position == from }
         let displaced = layout.keys.first { $0.position == to }
