@@ -131,7 +131,9 @@ struct LayoutEditorView: View {
                 Text("Portrait on the iPad").font(.caption.weight(.semibold)).padding(.top, 8)
                 KeyGridView(model: model, layoutId: id, layout: layout, changed: changed, selection: $selectedSlot, columns: 3, compact: true)
             }
-            // Task 11 adds the key inspector here.
+            if let slot = selectedSlot {
+                KeyInspectorView(model: model, layoutId: id, slot: slot)
+            }
         }
         .padding(24)
         .confirmationDialog("Reset \(layout.appName)?", isPresented: $confirmingResetLayout) {
