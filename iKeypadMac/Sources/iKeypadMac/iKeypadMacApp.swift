@@ -5,6 +5,7 @@ import iKeypadShared
 struct iKeypadMacApp: App {
     @StateObject private var contextMonitor = AppContextMonitor.shared
     @StateObject private var server = DeckServer.shared
+    @StateObject private var launchAtLogin = LaunchAtLogin.shared
 
     init() {
         DeckServer.shared.start()
@@ -47,6 +48,10 @@ struct iKeypadMacApp: App {
 
                 Divider()
 
+                LaunchAtLoginToggle(launchAtLogin: launchAtLogin)
+
+                Divider()
+
                 Button("Quit Sidekey") {
                     NSApplication.shared.terminate(nil)
                 }
@@ -54,6 +59,18 @@ struct iKeypadMacApp: App {
             }
             .padding(4)
         }
+    }
+}
+
+/// The "Launch at Login" checkmark item. Off until the user turns it on.
+private struct LaunchAtLoginToggle: View {
+    @ObservedObject var launchAtLogin: LaunchAtLogin
+
+    var body: some View {
+        Toggle("Launch at Login", isOn: Binding(
+            get: { launchAtLogin.isEnabled },
+            set: { launchAtLogin.setEnabled($0) }
+        ))
     }
 }
 
