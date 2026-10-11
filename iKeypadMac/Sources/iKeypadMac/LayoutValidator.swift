@@ -31,6 +31,10 @@ enum LayoutValidator {
             if let app = builtIns.first(where: { $0.appBundleIdentifier == c.appBundleIdentifier }) {
                 return "\(app.appName) already has a built-in layout; customise layout \(app.id) instead."
             }
+            // One file per new app: otherwise two files could both claim it.
+            guard c.layoutId == c.appBundleIdentifier else {
+                return "layoutId must equal appBundleIdentifier for an app without a built-in layout."
+            }
         }
         let bundle = base?.appBundleIdentifier ?? c.appBundleIdentifier
         let modeIds = Set(builtIns.filter { $0.appBundleIdentifier == bundle }.map(\.id))

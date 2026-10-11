@@ -92,4 +92,11 @@ final class LayoutValidatorTests: XCTestCase {
     func testANewAppNeedsABundleIdentifier() {
         XCTAssertEqual(problem([:], layoutId: "com.example.App", bundle: ""), "appBundleIdentifier is empty.")
     }
+
+    /// Two files cannot both claim a new app: its layout id must be its bundle id.
+    func testANewAppLayoutIdMustBeItsBundleIdentifier() {
+        XCTAssertEqual(problem([:], layoutId: "my-app", bundle: "com.example.App"),
+                       "layoutId must equal appBundleIdentifier for an app without a built-in layout.")
+        XCTAssertNil(problem([:], layoutId: "com.example.App", bundle: "com.example.App"))
+    }
 }
