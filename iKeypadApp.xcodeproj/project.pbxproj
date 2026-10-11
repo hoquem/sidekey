@@ -22,6 +22,7 @@
 		9284ED89F131FF9A98E18884 /* LayoutEditorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067ACAC074546699CEA79E5A /* LayoutEditorModel.swift */; };
 		986CB87BD752D654082CC132 /* PairingCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2499A2D7703C7855202ADDB /* PairingCredentials.swift */; };
 		A3FDF19AF9C6FFDC1A54E288 /* NowControllingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2328F3C3DE9811908410F05 /* NowControllingView.swift */; };
+		A78F9AA09CED74C14A969CFB /* ShortcutInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA25055360293822155CB0F /* ShortcutInput.swift */; };
 		BCA2140EE000ED2F05A34C55 /* DeckKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE656A8A379A4B6ADD7A233 /* DeckKeyView.swift */; };
 		BF68CA4897EDD57B41FF7A49 /* DeckClientPairingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57B8C32E5801300F0C9F3EF /* DeckClientPairingTests.swift */; };
 		C60B52E8C8CA6EEE7F5994D2 /* DeckRotaryDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948071221DF276722A9EE5A6 /* DeckRotaryDialView.swift */; };
@@ -56,6 +57,7 @@
 		347F366216B568BEC636A298 /* DeckClientReconnectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckClientReconnectTests.swift; sourceTree = "<group>"; };
 		352E2A3C6D0EE3B3B41DD60E /* DeckClientCharacterizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckClientCharacterizationTests.swift; sourceTree = "<group>"; };
 		3AF5AF288E06B91060D5116D /* DeckServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckServer.swift; sourceTree = "<group>"; };
+		5EA25055360293822155CB0F /* ShortcutInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutInput.swift; sourceTree = "<group>"; };
 		66BE045D8C96A71F82327FB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6876AAE119F49D350E6A3542 /* DeckClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckClient.swift; sourceTree = "<group>"; };
 		6F373BB288407BA133B72DD2 /* iKeypadTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = iKeypadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +126,7 @@
 				DF6B4B27F453E61A8F0E4048 /* LayoutValidator.swift */,
 				E7A8E3E2C7DDB3D8690FC16E /* Pairing.swift */,
 				9609308EB61815D710AD1107 /* PairingCodeWindow.swift */,
+				5EA25055360293822155CB0F /* ShortcutInput.swift */,
 				AA2E6F3AFF454C8840ADA9B3 /* SymbolCatalog.swift */,
 				856575F99F0F0B52FA92C733 /* UserLayoutStore.swift */,
 			);
@@ -349,6 +352,7 @@
 				6AC58A2F58E527785AA20DD6 /* LayoutValidator.swift in Sources */,
 				F2BD1E5D33B7071F93857C45 /* Pairing.swift in Sources */,
 				02DA989E3EF732004143158E /* PairingCodeWindow.swift in Sources */,
+				A78F9AA09CED74C14A969CFB /* ShortcutInput.swift in Sources */,
 				733ED076CE77CA2599049B38 /* SymbolCatalog.swift in Sources */,
 				1730F78C3AEABA332FD0EB5E /* UserLayoutStore.swift in Sources */,
 				5EC070841EA09B30DF8A3867 /* iKeypadMacApp.swift in Sources */,
