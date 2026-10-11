@@ -1,6 +1,6 @@
 # Spec: custom layouts
 
-Status: design agreed 2026-10-09; not built. Targets Mac 1.4.0. The iPad app does not change.
+Status: built on branch custom-layouts, 2026-10-11; ships in Mac 1.4.0. The iPad app does not change.
 
 ## Goal
 
@@ -151,8 +151,9 @@ errors..." and the editor lists each file with its reason. Nothing is silently s
 - **Saving:** every change writes the file at once and the iPad updates live. Reset Key and
   Reset Layout confirm first; Reset Layout deletes the file.
 - **Window:** Sidekey has no Dock icon, so the window activates the app when it opens, as
-  `PairingCodeWindow` does. The menu gains only a static "Edit Layouts..." item: no state that
-  changes while the menu is open, which is what crashed 1.1.0.
+  `PairingCodeWindow` does. The menu gains the static items "Edit Layouts..." and "Reload Layouts", and an
+  error-count item that changes only on reload from a menu action, never while the menu is open
+  (open-menu state changes are what crashed 1.1.0).
 
 ## Tests
 
