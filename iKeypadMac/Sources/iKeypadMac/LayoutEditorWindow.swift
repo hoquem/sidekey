@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 import iKeypadShared
+import UniformTypeIdentifiers
 
 /// The "Sidekey Layouts" window. Sidekey has no Dock icon, so showing it activates the app, as
 /// ``PairingCodeWindow`` does.
@@ -69,6 +70,11 @@ struct LayoutEditorView: View {
                 }
             }
             .frame(minWidth: 230)
+            .safeAreaInset(edge: .bottom) {
+                Button("Add App...", action: chooseApp)
+                    .padding(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         } detail: {
             if let id = model.selectedLayoutId, let layout = model.layout(id) {
                 detail(id: id, layout: layout)
@@ -85,6 +91,21 @@ struct LayoutEditorView: View {
         } message: {
             Text(model.errorMessage ?? "")
         }
+    }
+
+    /// Pick an app in Applications and give it a layout (or select the one it has).
+    private func chooseApp() {
+        let panel = NSOpenPanel()
+        panel.directoryURL = URL(fileURLWithPath: "/Applications")
+        panel.allowedContentTypes = [.application]
+        panel.prompt = "Add"
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        guard let bundleId = Bundle(url: url)?.bundleIdentifier else {
+            model.errorMessage = "\(url.lastPathComponent) has no bundle identifier, so Sidekey can't tell when it is in front."
+            return
+        }
+        let name = FileManager.default.displayName(atPath: url.path).replacingOccurrences(of: ".app", with: "")
+        model.addApp(bundleIdentifier: bundleId, name: name)
     }
 
     /// Broken layout files, so a file the app refused to load is never invisible.
