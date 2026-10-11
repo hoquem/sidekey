@@ -24,6 +24,8 @@ final class LayoutEditorModel: ObservableObject {
     @Published var selectedLayoutId: String?
     /// The last edit that failed, for the view to show; cleared by the view.
     @Published var errorMessage: String?
+    /// Layout files that could not be loaded; the window lists them.
+    @Published private(set) var fileErrors: [LayoutFileError] = []
 
     private let monitor: AppContextMonitor
     private let store: UserLayoutStore
@@ -39,6 +41,7 @@ final class LayoutEditorModel: ObservableObject {
     func reload() {
         let loaded = store.loadAll(builtIns: monitor.builtInProfiles)
         customisations = Dictionary(uniqueKeysWithValues: loaded.customisations.map { ($0.layoutId, $0) })
+        fileErrors = loaded.errors
         rebuildEntries()
     }
 
@@ -135,7 +138,7 @@ final class LayoutEditorModel: ObservableObject {
     ///
     /// :param id: The layout id.
     func resetLayout(_ id: String) {
-        guard customisations[id] != nil else { return }
+        guard customisations[id] != nil || fileError(for: id) != nil else { return }
         do {
             try store.delete(layoutId: id)
         } catch {
@@ -151,6 +154,7 @@ final class LayoutEditorModel: ObservableObject {
     /// :param bundleIdentifier: The app's bundle identifier.
     /// :param name: The app's display name.
     func addApp(bundleIdentifier: String, name: String) {
+        if refuseToOverwriteBrokenFile(for: bundleIdentifier) { return }
         if let existing = monitor.builtInProfiles.first(where: { $0.appBundleIdentifier == bundleIdentifier })?.id
             ?? customisations[bundleIdentifier]?.layoutId {
             selectedLayoutId = existing
@@ -161,8 +165,22 @@ final class LayoutEditorModel: ObservableObject {
         }
     }
 
+    private func fileError(for id: String) -> LayoutFileError? {
+        fileErrors.first { $0.fileName == "\(id).json" }
+    }
+
+    /// Saving over a file that failed to load would lose the user's hand edits.
+    ///
+    /// :returns: ``true`` (with ``errorMessage`` set) when the layout's file is broken.
+    private func refuseToOverwriteBrokenFile(for id: String) -> Bool {
+        guard let error = fileError(for: id) else { return false }
+        errorMessage = "Fix or delete \(error.fileName) first: \(error.reason)"
+        return true
+    }
+
     private func change(_ id: String, _ edit: (inout LayoutCustomisation) -> Void) {
         guard let current = layout(id) else { return }
+        if refuseToOverwriteBrokenFile(for: id) { return }
         var customisation = customisations[id]
             ?? LayoutCustomisation(layoutId: id, appBundleIdentifier: current.appBundleIdentifier, appName: current.appName)
         edit(&customisation)

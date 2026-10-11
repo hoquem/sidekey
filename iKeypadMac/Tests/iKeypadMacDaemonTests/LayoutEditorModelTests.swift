@@ -120,4 +120,38 @@ final class LayoutEditorModelTests: XCTestCase {
                        Set(monitor.builtInProfiles.filter { $0.appBundleIdentifier == citrix }.map(\.id)))
         XCTAssertEqual(model.modes(of: zoom).map(\.id), [zoom])
     }
+
+    private func writeBrokenFile(_ id: String) throws -> Data {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let bytes = Data("{ not json".utf8)
+        try bytes.write(to: directory.appendingPathComponent("\(id).json"))
+        model.reload()
+        return bytes
+    }
+
+    func testABrokenFileIsListedInFileErrors() throws {
+        _ = try writeBrokenFile(zoom)
+        XCTAssertEqual(model.fileErrors.map(\.fileName), ["\(zoom).json"])
+    }
+
+    func testEditingALayoutWithABrokenFileRefusesAndKeepsTheFile() throws {
+        let bytes = try writeBrokenFile(zoom)
+        model.setKey(raiseHand, at: 4, in: zoom)
+        XCTAssertTrue(model.errorMessage?.hasPrefix("Fix or delete \(zoom).json first: ") == true, model.errorMessage ?? "nil")
+        XCTAssertEqual(try Data(contentsOf: directory.appendingPathComponent("\(zoom).json")), bytes)
+    }
+
+    func testAddingAnAppWhoseFileIsBrokenRefuses() throws {
+        let bytes = try writeBrokenFile("com.example.SidekeyTest")
+        model.addApp(bundleIdentifier: "com.example.SidekeyTest", name: "Example")
+        XCTAssertNotNil(model.errorMessage)
+        XCTAssertEqual(try Data(contentsOf: directory.appendingPathComponent("com.example.SidekeyTest.json")), bytes)
+    }
+
+    func testResettingALayoutDeletesItsBrokenFile() throws {
+        _ = try writeBrokenFile(zoom)
+        model.resetLayout(zoom)
+        XCTAssertFalse(fileExists(zoom))
+        XCTAssertTrue(model.fileErrors.isEmpty)
+    }
 }
