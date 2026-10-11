@@ -53,6 +53,32 @@ struct LayoutEditorView: View {
     @State private var selectedSlot: Int?
     @State private var confirmingResetLayout = false
     @State private var fileToDelete: LayoutFileError?
+    @State private var appToRemove: String?
+
+    /// The standard macOS + and − under the app list. − removes an app you added; built-in apps
+    /// can't be removed (Reset Layout undoes changes to them).
+    private var addRemoveBar: some View {
+        let selected = model.selectedLayoutId
+        let canRemove = selected.map { !model.isBuiltIn($0) } ?? false
+        return HStack(spacing: 0) {
+            Button(action: chooseApp) {
+                Image(systemName: "plus").frame(width: 24, height: 20)
+            }
+            .help("Add a layout for another app")
+            .accessibilityLabel("Add App")
+            Divider().frame(height: 16)
+            Button { appToRemove = selected } label: {
+                Image(systemName: "minus").frame(width: 24, height: 20)
+            }
+            .disabled(!canRemove)
+            .help(canRemove ? "Remove this app's layout" : "Built-in apps can't be removed. Use Reset Layout to undo your changes.")
+            .accessibilityLabel("Remove App")
+            Spacer()
+        }
+        .buttonStyle(.borderless)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+    }
 
     var body: some View {
         NavigationSplitView {
@@ -73,11 +99,16 @@ struct LayoutEditorView: View {
                 }
                 // Below the list rather than inset over it, so it never covers the last row.
                 Divider()
-                Button("Add App...", action: chooseApp)
-                    .padding(10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                addRemoveBar
             }
             .frame(minWidth: 230)
+            .confirmationDialog("Remove \(appToRemove.flatMap { model.layout($0)?.appName } ?? "this app")?",
+                                isPresented: Binding(get: { appToRemove != nil }, set: { if !$0 { appToRemove = nil } }),
+                                presenting: appToRemove) { id in
+                Button("Remove", role: .destructive) { model.resetLayout(id) }
+            } message: { _ in
+                Text("Its keys are deleted, and the iPad shows the System layout for this app.")
+            }
         } detail: {
             if let id = model.selectedLayoutId, let layout = model.layout(id) {
                 detail(id: id, layout: layout)
