@@ -41,7 +41,7 @@ USB OR WI-FI
 Sidekey prefers a USB connection when your iPad is plugged into the Mac, and uses your Wi-Fi network otherwise.
 
 PRIVATE
-Sidekey has no accounts, no analytics and no tracking. Your iPad or iPhone talks only to Sidekey on a Mac, over USB or your local network; nothing is sent to the developer. The connection is not encrypted yet, so use USB or a network you trust.
+Sidekey has no accounts, no analytics and no tracking. Your iPad or iPhone talks only to Sidekey on a Mac, over USB or your local network; nothing is sent to the developer. The connection is not encrypted yet, so use USB (iPad) or a network you trust.
 
 REQUIRES THE FREE MAC APP
 Sidekey needs its free companion app on your Mac (macOS 13 or later), available at hoquem.github.io/sidekey. The Citrix Viewer layout needs Mac app 1.3.0 or later. The Mac app needs Accessibility permission to send shortcuts.
@@ -78,7 +78,7 @@ To test:
 1. On a Mac with macOS 13 or later, download Sidekey.dmg from https://github.com/hoquem/sidekey/releases/latest, drag Sidekey to Applications and open it (it appears in the menu bar).
 2. When macOS asks, switch Sidekey on in System Settings › Privacy & Security › Accessibility (and allow Local Network access if asked).
 3. Open Sidekey on the iPad or iPhone and allow Local Network access. Put it on the same Wi-Fi network as the Mac (an iPad can also connect with a USB cable).
-4. Pair: on the Mac, click the Sidekey menu bar icon and choose Pair Device... A window shows a 6-digit code. On the iPad or iPhone, type the code and tap Pair. The code is valid for two minutes; choose Pair Device... again for a new one. (Mac app 1.3.0's pairing window says "iPad"; the same code works on iPhone.)
+4. Pair: on the Mac, click the Sidekey menu bar icon and choose Pair Device... A window shows a 6-digit code. On the iPad or iPhone, type the code and tap Pair. The code is valid for two minutes; choose Pair Device... again for a new one. (The pairing window in the current Mac release says "iPad"; the same code works on iPhone.)
 5. Switch apps on the Mac (for example Finder, then Safari): the keys change. With Safari in front, tap Reload: the key lights up and Safari reloads.
 
 Without the Mac app running, the app shows "Looking for your Mac…" and setup instructions after a few seconds; this is expected.
