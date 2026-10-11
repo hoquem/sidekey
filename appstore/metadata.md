@@ -26,7 +26,7 @@ EVERY TAP GETS AN ANSWER
 A key glows amber while the Mac works, lights up when the shortcut was sent, and shakes with the Mac's reason when it could not be, for example when a permission is missing. If the app in front changes just as you tap, Sidekey refuses the tap rather than sending it to the wrong app.
 
 BUILT-IN LAYOUTS
-Safari, Chrome, Arc, Finder, Mail, Messages, Notes, Calendar, Music, Photos, Microsoft Word, Excel, PowerPoint, Outlook, Teams, Slack, Zoom, WhatsApp, Telegram, Spotify, Notion, ChatGPT, Citrix Viewer, Xcode, VS Code, Cursor, Antigravity, OpenCode, Terminal and MacDown, plus system keys for every other app: Play/Pause, Screenshot, Spotlight, Lock Mac and more. Shortcuts are taken from each app's own menus or published documentation.
+Safari, Chrome, Arc, Finder, Mail, Messages, Notes, Calendar, Music, Photos, Microsoft Word, Excel, PowerPoint, Outlook, Teams, Slack, Zoom, WhatsApp, Telegram, Spotify, Notion, ChatGPT, Citrix Viewer, Xcode, VS Code, Cursor, Antigravity, OpenCode, Terminal and MacDown, plus system keys for every other app: Play/Pause, Screenshot, Spotlight, Lock Mac and more. Shortcuts are taken from each app's own menus or published documentation. To change keys or add a layout for another app, choose Edit Layouts in the Sidekey menu on the Mac. This needs Mac app 1.4.0 or later.
 
 WORKS WITH CITRIX
 In a Citrix session to a remote Windows desktop, Sidekey sends Windows shortcuts such as Ctrl+Alt+Del, Win+E and Alt+F4 into the session. Pick a mode from the bottom row: Windows, Outlook, Browser, VS Code, or More for Word, Excel and Teams. This needs specific Citrix keyboard settings, listed on the support page.
