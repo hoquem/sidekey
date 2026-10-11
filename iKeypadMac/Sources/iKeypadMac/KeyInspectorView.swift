@@ -1,6 +1,32 @@
 import SwiftUI
 import iKeypadShared
 
+/// The key being edited in the inspector, and the slot it was loaded from.
+///
+/// A drag that swaps two keys also moves the selection, and SwiftUI can deliver the draft loaded
+/// for the old slot after the inspector already shows the new one. Carrying the owner inside the
+/// draft means a save only ever goes back to the slot the draft came from.
+struct KeyInspectorDraft: Equatable {
+    struct Owner: Equatable {
+        let layoutId: String
+        let slot: Int
+    }
+
+    /// ``nil`` when the slot shown has nothing editable, so the draft is never saved.
+    var owner: Owner?
+    var key: CustomKey
+
+    /// Whether this draft should be written into the slot the inspector shows.
+    ///
+    /// :param current: The layout and slot the inspector shows now.
+    /// :param savedKey: The key saved in that slot, or ``nil`` when it is empty.
+    /// :returns: ``true`` only for a draft loaded from ``current`` that differs from what is saved.
+    func shouldSave(into current: Owner, savedKey: CustomKey?) -> Bool {
+        guard owner == current, let savedKey else { return false }
+        return key != savedKey
+    }
+}
+
 /// Edits the key in one slot. Every valid change saves at once; a label outside 1 to 16
 /// characters is shown as a problem and not saved until fixed.
 struct KeyInspectorView: View {
@@ -8,7 +34,7 @@ struct KeyInspectorView: View {
     let layoutId: String
     let slot: Int
 
-    @State private var draft = LayoutEditorModel.newKey
+    @State private var draft = KeyInspectorDraft(owner: nil, key: LayoutEditorModel.newKey)
     @State private var confirmingReset = false
     @State private var choosingIcon = false
     @State private var shortcutNames: [String] = []
@@ -21,11 +47,12 @@ struct KeyInspectorView: View {
     }
 
     private var key: DeckKey? { model.layout(layoutId)?.keys.first { $0.position == slot } }
+    private var owner: KeyInspectorDraft.Owner { KeyInspectorDraft.Owner(layoutId: layoutId, slot: slot) }
     private var isChanged: Bool { model.changedSlots(in: layoutId).contains(slot) }
     private var labelProblem: String? {
-        let label = draft.label.trimmingCharacters(in: .whitespaces)
+        let label = draft.key.label.trimmingCharacters(in: .whitespaces)
         if label.isEmpty { return "Enter a label." }
-        if draft.label.count > LayoutValidator.maxLabelLength { return "At most \(LayoutValidator.maxLabelLength) characters." }
+        if draft.key.label.count > LayoutValidator.maxLabelLength { return "At most \(LayoutValidator.maxLabelLength) characters." }
         return nil
     }
 
@@ -53,8 +80,8 @@ struct KeyInspectorView: View {
         // saves leave the saved key equal to the draft, so this does not disturb typing.
         .onChange(of: key.map { CustomKey($0) }) { _ in loadDraft() }
         .onChange(of: draft) { new in
-            guard labelProblem == nil, let key, new != CustomKey(key) else { return }
-            model.setKey(new, at: slot, in: layoutId)
+            guard labelProblem == nil, new.shouldSave(into: owner, savedKey: key.map { CustomKey($0) }) else { return }
+            model.setKey(new.key, at: slot, in: layoutId)
         }
         .onDisappear { recorder.stop() }
         .confirmationDialog("Reset this key?", isPresented: $confirmingReset) {
@@ -66,7 +93,7 @@ struct KeyInspectorView: View {
 
     private var form: some View {
         Form {
-            TextField("Label", text: $draft.label)
+            TextField("Label", text: $draft.key.label)
             if let labelProblem {
                 Label(labelProblem, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.red)
             }
@@ -77,13 +104,13 @@ struct KeyInspectorView: View {
                 Button {
                     choosingIcon = true
                 } label: {
-                    Image(systemName: draft.iconSystemName ?? "square.dashed")
+                    Image(systemName: draft.key.iconSystemName ?? "square.dashed")
                 }
-                .accessibilityLabel("Icon: \(draft.iconSystemName ?? "none")")
-                .popover(isPresented: $choosingIcon) { IconPicker(selection: $draft.iconSystemName) }
+                .accessibilityLabel("Icon: \(draft.key.iconSystemName ?? "none")")
+                .popover(isPresented: $choosingIcon) { IconPicker(selection: $draft.key.iconSystemName) }
             }
 
-            Picker("Colour", selection: $draft.role) {
+            Picker("Colour", selection: $draft.key.role) {
                 Text("Navigate").tag(KeyRole?.some(.navigate))
                 Text("Create").tag(KeyRole?.some(.create))
                 Text("Run").tag(KeyRole?.some(.run))
@@ -96,7 +123,7 @@ struct KeyInspectorView: View {
             }
             actionEditor
 
-            Toggle("Hold to fire", isOn: $draft.requiresConfirm)
+            Toggle("Hold to fire", isOn: $draft.key.requiresConfirm)
             if key?.toggleChipId != nil && !isChanged {
                 Text("Editing this key stops it lighting with the app's state.").font(.caption).foregroundStyle(.secondary)
             }
@@ -119,7 +146,7 @@ struct KeyInspectorView: View {
     private var kind: Binding<Kind> {
         Binding(
             get: {
-                switch draft.action {
+                switch draft.key.action {
                 case .windowsHotkey: return .windows
                 case .runShortcut: return .shortcut
                 case .switchProfile: return .mode
@@ -129,37 +156,37 @@ struct KeyInspectorView: View {
             set: { new in
                 if new != .keyboard { recorder.stop() }
                 switch new {
-                case .keyboard: draft.action = .hotkey(key: "a", modifiers: [.command])
-                case .windows: draft.action = .windowsHotkey(key: "a", modifiers: [.ctrl])
+                case .keyboard: draft.key.action = .hotkey(key: "a", modifiers: [.command])
+                case .windows: draft.key.action = .windowsHotkey(key: "a", modifiers: [.ctrl])
                 case .shortcut:
                     loadShortcutNames(selectFirst: true)
                 case .mode:
-                    if let first = model.modes(of: layoutId).first { draft.action = .switchProfile(profileId: first.id) }
+                    if let first = model.modes(of: layoutId).first { draft.key.action = .switchProfile(profileId: first.id) }
                 }
             }
         )
     }
 
     @ViewBuilder private var actionEditor: some View {
-        switch draft.action {
+        switch draft.key.action {
         case .hotkey(let name, let modifiers):
             HStack {
                 ForEach([(KeyModifier.control, "⌃", "Control"), (.option, "⌥", "Option"), (.shift, "⇧", "Shift"), (.command, "⌘", "Command")], id: \.1) { mod, symbol, modifierName in
                     Toggle(symbol, isOn: Binding(
                         get: { modifiers.contains(mod) },
-                        set: { on in draft.action = .hotkey(key: name, modifiers: on ? modifiers + [mod] : modifiers.filter { $0 != mod }) }
+                        set: { on in draft.key.action = .hotkey(key: name, modifiers: on ? modifiers + [mod] : modifiers.filter { $0 != mod }) }
                     ))
                     .toggleStyle(.button)
                     .accessibilityLabel(modifierName)
                 }
-                Picker("Key", selection: Binding(get: { name }, set: { draft.action = .hotkey(key: $0, modifiers: modifiers) })) {
+                Picker("Key", selection: Binding(get: { name }, set: { draft.key.action = .hotkey(key: $0, modifiers: modifiers) })) {
                     ForEach(KeyNames.mac, id: \.self) { Text($0).tag($0) }
                 }
                 .labelsHidden()
             }
             Button(recorder.isRecording ? "Press a shortcut... (click to cancel)" : "Record Shortcut") {
                 if recorder.isRecording { recorder.stop() } else {
-                    recorder.start { key, mods in draft.action = .hotkey(key: key, modifiers: mods) }
+                    recorder.start { key, mods in draft.key.action = .hotkey(key: key, modifiers: mods) }
                 }
             }
             if let warning = SystemShortcuts.conflict(key: name, modifiers: modifiers) {
@@ -170,22 +197,22 @@ struct KeyInspectorView: View {
                 ForEach([WindowsModifier.ctrl, .alt, .shift, .win], id: \.self) { mod in
                     Toggle(mod.rawValue.capitalized, isOn: Binding(
                         get: { modifiers.contains(mod) },
-                        set: { on in draft.action = .windowsHotkey(key: name, modifiers: on ? modifiers + [mod] : modifiers.filter { $0 != mod }) }
+                        set: { on in draft.key.action = .windowsHotkey(key: name, modifiers: on ? modifiers + [mod] : modifiers.filter { $0 != mod }) }
                     ))
                     .toggleStyle(.button)
                 }
-                Picker("Key", selection: Binding(get: { name }, set: { draft.action = .windowsHotkey(key: $0, modifiers: modifiers) })) {
+                Picker("Key", selection: Binding(get: { name }, set: { draft.key.action = .windowsHotkey(key: $0, modifiers: modifiers) })) {
                     ForEach(KeyNames.windows, id: \.self) { Text($0).tag($0) }
                 }
                 .labelsHidden()
             }
         case .runShortcut(let name):
-            Picker("Shortcut", selection: Binding(get: { name }, set: { draft.action = .runShortcut(name: $0) })) {
+            Picker("Shortcut", selection: Binding(get: { name }, set: { draft.key.action = .runShortcut(name: $0) })) {
                 ForEach(shortcutNames.contains(name) ? shortcutNames : [name] + shortcutNames, id: \.self) { Text($0).tag($0) }
             }
             .onAppear { loadShortcutNames(selectFirst: false) }
         case .switchProfile(let id):
-            Picker("Layout", selection: Binding(get: { id }, set: { draft.action = .switchProfile(profileId: $0) })) {
+            Picker("Layout", selection: Binding(get: { id }, set: { draft.key.action = .switchProfile(profileId: $0) })) {
                 ForEach(model.modes(of: layoutId)) { Text($0.title).tag($0.id) }
             }
         case .shellScript, .appleScript, .none:
@@ -196,7 +223,12 @@ struct KeyInspectorView: View {
 
     private func loadDraft() {
         recorder.stop()
-        if let key, model.isEditable(key) { draft = CustomKey(key) }
+        if let key, model.isEditable(key) {
+            draft = KeyInspectorDraft(owner: owner, key: CustomKey(key))
+        } else {
+            // Nothing here to edit, so the leftover draft must not be saved anywhere.
+            draft.owner = nil
+        }
     }
 
     /// Lists the Apple Shortcuts off the main thread, since `shortcuts list` blocks until it exits.
@@ -215,7 +247,7 @@ struct KeyInspectorView: View {
                 // The user may have selected another key while the list loaded.
                 guard selectFirst, requestedLayout == layoutId, requestedSlot == slot else { return }
                 if let first = names.first {
-                    draft.action = .runShortcut(name: first)
+                    draft.key.action = .runShortcut(name: first)
                 } else {
                     model.errorMessage = "You have no Apple Shortcuts yet. Make one in the Shortcuts app first."
                 }
