@@ -98,6 +98,7 @@ private struct LayoutsMenuSection: View {
     @ObservedObject var monitor: AppContextMonitor
 
     var body: some View {
+        Button("Edit Layouts...") { LayoutEditorWindow.shared.show() }
         Button("Reload Layouts") { monitor.reloadUserLayouts(from: .app) }
         if !monitor.layoutFileErrors.isEmpty {
             let count = monitor.layoutFileErrors.count
