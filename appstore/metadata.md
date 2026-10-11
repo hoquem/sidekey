@@ -29,7 +29,7 @@ BUILT-IN LAYOUTS
 Safari, Chrome, Arc, Finder, Mail, Messages, Notes, Calendar, Music, Photos, Microsoft Word, Excel, PowerPoint, Outlook, Teams, Slack, Zoom, WhatsApp, Telegram, Spotify, Notion, ChatGPT, Citrix Viewer, Xcode, VS Code, Cursor, Antigravity, OpenCode, Terminal and MacDown, plus system keys for every other app: Play/Pause, Screenshot, Spotlight, Lock Mac and more. Shortcuts are taken from each app's own menus or published documentation.
 
 PAIRED WITH YOUR MAC
-Pair once with a code shown on your Mac. Until an iPad is paired, the Mac runs none of its taps, and the Mac only ever runs actions from its own built-in layouts.
+Pair once with a code shown on your Mac. Until an iPad is paired, the Mac runs none of its taps, and the Mac runs only actions from its own layouts, never one sent from the iPad.
 
 HOLD FOR DISRUPTIVE KEYS
 Keys that interrupt what you are doing, such as Lock Mac, End Call and Interrupt, fire only after a press and hold. Pin a layout to keep it on screen while you switch apps.

@@ -7,6 +7,8 @@ struct iKeypadMacApp: App {
     @StateObject private var server = DeckServer.shared
 
     init() {
+        // Before the server starts, so the first layout an iPad receives already has the user's keys.
+        AppContextMonitor.shared.reloadUserLayouts(from: .app)
         DeckServer.shared.start()
         // Keys can't fire without Accessibility; ask macOS to prompt (and list Sidekey in
         // System Settings) rather than failing silently on the first tap.
@@ -47,6 +49,10 @@ struct iKeypadMacApp: App {
 
                 Divider()
 
+                LayoutsMenuSection(monitor: contextMonitor)
+
+                Divider()
+
                 Button("Quit Sidekey") {
                     NSApplication.shared.terminate(nil)
                 }
@@ -83,5 +89,33 @@ private struct PairingMenuSection: View {
 
     private func showCode() {
         PairingCodeWindow.shared.show(for: pairing) { [pairing] in pairing.close() }
+    }
+}
+
+/// Reload hand-edited layout files, and say when any were refused. The error count changes only
+/// on a reload, which comes from a menu action or an editor save, never from a timer
+/// (see ``PairingMenuSection``).
+private struct LayoutsMenuSection: View {
+    @ObservedObject var monitor: AppContextMonitor
+
+    var body: some View {
+        Button("Edit Layouts...") { LayoutEditorWindow.shared.show() }
+        Button("Reload Layouts") { monitor.reloadUserLayouts(from: .app) }
+        if !monitor.layoutFileErrors.isEmpty {
+            let count = monitor.layoutFileErrors.count
+            Button("\(count) layout file\(count == 1 ? " has" : "s have") errors...") {
+                showErrors(monitor.layoutFileErrors)
+            }
+        }
+    }
+
+    private func showErrors(_ errors: [LayoutFileError]) {
+        NSApp.activate(ignoringOtherApps: true)
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = "Sidekey didn't load these layout files"
+        alert.informativeText = errors.map { "\($0.fileName): \($0.reason)" }.joined(separator: "\n\n")
+            + "\n\nSidekey is using the built-in layout for these apps, or the System layout for an app you added. Files are in \(UserLayoutStore.defaultDirectory.path)."
+        alert.runModal()
     }
 }

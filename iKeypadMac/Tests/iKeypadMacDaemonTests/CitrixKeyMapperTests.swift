@@ -51,6 +51,11 @@ final class CitrixKeyMapperTests: XCTestCase {
                        KeyChord(modifierKeys: [leftControl, leftCommand, leftOption], keyCode: 0x75, flags: ctrlFlags.union(altFlags)))
     }
 
+    /// The validator shows this reason to the user, so it must name the key.
+    func testUnknownKeySaysWhichKey() {
+        XCTAssertEqual(CitrixKeyMapper.UnknownKey(key: "banana").localizedDescription, "unknown Windows key \"banana\"")
+    }
+
     func testUnknownKeyThrows() {
         XCTAssertThrowsError(try CitrixKeyMapper.chord(key: "pageup", modifiers: [.ctrl])) { error in
             XCTAssertEqual(error as? CitrixKeyMapper.UnknownKey, CitrixKeyMapper.UnknownKey(key: "pageup"))

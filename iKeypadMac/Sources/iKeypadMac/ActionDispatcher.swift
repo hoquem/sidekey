@@ -27,7 +27,7 @@ public final class ActionDispatcher {
             return executeShellScript(command)
 
         case .runShortcut(let name):
-            return executeShellScript("/usr/bin/shortcuts run \"\(name)\"")
+            return runShortcut(named: name)
 
         case .switchProfile, .none:
             return (true, nil)
@@ -108,25 +108,36 @@ public final class ActionDispatcher {
     }
 
     private func executeShellScript(_ command: String) -> (Bool, String?) {
+        runProcess(URL(fileURLWithPath: "/bin/zsh"), arguments: ["-c", command])
+    }
+
+    /// Run the Apple Shortcut called ``name``. The name goes to the shortcuts tool as a single
+    /// argument after ``--``, never through a shell: user layouts make it untrusted text.
+    private func runShortcut(named name: String) -> (Bool, String?) {
+        runProcess(URL(fileURLWithPath: "/usr/bin/shortcuts"), arguments: ["run", "--", name])
+    }
+
+    /// Run ``executable`` and wait for it.
+    ///
+    /// :returns: Success, or the tool's trimmed standard error (or its exit code when it wrote
+    ///     none) when it fails.
+    private func runProcess(_ executable: URL, arguments: [String]) -> (Bool, String?) {
         let task = Process()
-        task.launchPath = "/bin/zsh"
-        task.arguments = ["-c", command]
-
-        let pipe = Pipe()
-        task.standardError = pipe
-
+        task.executableURL = executable
+        task.arguments = arguments
+        let stderr = Pipe()
+        task.standardError = stderr
         do {
             try task.run()
-            task.waitUntilExit()
-            if task.terminationStatus != 0 {
-                let errData = pipe.fileHandleForReading.readDataToEndOfFile()
-                let errMsg = String(data: errData, encoding: .utf8) ?? "Command failed with code \(task.terminationStatus)"
-                return (false, errMsg)
-            }
-            return (true, nil)
         } catch {
             return (false, error.localizedDescription)
         }
+        let errors = PipeReader(stderr)
+        task.waitUntilExit()
+        // On success stderr is not awaited: a child the command left running may hold it open.
+        guard task.terminationStatus != 0 else { return (true, nil) }
+        let text = String(decoding: errors.waitForData(), as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+        return (false, text.isEmpty ? "Command failed with code \(task.terminationStatus)" : text)
     }
 
     /// The virtual key code for a layout's key name; internal so tests can check every layout key maps.
@@ -204,5 +215,27 @@ public final class ActionDispatcher {
         case "f12": return 0x6F
         default: return nil
         }
+    }
+}
+
+/// Reads a pipe to its end on a background thread from the moment it is made, so a tool that
+/// writes more than a pipe holds (64 KB) never blocks waiting for a reader.
+final class PipeReader: @unchecked Sendable {
+    private var data = Data()
+    private let done = DispatchGroup()
+
+    /// :param pipe: The pipe to read. Make the reader as soon as the tool is running.
+    init(_ pipe: Pipe) {
+        done.enter()
+        DispatchQueue.global().async { [self] in
+            data = pipe.fileHandleForReading.readDataToEndOfFile()
+            done.leave()
+        }
+    }
+
+    /// :returns: Everything written to the pipe, once every writer has closed it.
+    func waitForData() -> Data {
+        done.wait()
+        return data
     }
 }

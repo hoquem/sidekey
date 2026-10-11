@@ -1,3 +1,4 @@
+import Foundation
 import CoreGraphics
 import iKeypadShared
 
@@ -18,7 +19,11 @@ struct KeyChord: Equatable {
 /// "Command (left)-Option", the Windows key via Command (right), and F1 to F12 sent with Option.
 /// Other settings send the wrong keys.
 enum CitrixKeyMapper {
-    struct UnknownKey: Error, Equatable { let key: String }
+    /// A key name with no Mac key code; the description is shown to the user.
+    struct UnknownKey: LocalizedError, Equatable {
+        let key: String
+        var errorDescription: String? { "unknown Windows key \"\(key)\"" }
+    }
 
     private struct Modifier {
         let keyCode: CGKeyCode
