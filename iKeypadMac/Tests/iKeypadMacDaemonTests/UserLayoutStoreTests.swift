@@ -89,6 +89,16 @@ final class UserLayoutStoreTests: XCTestCase {
         XCTAssertEqual(store.loadAll(builtIns: builtIns).errors, [])
     }
 
+    /// An upper-case extension is not skipped silently: the file is read, then refused because
+    /// its name is not <layoutId>.json.
+    func testAnUpperCaseJSONFileIsReported() throws {
+        let data = try JSONEncoder().encode(zoomChange(.hotkey(key: "a", modifiers: [.command])))
+        try write(String(decoding: data, as: UTF8.self), to: "\(zoom).JSON")
+        let loaded = store.loadAll(builtIns: builtIns)
+        XCTAssertEqual(loaded.customisations, [])
+        XCTAssertEqual(loaded.errors, [LayoutFileError(fileName: "\(zoom).JSON", reason: "File name must be \(zoom).json.")])
+    }
+
     func testFilesLoadInNameOrder() throws {
         let a = LayoutCustomisation(layoutId: "com.example.A", appBundleIdentifier: "com.example.A", appName: "A")
         let b = LayoutCustomisation(layoutId: "com.example.B", appBundleIdentifier: "com.example.B", appName: "B")

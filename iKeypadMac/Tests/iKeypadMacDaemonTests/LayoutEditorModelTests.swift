@@ -141,6 +141,17 @@ final class LayoutEditorModelTests: XCTestCase {
         XCTAssertEqual(try Data(contentsOf: directory.appendingPathComponent("\(zoom).json")), bytes)
     }
 
+    /// On a case-insensitive disk, saving us.zoom.xos.json would overwrite a hand-made
+    /// us.zoom.xos.JSON, so that file blocks edits like any other broken file.
+    func testAnUpperCaseJSONFileBlocksEditingItsLayout() throws {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let bytes = try JSONEncoder().encode(LayoutCustomisation(layoutId: zoom, appBundleIdentifier: zoom, appName: "Zoom"))
+        try bytes.write(to: directory.appendingPathComponent("\(zoom).JSON"))
+        model.setKey(raiseHand, at: 4, in: zoom)
+        XCTAssertEqual(model.errorMessage, "Fix or delete \(zoom).JSON first: File name must be \(zoom).json.")
+        XCTAssertEqual(try Data(contentsOf: directory.appendingPathComponent("\(zoom).JSON")), bytes)
+    }
+
     func testAddingAnAppWhoseFileIsBrokenRefuses() throws {
         let bytes = try writeBrokenFile("com.example.SidekeyTest")
         model.addApp(bundleIdentifier: "com.example.SidekeyTest", name: "Example")

@@ -169,8 +169,10 @@ final class LayoutEditorModel: ObservableObject {
         }
     }
 
+    /// The load error for a layout's file. Matched ignoring case because the Mac's disk usually
+    /// is case-insensitive, so ``<id>.JSON`` is the file a save to ``<id>.json`` would overwrite.
     private func fileError(for id: String) -> LayoutFileError? {
-        fileErrors.first { $0.fileName == "\(id).json" }
+        fileErrors.first { $0.fileName.caseInsensitiveCompare("\(id).json") == .orderedSame }
     }
 
     /// Saving over a file that failed to load would lose the user's hand edits.

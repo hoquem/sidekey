@@ -19,8 +19,9 @@ struct UserLayoutStore {
             .appendingPathComponent("Sidekey/Layouts", isDirectory: true)
     }
 
-    /// Read and validate every ``.json`` file in the folder, in file name order. A file that fails
-    /// to decode or validate is reported and skipped whole; it is never partly loaded.
+    /// Read and validate every ``.json`` file in the folder (any case, so ``.JSON`` is reported by
+    /// the validator rather than skipped), in file name order. A file that fails to decode or
+    /// validate is reported and skipped whole; it is never partly loaded.
     ///
     /// :param builtIns: Sidekey's built-in layouts, for ``LayoutValidator``.
     /// :returns: The files that are safe to install, and the ones that were refused.
@@ -36,7 +37,7 @@ struct UserLayoutStore {
 
         var customisations: [LayoutCustomisation] = []
         var errors: [LayoutFileError] = []
-        for file in files.filter({ $0.pathExtension == "json" }).sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) {
+        for file in files.filter({ $0.pathExtension.lowercased() == "json" }).sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) {
             let name = file.lastPathComponent
             let customisation: LayoutCustomisation
             do {
