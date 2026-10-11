@@ -49,6 +49,9 @@ struct KeyInspectorView: View {
         .onAppear(perform: loadDraft)
         .onChange(of: slot) { _ in loadDraft() }
         .onChange(of: layoutId) { _ in loadDraft() }
+        // Add Key, Replace, Reset and drag-moves change the saved key without changing the slot. Our own
+        // saves leave the saved key equal to the draft, so this does not disturb typing.
+        .onChange(of: key.map { CustomKey($0) }) { _ in loadDraft() }
         .onChange(of: draft) { new in
             guard labelProblem == nil, let key, new != CustomKey(key) else { return }
             model.setKey(new, at: slot, in: layoutId)
@@ -64,7 +67,9 @@ struct KeyInspectorView: View {
     private var form: some View {
         Form {
             TextField("Label", text: $draft.label)
-            if let labelProblem { Text(labelProblem).font(.caption).foregroundStyle(.red) }
+            if let labelProblem {
+                Label(labelProblem, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.red)
+            }
 
             HStack {
                 Text("Icon")
@@ -74,6 +79,7 @@ struct KeyInspectorView: View {
                 } label: {
                     Image(systemName: draft.iconSystemName ?? "square.dashed")
                 }
+                .accessibilityLabel("Icon: \(draft.iconSystemName ?? "none")")
                 .popover(isPresented: $choosingIcon) { IconPicker(selection: $draft.iconSystemName) }
             }
 
@@ -121,6 +127,7 @@ struct KeyInspectorView: View {
                 }
             },
             set: { new in
+                if new != .keyboard { recorder.stop() }
                 switch new {
                 case .keyboard: draft.action = .hotkey(key: "a", modifiers: [.command])
                 case .windows: draft.action = .windowsHotkey(key: "a", modifiers: [.ctrl])
@@ -137,12 +144,13 @@ struct KeyInspectorView: View {
         switch draft.action {
         case .hotkey(let name, let modifiers):
             HStack {
-                ForEach([(KeyModifier.control, "⌃"), (.option, "⌥"), (.shift, "⇧"), (.command, "⌘")], id: \.1) { mod, symbol in
+                ForEach([(KeyModifier.control, "⌃", "Control"), (.option, "⌥", "Option"), (.shift, "⇧", "Shift"), (.command, "⌘", "Command")], id: \.1) { mod, symbol, modifierName in
                     Toggle(symbol, isOn: Binding(
                         get: { modifiers.contains(mod) },
                         set: { on in draft.action = .hotkey(key: name, modifiers: on ? modifiers + [mod] : modifiers.filter { $0 != mod }) }
                     ))
                     .toggleStyle(.button)
+                    .accessibilityLabel(modifierName)
                 }
                 Picker("Key", selection: Binding(get: { name }, set: { draft.action = .hotkey(key: $0, modifiers: modifiers) })) {
                     ForEach(KeyNames.mac, id: \.self) { Text($0).tag($0) }
@@ -155,7 +163,7 @@ struct KeyInspectorView: View {
                 }
             }
             if let warning = SystemShortcuts.conflict(key: name, modifiers: modifiers) {
-                Text(warning).font(.caption).foregroundStyle(.orange)
+                Label(warning, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.orange)
             }
         case .windowsHotkey(let name, let modifiers):
             HStack {
