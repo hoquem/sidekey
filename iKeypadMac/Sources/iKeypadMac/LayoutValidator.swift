@@ -63,7 +63,12 @@ enum LayoutValidator {
         case .hotkey(let name, _):
             return ActionDispatcher.shared.keyCodeForString(name) == nil ? "unknown key \"\(name)\"." : nil
         case .windowsHotkey(let name, let modifiers):
-            return (try? CitrixKeyMapper.chord(key: name, modifiers: modifiers)) == nil ? "unknown Windows key \"\(name)\"." : nil
+            do {
+                _ = try CitrixKeyMapper.chord(key: name, modifiers: modifiers)
+                return nil
+            } catch {
+                return "\(error.localizedDescription)."
+            }
         case .runShortcut(let name):
             return name.trimmingCharacters(in: .whitespaces).isEmpty ? "shortcut name is empty." : nil
         case .switchProfile(let id):
