@@ -7,7 +7,7 @@ import iKeypadShared
 /// for the old slot after the inspector already shows the new one. Carrying the owner inside the
 /// draft means a save only ever goes back to the slot the draft came from.
 struct KeyInspectorDraft: Equatable {
-    struct Owner: Equatable {
+    struct Owner: Hashable {
         let layoutId: String
         let slot: Int
     }
@@ -74,8 +74,6 @@ struct KeyInspectorView: View {
         }
         .frame(width: 300, alignment: .topLeading)
         .onAppear(perform: loadDraft)
-        .onChange(of: slot) { _ in loadDraft() }
-        .onChange(of: layoutId) { _ in loadDraft() }
         // Add Key, Replace, Reset and drag-moves change the saved key without changing the slot. Our own
         // saves leave the saved key equal to the draft, so this does not disturb typing.
         .onChange(of: key.map { CustomKey($0) }) { _ in loadDraft() }

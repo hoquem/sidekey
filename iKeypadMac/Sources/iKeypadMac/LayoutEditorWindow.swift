@@ -71,13 +71,13 @@ struct LayoutEditorView: View {
                         }
                     }
                 }
-            }
-            .frame(minWidth: 230)
-            .safeAreaInset(edge: .bottom) {
+                // Below the list rather than inset over it, so it never covers the last row.
+                Divider()
                 Button("Add App...", action: chooseApp)
                     .padding(10)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .frame(minWidth: 230)
         } detail: {
             if let id = model.selectedLayoutId, let layout = model.layout(id) {
                 detail(id: id, layout: layout)
@@ -156,7 +156,10 @@ struct LayoutEditorView: View {
                 KeyGridView(model: model, layoutId: id, layout: layout, changed: changed, selection: $selectedSlot, columns: 3, compact: true)
             }
             if let slot = selectedSlot {
+                // A fresh inspector per slot: on macOS 13 an onChange(of: slot) handler runs with the
+                // previous slot's values, which loaded the wrong key into the inspector.
                 KeyInspectorView(model: model, layoutId: id, slot: slot)
+                    .id(KeyInspectorDraft.Owner(layoutId: id, slot: slot))
             }
         }
         .padding(24)
