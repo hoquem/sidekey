@@ -106,6 +106,8 @@ A file is rejected as a whole, never partly applied, when any of these hold:
   `ActionDispatcher` and `CitrixKeyMapper` use), so a bad key fails at load, not at tap.
 - A `runShortcut` name is empty.
 - `layoutId` contains `/` or starts with `.`, or the file name is not `<layoutId>.json`.
+- For an app with no built-in layout, `layoutId` is not the app's bundle id, so two files cannot
+  both claim the same app.
 
 A rejected file leaves the built-in layout in place. The menu shows "1 layout file has
 errors..." and the editor lists each file with its reason. Nothing is silently skipped.
@@ -113,7 +115,9 @@ errors..." and the editor lists each file with its reason. Nothing is silently s
 ## Edge cases
 
 - **Built-in layout removed in a later release:** if the app has no built-in layout left, the
-  file keeps working as that app's own layout (an empty base). If the app still has a built-in
+  file keeps working as that app's own layout (an empty base), provided its `layoutId` is the
+  app's bundle id; a file for an extra mode (such as a Citrix mode) is refused, since its
+  `layoutId` is not the bundle id. If the app still has a built-in
   layout under another id, the validator refuses the file and says which layout id to customise
   instead. (Changed while planning, 2026-10-09: no separate "orphaned" state is needed.)
 - **Built-in keys with script actions** (4 in the System layout): user layouts cannot hold
