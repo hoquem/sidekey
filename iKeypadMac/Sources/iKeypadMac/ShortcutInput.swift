@@ -53,28 +53,17 @@ enum AppleShortcuts {
         task.standardError = err
         try task.run()
         // Drain stderr on another thread while stdout is read, so a full stderr pipe cannot block the tool.
-        let errorBox = DataBox()
-        let stderrDrained = DispatchGroup()
-        stderrDrained.enter()
-        DispatchQueue.global().async {
-            errorBox.data = err.fileHandleForReading.readDataToEndOfFile()
-            stderrDrained.leave()
-        }
+        let errors = PipeReader(err)
         let output = out.fileHandleForReading.readDataToEndOfFile()
-        stderrDrained.wait()
+        let errorData = errors.waitForData()
         task.waitUntilExit()
         guard task.terminationStatus == 0 else {
-            let text = String(decoding: errorBox.data, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+            let text = String(decoding: errorData, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
             let reason = text.isEmpty ? "exit code \(task.terminationStatus)" : text
             throw ShortcutsListError(errorDescription: "Couldn't list your shortcuts: \(reason)")
         }
         return parse(String(decoding: output, as: UTF8.self))
     }
-}
-
-/// Holds bytes read on a background thread; written once before the thread's group is left.
-private final class DataBox: @unchecked Sendable {
-    var data = Data()
 }
 
 /// Raised when ``AppleShortcuts/names()`` cannot list the user's shortcuts.
