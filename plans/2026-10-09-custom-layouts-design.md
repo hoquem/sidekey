@@ -135,7 +135,7 @@ errors..." and the editor lists each file with its reason. Nothing is silently s
 ```
 
 - **App list:** built-in layouts plus user layouts; a dot marks customised ones; Citrix modes
-  nest under Citrix Viewer. **Add App...** picks an installed app and creates an empty layout.
+  are separate rows named after their mode key ("Citrix Viewer: Outlook"), which sort together (decided 2026-10-11). **Add App...** picks an installed app and creates an empty layout.
 - **Grid:** the resolved layout in landscape order (3 rows by 5 columns) with role colours, and a
   small portrait preview (the iPad keeps reading order in portrait, `iKeypadApp.swift`
   `keyGrid`). Click to select; drag to move or swap.
