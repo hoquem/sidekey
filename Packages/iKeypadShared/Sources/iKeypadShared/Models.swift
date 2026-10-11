@@ -23,6 +23,7 @@ public struct DeckProfile: Codable, Identifiable, Equatable, Sendable {
         self.columns = columns
         // Key ids derive from the layout id and slot, so the same key has the same id on every
         // launch; the Mac finds a tapped key by id, including for a layout pinned on the iPad.
+        // ``LayoutResolver`` adds a digest to the ids of a user's keys after this.
         self.keys = keys.map { key in
             var key = key
             key.id = "\(id)#\(key.position)"

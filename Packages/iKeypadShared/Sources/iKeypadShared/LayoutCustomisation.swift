@@ -61,8 +61,8 @@ extension SlotChange: Codable {
     }
 }
 
-/// A key the user made. Unlike ``DeckKey`` it has no id (derived from layout and slot), badge or
-/// live toggle: those belong to built-in keys that read app state.
+/// A key the user made. Unlike ``DeckKey`` it has no id (``LayoutResolver`` derives it from the
+/// layout, slot and key), badge or live toggle: those belong to built-in keys that read app state.
 public struct CustomKey: Codable, Equatable, Sendable {
     public var label: String
     public var iconSystemName: String?

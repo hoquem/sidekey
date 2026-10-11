@@ -213,6 +213,38 @@ final class DeckServerCharacterizationTests: XCTestCase {
         }
     }
 
+    /// A layout pinned on the iPad is a frozen copy. Once the user edits a key on the Mac (here
+    /// only turning on hold-to-fire), a tap on the pinned copy's old key must not run the new key.
+    func testPinnedTapOnAKeyEditedSincePinningIsRejected() async throws {
+        let marker = FileManager.default.temporaryDirectory.appendingPathComponent("sidekey-pinned-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: marker) }
+        let tap = CustomKey(label: "Touch", iconSystemName: nil, role: nil, requiresConfirm: false,
+                            action: .shellScript(command: "touch '\(marker.path)'"))
+        var held = tap
+        held.requiresConfirm = true
+        let base = DeckProfile(id: "test.layout", appBundleIdentifier: "test.layout", appName: "Test")
+        func resolved(_ key: CustomKey) -> DeckProfile {
+            LayoutResolver.resolve(LayoutCustomisation(layoutId: base.id, appBundleIdentifier: base.id, appName: "Test",
+                                                       slots: [0: .key(key)]), base: base)
+        }
+        let pinnedCopy = resolved(tap)
+        let edited = resolved(held)
+
+        let monitor = AppContextMonitor.shared
+        let original = monitor.activeProfile
+        monitor.activeProfile = edited
+        defer { monitor.activeProfile = original }
+
+        let stale = try await execute(keyId: pinnedCopy.keys[0].id, profileId: base.id, pinned: true)
+        XCTAssertEqual(stale.success, false)
+        XCTAssertEqual(stale.error, "This key changed on your Mac. Unpin, bring the app forward and pin again.")
+        try await Task.sleep(nanoseconds: 300_000_000)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: marker.path), "the edited key ran from a stale pinned tap")
+
+        let current = try await execute(keyId: edited.keys[0].id, profileId: base.id, pinned: true)
+        XCTAssertEqual(current.success, true, "a pinned tap on the current key still runs")
+    }
+
     func testPingIsAnsweredWithPong() async throws {
         let client = try await pairedClient()
         try client.send(.ping)

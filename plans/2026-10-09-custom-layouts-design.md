@@ -9,7 +9,8 @@ for an app Sidekey has no built-in layout for, using a visual editor on the Mac.
 
 **Done means:**
 - A user changes a key in a built-in layout (for example, swaps a Zoom key) and the iPad shows it
-  straight away, with no restart.
+  straight away, with no restart. On a layout pinned on the iPad, a changed key is refused until
+  the user unpins, brings the app to the front and pins again.
 - A user adds a layout for an app with no built-in layout, and the iPad shows it when that app is in front.
 - A user can reset one key, or a whole layout, to the built-in version.
 - Keys the user never changed still pick up fixes from later Sidekey releases.
@@ -83,7 +84,12 @@ One file per layout: `~/Library/Application Support/Sidekey/Layouts/<layout id>.
 - A slot is either a replacement key or `"removed"`. Slots not listed come from the base layout.
 - `action` uses the existing `KeyAction` JSON encoding, so the iPad needs no change.
 - Key ids are not stored. `DeckProfile.init` derives them as `<layout id>#<slot>`, so a tap from a
-  layout pinned on the iPad still finds its key.
+  layout pinned on the iPad still finds a key the user did not change. `LayoutResolver` gives a
+  user's key `<layout id>#<slot>#<digest>`, where the digest is the first 8 hex characters of
+  SHA-256 over the key's JSON with sorted keys. A pinned layout is a frozen copy on the iPad, so a
+  tap on a key changed since pinning names an id the Mac no longer has, and the Mac refuses it with
+  "This key changed on your Mac. Unpin, bring the app forward and pin again." rather than running
+  the new key (which might need a hold the iPad's copy does not ask for).
 
 ## Validation (on every load)
 
@@ -148,11 +154,12 @@ errors..." and the editor lists each file with its reason. Nothing is silently s
   - Windows shortcut: the same manual entry with Ctrl, Alt, Shift, Win.
   - Apple Shortcut: a menu filled from `shortcuts list`.
   - Switch layout: offered only for apps with several modes.
-- **Saving:** every change writes the file at once and the iPad updates live. Reset Key and
+- **Saving:** every change writes the file at once and the iPad updates live, except a layout
+  pinned on the iPad, whose changed keys are refused until it is pinned again. Reset Key and
   Reset Layout confirm first; Reset Layout deletes the file.
 - **Window:** Sidekey has no Dock icon, so the window activates the app when it opens, as
   `PairingCodeWindow` does. The menu gains the static items "Edit Layouts..." and "Reload Layouts", and an
-  error-count item that changes only on reload from a menu action, never while the menu is open
+  error-count item that changes only on reload (from a menu action or an editor save), never while the menu is open
   (open-menu state changes are what crashed 1.1.0).
 
 ## Tests

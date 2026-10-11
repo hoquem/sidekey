@@ -321,7 +321,11 @@ public final class DeckServer: ObservableObject {
             delay = 0.25
         }
         guard let key = profile.keys.first(where: { $0.id == keyId }) else {
-            return .failure(TapRejected(reason: "Layout changed. Tap again."))
+            // A pinned layout is a frozen copy on the iPad, and a key the user changed since has a
+            // new id (see ``LayoutResolver``), so the old key can never run the new key's action.
+            return .failure(TapRejected(reason: pinned == true
+                ? "This key changed on your Mac. Unpin, bring the app forward and pin again."
+                : "Layout changed. Tap again."))
         }
         return .success(TapTarget(action: key.action, delay: delay))
     }

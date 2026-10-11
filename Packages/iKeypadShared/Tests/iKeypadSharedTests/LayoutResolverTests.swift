@@ -34,9 +34,43 @@ final class LayoutResolverTests: XCTestCase {
         XCTAssertEqual(layout.keys.count, 2)
     }
 
-    func testKeyIdsStayStableSoPinnedTapsStillLand() {
+    /// Untouched keys keep ``<layoutId>#<slot>``, so a tap from a layout pinned on the iPad still lands.
+    func testUntouchedKeysKeepThePlainId() {
         let layout = LayoutResolver.resolve(customisation([4: .key(raiseHand)]), base: base)
-        XCTAssertEqual(Set(layout.keys.map(\.id)), ["us.zoom.xos#0", "us.zoom.xos#1", "us.zoom.xos#4", "us.zoom.xos#9"])
+        XCTAssertEqual(Set(layout.keys.filter { $0.position != 4 }.map(\.id)), ["us.zoom.xos#0", "us.zoom.xos#1", "us.zoom.xos#9"])
+    }
+
+    /// A user's key carries a digest of its content, so a pinned copy of an older key is never
+    /// matched to the new one. The literal value proves the id is the same on every launch.
+    func testACustomKeyIdCarriesADigestOfTheKey() {
+        let layout = LayoutResolver.resolve(customisation([4: .key(raiseHand)]), base: base)
+        XCTAssertEqual(layout.keys.first { $0.position == 4 }?.id, "us.zoom.xos#4#\(Self.raiseHandDigest)")
+    }
+
+    /// First 8 hex characters of SHA-256 over ``raiseHand`` encoded with sorted keys, checked with
+    /// `shasum -a 256` on that JSON.
+    private static let raiseHandDigest = "3843a83c"
+
+    func testCustomKeyIdsAreTheSameOnEveryResolve() {
+        let first = LayoutResolver.resolve(customisation([4: .key(raiseHand)]), base: base)
+        let second = LayoutResolver.resolve(customisation([4: .key(raiseHand)]), base: base)
+        XCTAssertEqual(first.keys.map(\.id), second.keys.map(\.id))
+    }
+
+    /// Turning on hold-to-fire is an edit like any other: the key gets a new id.
+    func testEditingAKeyChangesItsId() {
+        var held = raiseHand
+        held.requiresConfirm = true
+        let before = LayoutResolver.resolve(customisation([4: .key(raiseHand)]), base: base)
+        let after = LayoutResolver.resolve(customisation([4: .key(held)]), base: base)
+        XCTAssertNotEqual(before.keys.first { $0.position == 4 }?.id, after.keys.first { $0.position == 4 }?.id)
+    }
+
+    /// The digest ids reach the iPad unchanged; decoding must not derive them again.
+    func testCustomKeyIdsSurviveTheWire() throws {
+        let layout = LayoutResolver.resolve(customisation([4: .key(raiseHand)]), base: base)
+        let decoded = try JSONDecoder().decode(DeckProfile.self, from: JSONEncoder().encode(layout))
+        XCTAssertEqual(decoded.keys.map(\.id), layout.keys.map(\.id))
     }
 
     func testANewAppStartsFromAnEmptyThreeByFiveLayout() {
