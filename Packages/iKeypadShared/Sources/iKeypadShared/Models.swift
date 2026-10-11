@@ -232,7 +232,7 @@ public enum DeckMessage: Codable, Equatable, Sendable {
     case appContextUpdated(context: AppContext)
     /// A tap on key ``keyId`` of layout ``profileId``. The Mac runs the action from its own copy
     /// of that layout; a tap never carries an action, so a client cannot make the Mac run anything
-    /// outside its built-in layouts. The Mac rejects taps on a layout that is no longer active
+    /// outside the Mac's own layouts. The Mac rejects taps on a layout that is no longer active
     /// unless ``pinned`` is set, in which case it brings that layout's app forward.
     case executeAction(keyId: String, profileId: String?, pinned: Bool?)
     case actionExecuted(keyId: String, success: Bool, errorMessage: String?)

@@ -114,7 +114,7 @@ private struct LayoutsMenuSection: View {
         alert.alertStyle = .warning
         alert.messageText = "Sidekey didn't load these layout files"
         alert.informativeText = errors.map { "\($0.fileName): \($0.reason)" }.joined(separator: "\n\n")
-            + "\n\nSidekey is using the built-in layouts for these apps. Files are in \(UserLayoutStore.defaultDirectory.path)."
+            + "\n\nSidekey is using the built-in layout for these apps, or the System layout for an app you added. Files are in \(UserLayoutStore.defaultDirectory.path)."
         alert.runModal()
     }
 }

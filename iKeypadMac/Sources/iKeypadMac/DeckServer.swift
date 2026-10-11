@@ -291,7 +291,7 @@ public final class DeckServer: ObservableObject {
     /// runs, bringing a pinned layout's app forward first.
     ///
     /// The action always comes from the Mac's own layout, never from the client, so only the
-    /// built-in layouts' actions can ever run.
+    /// Mac's own layouts' actions can ever run.
     ///
     /// :returns: The key's action and the delay before firing (time for a pinned app to come
     ///     forward), or why the tap is rejected.

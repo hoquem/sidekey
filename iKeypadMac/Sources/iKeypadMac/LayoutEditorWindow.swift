@@ -131,7 +131,7 @@ struct LayoutEditorView: View {
                 model.resetLayout(String(error.fileName.dropLast(".json".count)))
             }
         } message: { error in
-            Text("Delete \(error.fileName)? Your changes in it are lost; the app goes back to its built-in layout.")
+            Text("Delete \(error.fileName)? Your changes in it are lost; the app goes back to its built-in layout, or to the System layout if you added it.")
         }
     }
 

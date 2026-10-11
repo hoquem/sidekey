@@ -138,6 +138,7 @@ final class LayoutEditorModel: ObservableObject {
     ///
     /// :param id: The layout id.
     func resetLayout(_ id: String) {
+        reload()
         guard customisations[id] != nil || fileError(for: id) != nil else { return }
         do {
             try store.delete(layoutId: id)
@@ -154,6 +155,7 @@ final class LayoutEditorModel: ObservableObject {
     /// :param bundleIdentifier: The app's bundle identifier.
     /// :param name: The app's display name.
     func addApp(bundleIdentifier: String, name: String) {
+        reload()
         if refuseToOverwriteBrokenFile(for: bundleIdentifier) { return }
         if let existing = monitor.builtInProfiles.first(where: { $0.appBundleIdentifier == bundleIdentifier })?.id
             ?? customisations[bundleIdentifier]?.layoutId {
@@ -179,6 +181,8 @@ final class LayoutEditorModel: ObservableObject {
     }
 
     private func change(_ id: String, _ edit: (inout LayoutCustomisation) -> Void) {
+        // Files can change on disk while the window is open; never edit from a stale copy.
+        reload()
         guard let current = layout(id) else { return }
         if refuseToOverwriteBrokenFile(for: id) { return }
         var customisation = customisations[id]

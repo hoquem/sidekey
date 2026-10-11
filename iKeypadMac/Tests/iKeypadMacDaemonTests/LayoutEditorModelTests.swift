@@ -154,4 +154,14 @@ final class LayoutEditorModelTests: XCTestCase {
         XCTAssertFalse(fileExists(zoom))
         XCTAssertTrue(model.fileErrors.isEmpty)
     }
+
+    func testEditingRefusesWhenTheFileWasBrokenByHandAfterTheEditorLoaded() throws {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let bytes = Data("{ not json".utf8)
+        try bytes.write(to: directory.appendingPathComponent("\(zoom).json"))
+        // No model.reload(): the editor has not seen the hand edit.
+        model.setKey(raiseHand, at: 4, in: zoom)
+        XCTAssertTrue(model.errorMessage?.hasPrefix("Fix or delete \(zoom).json first: ") == true, model.errorMessage ?? "nil")
+        XCTAssertEqual(try Data(contentsOf: directory.appendingPathComponent("\(zoom).json")), bytes)
+    }
 }
