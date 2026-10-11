@@ -88,3 +88,8 @@ enum LayoutStoreError: LocalizedError, Equatable {
         }
     }
 }
+
+extension UserLayoutStore {
+    /// The store the running app reads and the editor writes.
+    static let app = UserLayoutStore(directory: defaultDirectory)
+}
