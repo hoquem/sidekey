@@ -12,7 +12,10 @@ final class LayoutEditorWindow {
     private var window: NSWindow?
     private lazy var model = LayoutEditorModel(monitor: .shared, store: .app)
 
+    /// Show the window. Hand edits since the last reload are applied to the iPad first, as
+    /// Reload Layouts does, so the editor never shows keys the iPad is not running.
     func show() {
+        AppContextMonitor.shared.reloadUserLayouts(from: .app)
         model.reload()
         if window == nil {
             let window = NSWindow(contentViewController: NSHostingController(rootView: LayoutEditorView(model: model)))
