@@ -17,7 +17,7 @@ Sidekey turns an iPad into a shortcut deck for your Mac. Prop the iPad beside yo
 
 ## Install
 
-Sidekey has two parts: a menu bar app for your Mac and an app for your iPad. The Mac app is available now; the iPad app is not yet publicly available (see step 2). Once both are installed, pair them once.
+Sidekey has two parts: a menu bar app for your Mac and an app for your iPad or iPhone, free on the App Store. Once both are installed, pair them once.
 
 If you installed Mac version 1.0.0, replace it with the latest version: 1.0.0 had a security problem and was withdrawn (see the [1.0.0 release notes](https://github.com/hoquem/sidekey/releases/tag/v1.0.0)).
 
@@ -45,20 +45,20 @@ Get [Sidekey on the App Store](https://apps.apple.com/app/id6820215459): open th
 
 You can also build it yourself from source (see [Build from source](#build-from-source)). Building needs Xcode and your own Apple developer team and bundle IDs; with a free personal team, Apple lets the build run for 7 days before you must reinstall it.
 
-However you install it, open **Sidekey** on the iPad and tap **Allow** when it asks to find devices on your local network.
+However you install it, open **Sidekey** on the iPad or iPhone and tap **Allow** when it asks to find devices on your local network.
 
 ### 3. Connect and pair
 
 1. Plug the iPad into the Mac with a USB cable, or put both on the same Wi-Fi network.
-2. Open Sidekey on the iPad. When it finds the Mac, it asks for a pairing code.
+2. Open Sidekey on the iPad or iPhone. When it finds the Mac, it asks for a pairing code.
 3. On the Mac, click the Sidekey menu bar icon and choose **Pair Device...**. A window shows a 6-digit code for two minutes.
-4. On the iPad, type the code and tap **Pair**. After five wrong codes, or two minutes, choose Pair Device again for a new code.
+4. On the iPad or iPhone, type the code and tap **Pair**. After five wrong codes, or two minutes, choose Pair Device again for a new code.
 
-From then on the iPad connects to that Mac by itself whenever Sidekey is running on both. Switch apps on the Mac and the keys on the iPad change to match.
+From then on the iPad or iPhone connects to that Mac by itself whenever Sidekey is running on both. Switch apps on the Mac and the keys on the device change to match.
 
 ## Security
 
-- **Pairing:** a Mac accepts an iPad only after it has been paired with a short-lived code shown on the Mac. Until then the iPad receives only the Mac's name and identifier and a pairing request, and its taps are refused. Each side stores a pairing token in its Keychain; later connections prove the token without sending it.
+- **Pairing:** a Mac accepts an iPad or iPhone only after it has been paired with a short-lived code shown on the Mac. Until then the device receives only the Mac's name and identifier and a pairing request, and its taps are refused. Each side stores a pairing token in its Keychain; later connections prove the token without sending it.
 - **The Mac runs only its own actions:** a tap carries which key on which layout (and whether it is pinned); the Mac runs that key's action from its own copy of the layout, never an action sent over the network. Layouts you make on the Mac can only send keyboard or Windows shortcuts, run your Apple Shortcuts or switch Citrix modes. They cannot run shell commands or AppleScript themselves (an Apple Shortcut you choose runs its own steps), and every layout file is checked each time it is loaded.
 - **Not encrypted yet:** Traffic between the iPad and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends (app names, window titles, the keys you tap and both device names). If they capture the one-time pairing exchange or interfere with a live connection, they could also press keys in your Mac's layouts, including ones you made, for example to open Terminal or lock the Mac, until you choose Forget Paired Devices on the Mac. Use Sidekey over USB or on a network you trust. Encryption is planned.
 - **The iPad does not verify the Mac yet:** a paired iPad looks for its Mac by an identifier the Mac advertises on the network, which another device could copy.
@@ -98,13 +98,13 @@ From then on the iPad connects to that Mac by itself whenever Sidekey is running
 | Spotify | Play/Pause, Like, Shuffle, Repeat, Search, Queue |
 | Notion | New Page, Search, Back, Forward, Copy Link, Comment |
 | ChatGPT | Chat Bar, Find, Stop, Share Desktop, Share Window, Browser |
-| Citrix Viewer | Modes for Windows, Outlook, Browser, VS Code and, under More, Word, Excel and Teams; the bottom row switches mode (Windows shortcuts from Microsoft's published lists, sent into the session; needs iPad build 5 or later and the Citrix keyboard settings in [Support](https://hoquem.github.io/sidekey/support.html)) |
+| Citrix Viewer | Modes for Windows, Outlook, Browser, VS Code and, under More, Word, Excel and Teams; the bottom row switches mode (Windows shortcuts from Microsoft's published lists, sent into the session; needs the Citrix keyboard settings in [Support](https://hoquem.github.io/sidekey/support.html)) |
 
 Shortcuts are taken from each app's own menus or published documentation. The Outlook, Slack, Spotify, Notion and ChatGPT layouts, most of the Excel and Teams keys, Cursor's Accept All, Reject All, Model, Mode, Mode Menu and Add to Chat keys, Antigravity's Agent Panel key and OpenCode's Stop key come from each vendor's published shortcuts. Not every key has been tried in its app yet. Notion and ChatGPT publish only a few shortcuts, so their decks are partly empty. The built-in layouts are code in `Packages/iKeypadShared/Sources/iKeypadShared/` (`DefaultProfiles.swift` and `PopularAppProfiles.swift`). To add an app without writing code, use **Edit Layouts...** (see [Custom layouts](#custom-layouts)); contributors can also add a profile in those files.
 
 ## Custom layouts
 
-Needs Sidekey for Mac 1.4.0 or later and iPad or iPhone app build 5 or later. Choose **Edit Layouts...** in the Sidekey menu to change what the keys do. You can change, move, remove and reset keys (built-in keys that run scripts are the exception, see below) and add a layout for any app. Changes take effect at once and show on the iPad or iPhone when that app is in front. On a pinned layout, a key you changed, moved, removed or reset is refused until you unpin, bring the app to the front and pin again; keys you have not changed since pinning keep working. If you reset or remove a layout you added for an app, unpin it.
+Needs Sidekey for Mac 1.4.0 or later. Choose **Edit Layouts...** in the Sidekey menu to change what the keys do. You can change, move, remove and reset keys (built-in keys that run scripts are the exception, see below) and add a layout for any app. Changes take effect at once and show on the iPad or iPhone when that app is in front. On a pinned layout, a key you changed, moved, removed or reset is refused until you unpin, bring the app to the front and pin again; keys you have not changed since pinning keep working. If you reset or remove a layout you added for an app, unpin it.
 
 - **The editor.** The list on the left holds every built-in layout (each Citrix mode is its own row, such as "Citrix Viewer: Outlook") and any app you add with the **+** button under the list (choosing an app that already has a layout selects it instead). The **−** (minus) button removes an app you added after you confirm, and the iPad then shows the System layout for that app; it is greyed out for built-in apps, where **Reset Layout...** undoes your changes. A dot marks a layout you have changed. Select an app to see its 15 key slots as a 5 columns by 3 rows grid plus a preview of how they sit on the iPad or iPhone in portrait. Drag a key onto another to swap them, or onto an empty slot to move it.
 - **Editing a key.** Select a key to set its label (1 to 16 characters), icon, colour and action, and whether it needs a press and hold. The action is a keyboard shortcut (record it, or pick the keys by hand; the editor warns when the shortcut is one macOS uses itself, such as Command-Space), a Windows shortcut, one of your Apple Shortcuts chosen from a list, or, for apps with several modes such as Citrix Viewer, a switch to another mode. **Reset Key...** appears on keys you changed and **Reset Layout...** on layouts you changed; both go back to the built-in version after you confirm. For an app you added, Reset Key empties the slot and Reset Layout removes the layout.
