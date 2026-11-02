@@ -37,13 +37,13 @@ Requires macOS 13 or later.
 
 **Uninstalling:** first choose **Forget Paired Devices** in the Sidekey menu, so a later reinstall does not still trust your old iPads. Then quit Sidekey, delete it from Applications, and remove it from System Settings › Privacy & Security › Accessibility (and Automation and Local Network, if listed).
 
-### 2. iPad app (coming to the App Store)
+### 2. iPad and iPhone app
 
-Requires iPadOS 16 or later.
+Requires iPadOS 16 or later, or iOS 16 or later.
 
-Sidekey for iPad is not on the App Store yet; this section will link to it when it is available. Once it is, open the **App Store** on your iPad, search for **Sidekey**, and tap **Get**.
+Get [Sidekey on the App Store](https://apps.apple.com/app/id6820215459): open the **App Store** on your iPad or iPhone, search for **Sidekey**, and tap **Get**. One app works on both.
 
-Until then, the iPad app is in a private TestFlight beta, or you can build it yourself from source (see [Build from source](#build-from-source)). Building needs Xcode and your own Apple developer team and bundle IDs; with a free personal team, Apple lets the build run for 7 days before you must reinstall it.
+You can also build it yourself from source (see [Build from source](#build-from-source)). Building needs Xcode and your own Apple developer team and bundle IDs; with a free personal team, Apple lets the build run for 7 days before you must reinstall it.
 
 However you install it, open **Sidekey** on the iPad and tap **Allow** when it asks to find devices on your local network.
 
