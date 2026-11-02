@@ -17,6 +17,7 @@
 		4E08DA389DAA37612D3CBD48 /* DeckClientCharacterizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 352E2A3C6D0EE3B3B41DD60E /* DeckClientCharacterizationTests.swift */; };
 		508724F6C31A8E58D119FC48 /* ActionDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7975824A26AADE9117E8C4 /* ActionDispatcher.swift */; };
 		5BAE329C48E3FB1B24D1DE1B /* AppContextMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C829FA5E3E27D4B01E0D3F /* AppContextMonitor.swift */; };
+		5CC72792484DF1A5D7E5DE60 /* SetupHintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE6575FF664E8A8C3F15B3C1 /* SetupHintTests.swift */; };
 		5EC070841EA09B30DF8A3867 /* iKeypadMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CE111B591B07C75936E526 /* iKeypadMacApp.swift */; };
 		6AC58A2F58E527785AA20DD6 /* LayoutValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6B4B27F453E61A8F0E4048 /* LayoutValidator.swift */; };
 		733ED076CE77CA2599049B38 /* SymbolCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2E6F3AFF454C8840ADA9B3 /* SymbolCatalog.swift */; };
@@ -85,6 +86,7 @@
 		E2328F3C3DE9811908410F05 /* NowControllingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowControllingView.swift; sourceTree = "<group>"; };
 		E7A8E3E2C7DDB3D8690FC16E /* Pairing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pairing.swift; sourceTree = "<group>"; };
 		E98569F8D3A548765DE558C5 /* LayoutEditorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutEditorWindow.swift; sourceTree = "<group>"; };
+		EE6575FF664E8A8C3F15B3C1 /* SetupHintTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupHintTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +202,7 @@
 				352E2A3C6D0EE3B3B41DD60E /* DeckClientCharacterizationTests.swift */,
 				D57B8C32E5801300F0C9F3EF /* DeckClientPairingTests.swift */,
 				347F366216B568BEC636A298 /* DeckClientReconnectTests.swift */,
+				EE6575FF664E8A8C3F15B3C1 /* SetupHintTests.swift */,
 			);
 			name = Tests;
 			path = iKeypad/Tests;
@@ -374,6 +377,7 @@
 				4E08DA389DAA37612D3CBD48 /* DeckClientCharacterizationTests.swift in Sources */,
 				BF68CA4897EDD57B41FF7A49 /* DeckClientPairingTests.swift in Sources */,
 				20C1670D9C43FF7A5002A548 /* DeckClientReconnectTests.swift in Sources */,
+				5CC72792484DF1A5D7E5DE60 /* SetupHintTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

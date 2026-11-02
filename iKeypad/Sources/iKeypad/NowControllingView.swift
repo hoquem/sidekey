@@ -12,6 +12,11 @@ struct NowControllingView: View {
 
     private static let setupHintDelay: TimeInterval = 8
 
+    /// Hints shown while no Mac has been found. Only an iPad is offered the
+    /// USB cable: the docs and App Store text support USB on iPad alone.
+    static let padSetupHint = "Open Sidekey on your Mac, then connect this iPad with a USB cable or join the same Wi-Fi network."
+    static let phoneSetupHint = "Open Sidekey on your Mac, then join the same Wi-Fi network as the Mac."
+
     var body: some View {
         Group {
             if client.isConnected {
@@ -223,7 +228,7 @@ struct NowControllingView: View {
     private func help(at now: Date) -> String? {
         switch client.phase {
         case .searching(let since) where now.timeIntervalSince(since) >= Self.setupHintDelay:
-            return "Open Sidekey on your Mac, then connect this \(UIDevice.current.model) with a USB cable or join the same Wi-Fi network."
+            return UIDevice.current.userInterfaceIdiom == .pad ? Self.padSetupHint : Self.phoneSetupHint
         case .reconnecting:
             return "Keys are paused until the Mac is back."
         default:
