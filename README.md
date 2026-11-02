@@ -1,19 +1,19 @@
 # Sidekey
 
-Sidekey turns an iPad into a shortcut deck for your Mac. Prop the iPad beside your keyboard: whenever you switch apps on the Mac, the iPad shows keys for that app, and tapping a key runs the shortcut on the Mac.
+Sidekey turns an iPad or iPhone into a shortcut deck for your Mac. Prop it beside your keyboard: whenever you switch apps on the Mac, it shows keys for that app, and tapping a key runs the shortcut on the Mac.
 
 - **Follows your Mac.** The keys change with the frontmost app: Xcode shows Run, Build and Test; Zoom shows Mute, Video and Share Screen; Terminal shows tabs, Clear and Interrupt.
 - **Shows what it is driving.** The top of the screen shows the Mac app's icon, name and window title, and whether the link is USB or Wi-Fi. For Zoom it also shows meeting state such as the mic (built from Zoom's documented menus and not yet tested in a live meeting).
 - **Every tap gets an answer.** A key glows amber while the Mac works, lights up when the Mac reports the shortcut was sent, and shakes with the Mac's reason when it could not (for example, a missing permission).
 - **USB first.** Connects over the iPad's USB cable when it is plugged in and falls back to Wi-Fi.
-- **Paired, not open.** Only an iPad you pair with your Mac, using a code shown on the Mac, can see or control it. A tap carries which key on which layout (and whether that layout is pinned); the Mac runs the action from its own copy of the layout, either a built-in one or one you made on the Mac.
+- **Paired, not open.** Only an iPad or iPhone you pair with your Mac, using a code shown on the Mac, can see or control it. A tap carries which key on which layout (and whether that layout is pinned); the Mac runs the action from its own copy of the layout, either a built-in one or one you made on the Mac.
 - **Hold for disruptive keys.** Lock Mac, Interrupt, End Call, Telegram Lock, Xcode Clean, and Citrix Viewer's Lock, Close App and Teams Leave fire only after a press and hold.
 
 ## Requirements
 
-- iPad with iPadOS 16 or later
+- iPad with iPadOS 16 or later, or iPhone with iOS 16 or later
 - Mac with macOS 13 or later
-- A USB cable between them, or both on the same Wi-Fi network
+- Both on the same Wi-Fi network, or a USB cable between an iPad and the Mac
 
 ## Install
 
@@ -49,9 +49,9 @@ However you install it, open **Sidekey** on the iPad or iPhone and tap **Allow**
 
 ### 3. Connect and pair
 
-1. Plug the iPad into the Mac with a USB cable, or put both on the same Wi-Fi network.
+1. Put the iPad or iPhone on the same Wi-Fi network as the Mac. An iPad can also plug into the Mac with a USB cable.
 2. Open Sidekey on the iPad or iPhone. When it finds the Mac, it asks for a pairing code.
-3. On the Mac, click the Sidekey menu bar icon and choose **Pair Device...**. A window shows a 6-digit code for two minutes.
+3. On the Mac, click the Sidekey menu bar icon and choose **Pair Device...**. A window shows a 6-digit code for two minutes. (In Mac 1.4.0 the window says iPad; the same code works on iPhone.)
 4. On the iPad or iPhone, type the code and tap **Pair**. After five wrong codes, or two minutes, choose Pair Device again for a new code.
 
 From then on the iPad or iPhone connects to that Mac by itself whenever Sidekey is running on both. Switch apps on the Mac and the keys on the device change to match.
@@ -60,9 +60,9 @@ From then on the iPad or iPhone connects to that Mac by itself whenever Sidekey 
 
 - **Pairing:** a Mac accepts an iPad or iPhone only after it has been paired with a short-lived code shown on the Mac. Until then the device receives only the Mac's name and identifier and a pairing request, and its taps are refused. Each side stores a pairing token in its Keychain; later connections prove the token without sending it.
 - **The Mac runs only its own actions:** a tap carries which key on which layout (and whether it is pinned); the Mac runs that key's action from its own copy of the layout, never an action sent over the network. Layouts you make on the Mac can only send keyboard or Windows shortcuts, run your Apple Shortcuts or switch Citrix modes. They cannot run shell commands or AppleScript themselves (an Apple Shortcut you choose runs its own steps), and every layout file is checked each time it is loaded.
-- **Not encrypted yet:** Traffic between the iPad and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends (app names, window titles, the keys you tap and both device names). If they capture the one-time pairing exchange or interfere with a live connection, they could also press keys in your Mac's layouts, including ones you made, for example to open Terminal or lock the Mac, until you choose Forget Paired Devices on the Mac. Use Sidekey over USB or on a network you trust. Encryption is planned.
-- **The iPad does not verify the Mac yet:** a paired iPad looks for its Mac by an identifier the Mac advertises on the network, which another device could copy.
-- **Forgetting:** Forget Paired Devices in the Mac's Sidekey menu revokes every paired iPad. Forget This Mac on the iPad (press and hold the connection label while connected) only removes the iPad's copy; to revoke access, use the Mac.
+- **Not encrypted yet:** Traffic between the iPad or iPhone and the Mac is not encrypted yet. Someone who can watch or tamper with your network could read what Sidekey sends (app names, window titles, the keys you tap and both device names). If they capture the one-time pairing exchange or interfere with a live connection, they could also press keys in your Mac's layouts, including ones you made, for example to open Terminal or lock the Mac, until you choose Forget Paired Devices on the Mac. Use Sidekey over USB (iPad) or on a network you trust. Encryption is planned.
+- **The iPad or iPhone does not verify the Mac yet:** a paired device looks for its Mac by an identifier the Mac advertises on the network, which another device could copy.
+- **Forgetting:** Forget Paired Devices in the Mac's Sidekey menu revokes every paired iPad and iPhone. Forget This Mac on the device (press and hold the connection label while connected) only removes the device's copy; to revoke access, use the Mac.
 
 ## Built-in layouts
 
@@ -106,7 +106,7 @@ Shortcuts are taken from each app's own menus or published documentation. The Ou
 
 Needs Sidekey for Mac 1.4.0 or later. Choose **Edit Layouts...** in the Sidekey menu to change what the keys do. You can change, move, remove and reset keys (built-in keys that run scripts are the exception, see below) and add a layout for any app. Changes take effect at once and show on the iPad or iPhone when that app is in front. On a pinned layout, a key you changed, moved, removed or reset is refused until you unpin, bring the app to the front and pin again; keys you have not changed since pinning keep working. If you reset or remove a layout you added for an app, unpin it.
 
-- **The editor.** The list on the left holds every built-in layout (each Citrix mode is its own row, such as "Citrix Viewer: Outlook") and any app you add with the **+** button under the list (choosing an app that already has a layout selects it instead). The **−** (minus) button removes an app you added after you confirm, and the iPad then shows the System layout for that app; it is greyed out for built-in apps, where **Reset Layout...** undoes your changes. A dot marks a layout you have changed. Select an app to see its 15 key slots as a 5 columns by 3 rows grid plus a preview of how they sit on the iPad or iPhone in portrait. Drag a key onto another to swap them, or onto an empty slot to move it.
+- **The editor.** The list on the left holds every built-in layout (each Citrix mode is its own row, such as "Citrix Viewer: Outlook") and any app you add with the **+** button under the list (choosing an app that already has a layout selects it instead). The **−** (minus) button removes an app you added after you confirm, and the iPad or iPhone then shows the System layout for that app; it is greyed out for built-in apps, where **Reset Layout...** undoes your changes. A dot marks a layout you have changed. Select an app to see its 15 key slots as a 5 columns by 3 rows grid plus a preview of how they sit on the iPad or iPhone in portrait. Drag a key onto another to swap them, or onto an empty slot to move it.
 - **Editing a key.** Select a key to set its label (1 to 16 characters), icon, colour and action, and whether it needs a press and hold. The action is a keyboard shortcut (record it, or pick the keys by hand; the editor warns when the shortcut is one macOS uses itself, such as Command-Space), a Windows shortcut, one of your Apple Shortcuts chosen from a list, or, for apps with several modes such as Citrix Viewer, a switch to another mode. **Reset Key...** appears on keys you changed and **Reset Layout...** on layouts you changed; both go back to the built-in version after you confirm. For an app you added, Reset Key empties the slot and Reset Layout removes the layout.
 - **What custom keys cannot do.** They cannot run shell commands or AppleScript themselves; an Apple Shortcut you choose runs whatever steps it contains. A few built-in keys do run scripts (for example Play/Pause); those can be replaced or removed but not edited or moved. A key that lights with the app's state, such as Zoom's mute key or a Citrix mode key, stops lighting once you edit or move it.
 - **Files.** Each customised layout is saved as `~/Library/Application Support/Sidekey/Layouts/<layoutId>.json`. You can edit these by hand; choose **Reload Layouts** in the menu to pick up the changes. Sidekey checks every file each time it loads. A file with a problem is refused whole and reported: the menu shows "1 layout file has errors..." or "N layout files have errors..." and the editor lists the file with a **Delete File...** button. Until you fix or delete it, that app uses its built-in layout, or the System layout if you added the app.
@@ -121,14 +121,14 @@ xcodegen generate
 open iKeypadApp.xcodeproj
 ```
 
-To build only the iPad app, use the `iKeypad` scheme. Before building, change these in `project.yml` to your own values, then run `xcodegen generate` again:
+To build only the iPad and iPhone app, use the `iKeypad` scheme. Before building, change these in `project.yml` to your own values, then run `xcodegen generate` again:
 
 - `DEVELOPMENT_TEAM` (three places): your Apple team ID.
 - The bundle IDs `com.hoque.sidekey`, `com.hoque.sidekey.tests` and `com.hoque.sidekey.mac`: they are registered to the author's team, so automatic signing fails for anyone else.
 
 Schemes:
 
-- `iKeypad`: the iPad app (shown as Sidekey on the Home Screen)
+- `iKeypad`: the iPad and iPhone app (shown as Sidekey on the Home Screen)
 - `SidekeyMac`: the Mac menu bar app (builds `Sidekey.app`)
 
 Internal module and folder names still use the project's working name, iKeypad.
@@ -147,7 +147,7 @@ Use the name of any iPad simulator installed with your Xcode (`xcrun simctl list
 ## How it works
 
 - `iKeypadMac`: the Mac app. Watches the frontmost app, advertises `_sidekey._tcp` over Bonjour on port 49200, and serves only paired iPads: it sends them the matching layout and app state, and runs the action of each key they tap from its own copy of the layout (keyboard shortcuts via `CGEvent`, AppleScript, shell commands, Shortcuts).
-- `iKeypad`: the iPad app. Finds its paired Mac with Bonjour (any Sidekey Mac until it has paired), prefers the USB link, and renders the deck.
+- `iKeypad`: the iPad and iPhone app. Finds its paired Mac with Bonjour (any Sidekey Mac until it has paired), prefers the USB link, and renders the deck.
 - `Packages/iKeypadShared`: the length-prefixed JSON protocol, models and built-in layouts.
 
 ## License
