@@ -2,6 +2,8 @@
 
 Sidekey turns an iPad or iPhone into a shortcut deck for your Mac. Prop it beside your keyboard: whenever you switch apps on the Mac, it shows keys for that app, and tapping a key runs the shortcut on the Mac.
 
+Watch the one-minute demo on [YouTube](https://youtu.be/YLXNkcEFGrI).
+
 - **Follows your Mac.** The keys change with the frontmost app: Xcode shows Run, Build and Test; Zoom shows Mute, Video and Share Screen; Terminal shows tabs, Clear and Interrupt.
 - **Shows what it is driving.** The top of the screen shows the Mac app's icon, name and window title, and whether the link is USB or Wi-Fi. For Zoom it also shows meeting state such as the mic (built from Zoom's documented menus and not yet tested in a live meeting).
 - **Every tap gets an answer.** A key glows amber while the Mac works, lights up when the Mac reports the shortcut was sent, and shakes with the Mac's reason when it could not (for example, a missing permission).

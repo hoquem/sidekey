@@ -41,7 +41,7 @@ USB OR WI-FI
 Sidekey prefers a USB connection when your iPad is plugged into the Mac, and uses your Wi-Fi network otherwise.
 
 PRIVATE
-Sidekey has no accounts, no analytics and no tracking. Your iPad or iPhone talks only to Sidekey on a Mac, over USB or your local network; nothing is sent to the developer. The connection is not encrypted yet, so use USB (iPad) or a network you trust.
+Sidekey has no accounts, no analytics and no tracking. Your iPad or iPhone talks only to Sidekey on a Mac, over your local network or, on an iPad, a USB cable; nothing is sent to the developer. The connection is not encrypted yet, so use USB (iPad) or a network you trust.
 
 REQUIRES THE FREE MAC APP
 Sidekey needs its free companion app on your Mac (macOS 13 or later), available at hoquem.github.io/sidekey. The Citrix Viewer layout needs Mac app 1.3.0 or later. The Mac app needs Accessibility permission to send shortcuts.
