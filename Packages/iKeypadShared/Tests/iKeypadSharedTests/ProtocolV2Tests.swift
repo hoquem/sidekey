@@ -132,6 +132,29 @@ final class ProtocolV2Tests: XCTestCase {
         XCTAssertEqual(chrome.keys.first { $0.label == "Search Tabs" }?.action, .hotkey(key: "a", modifiers: [.command, .shift]))
     }
 
+    func testTeamsHasChatAndMeetingModes() throws {
+        let bundle = "com.microsoft.teams2"
+        let modes = DefaultProfiles.allDefaultProfiles().filter { $0.appBundleIdentifier == bundle }
+        // Chat keeps the original id so users' saved Teams edits still apply, and starts first.
+        XCTAssertEqual(modes.map(\.id), [bundle, "\(bundle).meeting"])
+        for mode in modes {
+            XCTAssertEqual(mode.keys.count, 15, mode.id)
+            XCTAssertEqual(Set(mode.keys.map(\.position)).count, mode.keys.count, "\(mode.id) has duplicate slots")
+            let modeRow = mode.keys.filter { $0.position >= 13 }.sorted { $0.position < $1.position }
+            XCTAssertEqual(modeRow.map(\.label), ["Chat", "Meeting"], mode.id)
+            XCTAssertEqual(modeRow.map(\.action), modes.map { .switchProfile(profileId: $0.id) }, mode.id)
+            XCTAssertEqual(modeRow.map(\.toggleChipId), modes.map { "mode.\($0.id)" }, mode.id)
+        }
+        XCTAssertEqual(modes[0].keys.filter(\.requiresConfirm).map(\.label), ["End Call"])
+        let meeting = modes[1]
+        XCTAssertEqual(meeting.keys.filter(\.requiresConfirm).map(\.label), ["Leave"])
+        func action(_ label: String) -> KeyAction? { meeting.keys.first { $0.label == label }?.action }
+        XCTAssertEqual(action("Mute"), .hotkey(key: "m", modifiers: [.command, .shift]))
+        XCTAssertEqual(action("Video"), .hotkey(key: "o", modifiers: [.command, .shift]))
+        XCTAssertEqual(action("Admit Lobby"), .hotkey(key: "y", modifiers: [.command, .shift]))
+        XCTAssertEqual(action("Share Toolbar"), .hotkey(key: "space", modifiers: [.command, .shift]))
+    }
+
     func testPopularMacAppsHaveLayouts() {
         let bundles = Set(DefaultProfiles.allDefaultProfiles().map(\.appBundleIdentifier))
         let popular = ["com.apple.Safari", "com.google.Chrome", "com.apple.finder", "com.apple.mail", "com.apple.MobileSMS",

@@ -1526,7 +1526,6 @@ public struct DefaultProfiles {
             makeExcelProfile(),
             makePowerPointProfile(),
             makeOutlookProfile(),
-            makeTeamsProfile(),
             makeSlackProfile(),
             makeSpotifyProfile(),
             makeNotesProfile(),
@@ -1538,6 +1537,6 @@ public struct DefaultProfiles {
             makeSafariProfile(),
             makeChromeProfile(),
             makeBrowserProfile(bundleId: "company.thebrowser.Browser", name: "Arc")
-        ] + makeCitrixViewerProfiles()
+        ] + makeTeamsProfiles() + makeCitrixViewerProfiles()
     }
 }

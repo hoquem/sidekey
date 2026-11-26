@@ -831,12 +831,31 @@ extension DefaultProfiles {
         )
     }
 
-    /// Microsoft Teams (``com.microsoft.teams2``). Settings from Teams' menu bar; the rest from Microsoft's
-    /// published "Keyboard shortcuts for Microsoft Teams" (macOS).
-    public static func makeTeamsProfile() -> DeckProfile {
-        DeckProfile(
-            id: "com.microsoft.teams2",
-            appBundleIdentifier: "com.microsoft.teams2",
+    /// Microsoft Teams (``com.microsoft.teams2``) as two modes: Chat, the layout Teams starts in,
+    /// and Meeting, for video calls and webinars. Slots 13 and 14 of both switch between them, and
+    /// the Mac remembers the mode and lights its key. Settings is from Teams' menu bar; the rest is
+    /// from Microsoft's published "Keyboard shortcuts for Microsoft Teams" (Mac tab, read
+    /// 2026-11-26).
+    ///
+    /// Microsoft's Mac list gives Command+Shift+A to both Accept Audio Call and Toggle Live
+    /// Captions; the Meeting mode's Captions key relies on captions being what fires inside a
+    /// meeting, as confirmed when every Meeting key was tested live on 2026-11-26. Temporarily
+    /// Unmute (Option+Space) is left out: it is push to talk, and a deck tap releases the key at
+    /// once. There are no state chips, as nothing reads Teams' mute or camera state.
+    ///
+    /// :returns: The Chat mode first (the layout Teams starts in), then the Meeting mode.
+    public static func makeTeamsProfiles() -> [DeckProfile] {
+        let bundle = "com.microsoft.teams2"
+        let meetingId = "\(bundle).meeting"
+        let modeRow = [
+            DeckKey(position: 13, label: "Chat", iconSystemName: "bubble.left.and.bubble.right",
+                    action: .switchProfile(profileId: bundle), role: .navigate, toggleChipId: "mode.\(bundle)"),
+            DeckKey(position: 14, label: "Meeting", iconSystemName: "video.circle",
+                    action: .switchProfile(profileId: meetingId), role: .navigate, toggleChipId: "mode.\(meetingId)")
+        ]
+        let chat = DeckProfile(
+            id: bundle,
+            appBundleIdentifier: bundle,
             appName: "Teams",
             rows: 3,
             columns: 5,
@@ -932,23 +951,46 @@ extension DefaultProfiles {
                     iconSystemName: "gearshape",
                     action: .hotkey(key: ",", modifiers: [.command]),
                     role: .navigate
-                ),
-                DeckKey(
-                    position: 13,
-                    label: "Next Section",
-                    iconSystemName: "arrow.right.square",
-                    action: .hotkey(key: "f6", modifiers: [.command]),
-                    role: .navigate
-                ),
-                DeckKey(
-                    position: 14,
-                    label: "Prev Section",
-                    iconSystemName: "arrow.left.square",
-                    action: .hotkey(key: "f6", modifiers: [.command, .shift]),
-                    role: .navigate
                 )
-            ]
+            ] + modeRow
         )
+        let meeting = DeckProfile(
+            id: meetingId,
+            appBundleIdentifier: bundle,
+            appName: "Teams",
+            rows: 3,
+            columns: 5,
+            keys: [
+                DeckKey(position: 0, label: "Mute", iconSystemName: "mic.slash",
+                        action: .hotkey(key: "m", modifiers: [.command, .shift]), role: .modify),
+                DeckKey(position: 1, label: "Video", iconSystemName: "video",
+                        action: .hotkey(key: "o", modifiers: [.command, .shift]), role: .modify),
+                DeckKey(position: 2, label: "Raise Hand", iconSystemName: "hand.raised",
+                        action: .hotkey(key: "k", modifiers: [.command, .shift]), role: .modify),
+                DeckKey(position: 3, label: "Share Tray", iconSystemName: "rectangle.on.rectangle",
+                        action: .hotkey(key: "e", modifiers: [.command, .shift]), role: .run),
+                DeckKey(position: 4, label: "Leave", iconSystemName: "phone.down.fill",
+                        action: .hotkey(key: "h", modifiers: [.command, .shift]), role: .danger,
+                        requiresConfirm: true),
+                DeckKey(position: 5, label: "Captions", iconSystemName: "captions.bubble",
+                        action: .hotkey(key: "a", modifiers: [.command, .shift]), role: .modify),
+                DeckKey(position: 6, label: "Admit Lobby", iconSystemName: "person.badge.plus",
+                        action: .hotkey(key: "y", modifiers: [.command, .shift]), role: .run),
+                DeckKey(position: 7, label: "Share Toolbar", iconSystemName: "menubar.rectangle",
+                        action: .hotkey(key: "space", modifiers: [.command, .shift]), role: .navigate),
+                DeckKey(position: 8, label: "Join Meeting", iconSystemName: "video.badge.plus",
+                        action: .hotkey(key: "k", modifiers: [.command, .control]), role: .run),
+                DeckKey(position: 9, label: "Calendar", iconSystemName: "calendar",
+                        action: .hotkey(key: "2", modifiers: [.command]), role: .navigate),
+                DeckKey(position: 10, label: "Zoom Share In", iconSystemName: "plus.magnifyingglass",
+                        action: .hotkey(key: "=", modifiers: [.command, .option]), role: .modify),
+                DeckKey(position: 11, label: "Zoom Share Out", iconSystemName: "minus.magnifyingglass",
+                        action: .hotkey(key: "-", modifiers: [.command, .option]), role: .modify),
+                DeckKey(position: 12, label: "Reset Zoom", iconSystemName: "1.magnifyingglass",
+                        action: .hotkey(key: "0", modifiers: [.command, .option]), role: .modify)
+            ] + modeRow
+        )
+        return [chat, meeting]
     }
 
     /// Slack (``com.tinyspeck.slackmacgap``). Shortcuts from Slack's published "Slack keyboard shortcuts" (Mac).
