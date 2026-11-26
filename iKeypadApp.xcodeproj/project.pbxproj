@@ -476,7 +476,7 @@
 				CODE_SIGN_ENTITLEMENTS = SidekeyMac/Sidekey.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = C67LAFG9Q4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SidekeyMac/Info.plist;
@@ -484,7 +484,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hoque.sidekey.mac;
 				PRODUCT_NAME = Sidekey;
 				SDKROOT = macosx;
@@ -554,7 +554,7 @@
 				CODE_SIGN_ENTITLEMENTS = SidekeyMac/Sidekey.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = C67LAFG9Q4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = SidekeyMac/Info.plist;
@@ -562,7 +562,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hoque.sidekey.mac;
 				PRODUCT_NAME = Sidekey;
 				SDKROOT = macosx;
