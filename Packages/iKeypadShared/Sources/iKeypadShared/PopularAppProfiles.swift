@@ -839,9 +839,9 @@ extension DefaultProfiles {
     ///
     /// Microsoft's Mac list gives Command+Shift+A to both Accept Audio Call and Toggle Live
     /// Captions; the Meeting mode's Captions key relies on captions being what fires inside a
-    /// meeting, which is not yet tested live. Temporarily Unmute (Option+Space) is left out: it
-    /// is push to talk, and a deck tap releases the key at once. There are no state chips, as
-    /// nothing reads Teams' mute or camera state.
+    /// meeting, as confirmed when every Meeting key was tested live on 2026-11-26. Temporarily
+    /// Unmute (Option+Space) is left out: it is push to talk, and a deck tap releases the key at
+    /// once. There are no state chips, as nothing reads Teams' mute or camera state.
     ///
     /// :returns: The Chat mode first (the layout Teams starts in), then the Meeting mode.
     public static func makeTeamsProfiles() -> [DeckProfile] {
