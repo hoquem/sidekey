@@ -850,7 +850,7 @@ extension DefaultProfiles {
         let modeRow = [
             DeckKey(position: 13, label: "Chat", iconSystemName: "bubble.left.and.bubble.right",
                     action: .switchProfile(profileId: bundle), role: .navigate, toggleChipId: "mode.\(bundle)"),
-            DeckKey(position: 14, label: "Meeting", iconSystemName: "video.bubble",
+            DeckKey(position: 14, label: "Meeting", iconSystemName: "video.circle",
                     action: .switchProfile(profileId: meetingId), role: .navigate, toggleChipId: "mode.\(meetingId)")
         ]
         let chat = DeckProfile(
